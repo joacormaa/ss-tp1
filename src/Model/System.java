@@ -27,10 +27,6 @@ public class System {
         return particles;
     }
 
-    public void printSystemState(){
-
-    }
-
     private void initializeParticles() {
         for(int i = 0; i < c.PARTICLES_QUANTITY(); i++) {
             double x = Math.random() * c.SYSTEM_LENGTH();

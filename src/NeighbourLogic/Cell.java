@@ -20,7 +20,7 @@ public class Cell {
         particles.add(p);
     }
 
-    public List<Integer> getNeighnourIds() {
+    public List<Integer> getNeighbourIds() {
         List<Integer> neighbours = new LinkedList<>();
 
         neighbours.add(getNeighbourId(xPosition,yPosition));

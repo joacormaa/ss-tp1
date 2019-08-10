@@ -56,7 +56,7 @@ public class SystemNeighbourManager {
             for(Particle p : c.getParticles()) {
 
                 List<Cell> neighbours = new ArrayList<>();
-                for(Integer i :c.getNeighnourIds()) neighbours.add(cellMap.get(i));
+                for(Integer i :c.getNeighbourIds()) neighbours.add(cellMap.get(i));
 
                 for(Cell neighbour : neighbours) {
                     for(Particle q : neighbour.getParticles()) {
