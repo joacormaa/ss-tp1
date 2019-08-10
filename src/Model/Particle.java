@@ -37,7 +37,7 @@ public class Particle {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Particle)) return false;
 
         Particle particle = (Particle) o;
 

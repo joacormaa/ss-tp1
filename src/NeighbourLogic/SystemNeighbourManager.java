@@ -87,9 +87,11 @@ public class SystemNeighbourManager {
         try {
             fileWriter = new FileWriter(c.OUTPUT_PATH());
             fileWriter.write(text);
+            fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     private String getNeighbourState() {

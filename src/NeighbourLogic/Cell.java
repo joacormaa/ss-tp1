@@ -56,7 +56,7 @@ public class Cell {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Cell)) return false;
 
         Cell cell = (Cell) o;
 
