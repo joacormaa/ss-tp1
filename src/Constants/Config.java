@@ -1,11 +1,22 @@
 package Constants;
 
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+
+import static java.lang.System.exit;
+
 public class Config {
-    private double SYSTEM_LENGTH = 100;
-    private int PARTICLES_QUANTITY = 200;
-    private double PARTICLE_RADIUS = 1;
-    private double PARTICLE_RC = 1;
-    private String OUTPUT_PATH = "output.txt";
+    private double SYSTEM_LENGTH;
+    private int PARTICLE_QUANTITY;
+    private double PARTICLE_RADIUS;
+    private double PARTICLE_RC;
+    private String OUTPUT_PATH;
     private double PARTICLE_INFLUENCE_RADIUS;
     private int CELL_AMOUNT;
     private double CELL_LENGTH;
@@ -19,10 +30,39 @@ public class Config {
         return instance;
     }
 
-    private Config(){
+    private Config() {
+
+        try{
+            recoverValuesFromXML();
+        }
+        catch (ParserConfigurationException | IOException |SAXException e){
+            System.err.println("Invalid XML file. '"+e.getMessage()+"'");
+            exit(-1);
+        }
+
         PARTICLE_INFLUENCE_RADIUS = 2*PARTICLE_RADIUS+PARTICLE_RC;
         CELL_AMOUNT = (int)Math.floor(SYSTEM_LENGTH/PARTICLE_INFLUENCE_RADIUS);
+        if(CELL_AMOUNT==0)CELL_AMOUNT=1;
         CELL_LENGTH = SYSTEM_LENGTH/CELL_AMOUNT;
+    }
+
+    private void recoverValuesFromXML() throws ParserConfigurationException, IOException, SAXException {
+        File file = new File("config.xml");
+
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        Document document = documentBuilder.parse(file);
+
+        String SYSTEM_LENGTH_STR = document.getElementsByTagName("SYSTEM_LENGTH").item(0).getTextContent();
+        String PARTICLE_QUANTITY_STR = document.getElementsByTagName("PARTICLE_QUANTITY").item(0).getTextContent();
+        String PARTICLE_RADIUS_STR = document.getElementsByTagName("PARTICLE_RADIUS").item(0).getTextContent();
+        String PARTICLE_RC_STR = document.getElementsByTagName("PARTICLE_RC").item(0).getTextContent();
+
+        this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
+        this.SYSTEM_LENGTH=Double.parseDouble(SYSTEM_LENGTH_STR);
+        this.PARTICLE_QUANTITY = Integer.parseInt(PARTICLE_QUANTITY_STR);
+        this.PARTICLE_RADIUS = Double.parseDouble(PARTICLE_RADIUS_STR);
+        this.PARTICLE_RC = Double.parseDouble(PARTICLE_RC_STR);
     }
 
     public double SYSTEM_LENGTH(){
@@ -30,7 +70,7 @@ public class Config {
     }
 
     public int PARTICLES_QUANTITY() {
-        return PARTICLES_QUANTITY;
+        return PARTICLE_QUANTITY;
     }
 
     public double PARTICLE_RADIUS() {
@@ -57,3 +97,4 @@ public class Config {
         return CELL_LENGTH;
     }
 }
+
