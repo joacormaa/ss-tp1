@@ -60,7 +60,7 @@ public class SystemNeighbourManager {
 
                 for(Cell neighbour : neighbours) {
                     for(Particle q : neighbour.getParticles()) {
-                        if(!p.equals(q) && p.isAdjacent(q)) {
+                        if(!p.equals(q) && p.isAdjacentTo(q)) {
                             addNeighbour(p,q);
                         }
                     }

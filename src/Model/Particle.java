@@ -28,10 +28,18 @@ public class Particle {
         return y;
     }
 
-    public boolean isAdjacent(Particle p) {
+    public boolean isAdjacentTo(Particle p) {
         Config c = Config.getInstance();
+        double systemLength = c.SYSTEM_LENGTH();
+        double xDifference = Math.abs(x - p.getX());
+        if (xDifference > systemLength / 2)
+            xDifference = systemLength - xDifference;
 
-        return Math.sqrt(Math.pow(x-p.getX(), 2) + Math.pow(y - p.getY(), 2)) <= c.PARTICLE_INFLUENCE_RADIUS();
+        double yDifference = Math.abs(y - p.getY());
+        if (yDifference > systemLength / 2)
+            yDifference = systemLength - yDifference;
+
+        return Math.sqrt(Math.pow(xDifference,2) + Math.pow(yDifference,2)) <= c.PARTICLE_INFLUENCE_RADIUS();
     }
 
     @Override
