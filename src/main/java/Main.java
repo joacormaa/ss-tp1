@@ -1,18 +1,14 @@
-import Model.Particle;
-import Model.System;
+import Model.SystemInstant;
 import NeighbourLogic.SystemNeighbourManager;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        System system = new System(0);
+        SystemInstant systemInstant = new SystemInstant(0);
 
-        SystemNeighbourManager snm = new SystemNeighbourManager(system);
+        SystemNeighbourManager snm = new SystemNeighbourManager(systemInstant);
+        snm.calculateNeighbours();
         snm.outputNeighbours();
 
     }

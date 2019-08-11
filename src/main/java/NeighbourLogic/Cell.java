@@ -1,6 +1,7 @@
 package NeighbourLogic;
 
 import Constants.Config;
+import Constants.ConfigSingleton;
 import Model.Particle;
 
 import java.util.LinkedList;
@@ -45,7 +46,7 @@ public class Cell {
     }
 
     private int getNeighbourId(int x, int y){
-        Config c = Config.getInstance();
+        Config c = ConfigSingleton.getInstance();
 
         int x_mod = Helper.getModule(x,c.CELL_AMOUNT());
         int y_mod = Helper.getModule(y,c.CELL_AMOUNT());

@@ -1,9 +1,6 @@
 package Model;
 
-import Constants.Config;
-
-import java.util.LinkedList;
-import java.util.List;
+import Constants.ConfigSingleton;
 
 public class Particle {
     private  int id;
@@ -29,7 +26,7 @@ public class Particle {
     }
 
     public boolean isAdjacentTo(Particle p) {
-        Config c = Config.getInstance();
+        ConfigSingleton c = ConfigSingleton.getInstance();
         double systemLength = c.SYSTEM_LENGTH();
         double xDifference = Math.abs(x - p.getX());
         if (xDifference > systemLength / 2)

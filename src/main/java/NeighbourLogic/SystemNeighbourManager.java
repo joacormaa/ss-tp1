@@ -1,34 +1,37 @@
 package NeighbourLogic;
 
 import Constants.Config;
+import Constants.ConfigSingleton;
 import Model.Particle;
-import Model.System;
+import Model.SystemInstant;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
 public class SystemNeighbourManager {
-    private System system;
+    private SystemInstant systemInstant;
     private Map<Particle, Set<Particle>> neighbours;
     private Map<Integer, Cell> cellMap;
     private Config c;
 
-    public SystemNeighbourManager(System system){
-        this.system=system;
+    public SystemNeighbourManager(SystemInstant systemInstant){
+        this.systemInstant = systemInstant;
         this.neighbours=new HashMap<>();
         this.cellMap=new HashMap<>();
-        this.c = Config.getInstance();
+        this.c = ConfigSingleton.getInstance();
+    }
+
+    public void calculateNeighbours(){
         initializeCells();
         initializeNeighbourMap();
 
         assignCells();
         assignNeighbours();
-
     }
 
     private void initializeNeighbourMap() {
-        for (Particle p : system.getParticles())  neighbours.put(p,new HashSet<>());
+        for (Particle p : systemInstant.getParticles())  neighbours.put(p,new HashSet<>());
     }
 
 
@@ -42,7 +45,7 @@ public class SystemNeighbourManager {
     }
 
     private void assignCells() {
-        for(Particle p : system.getParticles()) {
+        for(Particle p : systemInstant.getParticles()) {
             int cellX = (int) (p.getX()/c.CELL_LENGTH());
             int cellY = (int) (p.getY() / c.CELL_LENGTH());
             int cellId = cellX+cellY*c.CELL_AMOUNT();
@@ -96,7 +99,7 @@ public class SystemNeighbourManager {
 
     private String getNeighbourState() {
         StringBuilder sb = new StringBuilder();
-        for(Particle p: system.getParticles()){
+        for(Particle p: systemInstant.getParticles()){
 
             sb.append("Id: ");
             sb.append(p.getId());
@@ -125,6 +128,9 @@ public class SystemNeighbourManager {
             sb.append(',');
             sb.append(it.next().getId());
         }
+    }
 
+    public void setConfig(Config config){
+        c=config;
     }
 }

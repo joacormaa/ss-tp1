@@ -1,20 +1,20 @@
 package Model;
 
 import Constants.Config;
-import NeighbourLogic.Cell;
+import Constants.ConfigSingleton;
 
 
 import java.util.*;
 
-public class System {
+public class SystemInstant {
     private Config c;
     private int time;
     private Collection<Particle> particles;
 
-    public System(int time){
+    public SystemInstant(int time){
         this.time=time;
         this.particles=new ArrayList<>();
-        this.c = Config.getInstance();
+        this.c = ConfigSingleton.getInstance();
 
         initializeParticles();
     }
