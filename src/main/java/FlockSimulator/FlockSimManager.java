@@ -5,7 +5,13 @@ import Model.Particle;
 import Model.System;
 import NeighbourLogic.Helper;
 import NeighbourLogic.SystemNeighbourManager;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class FlockSimManager {
@@ -68,6 +74,23 @@ public class FlockSimManager {
     }
 
     public void printSystemOverTime(){
-        int a =1;
+
+        String json = new Gson().toJson(systems);
+        FileWriter fileWriter;
+        try {
+            fileWriter = new FileWriter(c.OUTPUT_PATH());
+            fileWriter.write(json);
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getJsonRepresentation(){
+
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+
+        return gson.toJson(systems);
     }
 }

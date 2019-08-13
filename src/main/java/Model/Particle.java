@@ -9,7 +9,7 @@ public class Particle {
     private  int id;
     private double x;
     private double y;
-    private double speed;
+    private transient double speed;
     private double angle;
 
     public Particle(int id, double x, double y,double speed, double angle) {

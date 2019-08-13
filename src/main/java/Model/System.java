@@ -7,7 +7,7 @@ import NeighbourLogic.Cell;
 import java.util.*;
 
 public class System {
-    private Config c;
+    private transient Config c;
     private int time;
     private Collection<Particle> particles;
 
