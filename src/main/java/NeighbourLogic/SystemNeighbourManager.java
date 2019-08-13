@@ -14,17 +14,20 @@ public class SystemNeighbourManager {
     private Map<Integer, Cell> cellMap;
     private Config c;
 
-    public SystemNeighbourManager(System system){
-        this.system=system;
+    public SystemNeighbourManager(){
         this.neighbours=new HashMap<>();
         this.cellMap=new HashMap<>();
         this.c = Config.getInstance();
+    }
+
+    public Map<Particle, Set<Particle>> getNeighbours(System system){
+        this.system=system;
         initializeCells();
         initializeNeighbourMap();
 
         assignCells();
         assignNeighbours();
-
+        return neighbours;
     }
 
     private void initializeNeighbourMap() {

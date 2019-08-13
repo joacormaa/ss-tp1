@@ -19,6 +19,12 @@ public class System {
         initializeParticles();
     }
 
+    public System(int time, Collection<Particle> particles){
+        this.time=time;
+        this.particles=particles;
+        this.c = Config.getInstance();
+    }
+
     public int getTime() {
         return time;
     }
@@ -31,7 +37,8 @@ public class System {
         for(int i = 0; i < c.PARTICLES_QUANTITY(); i++) {
             double x = Math.random() * c.SYSTEM_LENGTH();
             double y = Math.random() * c.SYSTEM_LENGTH();
-            particles.add(new Particle(i, x, y));
+            double angle = Math.random() * 360;
+            particles.add(new Particle(i, x, y,c.PARTICLE_SPEED(),angle));
         }
     }
 }

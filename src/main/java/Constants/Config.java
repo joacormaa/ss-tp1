@@ -20,6 +20,8 @@ public class Config {
     private double PARTICLE_INFLUENCE_RADIUS;
     private int CELL_AMOUNT;
     private double CELL_LENGTH;
+    private double PARTICLE_SPEED;
+
 
     private static Config instance;
 
@@ -57,13 +59,17 @@ public class Config {
         String PARTICLE_QUANTITY_STR = document.getElementsByTagName("PARTICLE_QUANTITY").item(0).getTextContent();
         String PARTICLE_RADIUS_STR = document.getElementsByTagName("PARTICLE_RADIUS").item(0).getTextContent();
         String PARTICLE_RC_STR = document.getElementsByTagName("PARTICLE_RC").item(0).getTextContent();
+        String PARTICLE_SPEED_STR = document.getElementsByTagName("PARTICLE_SPEED").item(0).getTextContent();
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
         this.SYSTEM_LENGTH=Double.parseDouble(SYSTEM_LENGTH_STR);
         this.PARTICLE_QUANTITY = Integer.parseInt(PARTICLE_QUANTITY_STR);
         this.PARTICLE_RADIUS = Double.parseDouble(PARTICLE_RADIUS_STR);
         this.PARTICLE_RC = Double.parseDouble(PARTICLE_RC_STR);
+        this.PARTICLE_SPEED = Double.parseDouble(PARTICLE_SPEED_STR);
     }
+
+    public double PARTICLE_SPEED(){return PARTICLE_SPEED;}
 
     public double SYSTEM_LENGTH(){
         return SYSTEM_LENGTH;

@@ -9,11 +9,15 @@ public class Particle {
     private  int id;
     private double x;
     private double y;
+    private double speed;
+    private double angle;
 
-    public Particle(int id, double x, double y) {
+    public Particle(int id, double x, double y,double speed, double angle) {
         this.id = id;
         this.x = x;
         this.y = y;
+        this.speed=speed;
+        this.angle=angle;
     }
 
     public int getId() {
@@ -41,6 +45,15 @@ public class Particle {
 
         return Math.sqrt(Math.pow(xDifference,2) + Math.pow(yDifference,2)) <= c.PARTICLE_INFLUENCE_RADIUS();
     }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public double getAngle() {
+        return angle;
+    }
+
 
     @Override
     public boolean equals(Object o) {
