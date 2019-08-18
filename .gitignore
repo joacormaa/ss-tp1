@@ -2,3 +2,5 @@ out/
 .idea/**
 *.iml
 output.txt
+target*
+ss-tp1*

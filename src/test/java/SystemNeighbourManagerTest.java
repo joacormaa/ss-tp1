@@ -28,6 +28,7 @@ public class SystemNeighbourManagerTest {
     @Before
     public void setup(){
         this.systemInstant = new SystemInstant(0);
+        ConfigSingleton.setInstance(config);
     }
 
 

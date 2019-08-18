@@ -21,9 +21,9 @@ public class ConfigSingleton implements Config{
     private int CELL_AMOUNT;
     private double CELL_LENGTH;
 
-    private static ConfigSingleton instance;
+    private static Config instance;
 
-    public static ConfigSingleton getInstance(){
+    public static Config getInstance(){
         if(instance==null){
             instance=new ConfigSingleton();
         }
@@ -95,6 +95,10 @@ public class ConfigSingleton implements Config{
 
     public double CELL_LENGTH() {
         return CELL_LENGTH;
+    }
+
+    public static void setInstance(Config config){
+        instance=config; //Method shouldn/t exist but spring doesnt fix the issue
     }
 }
 

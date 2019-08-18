@@ -38,7 +38,7 @@ public class MetricComparer {
             List<Long> list  = times.get(c);
             double average = calculateAverage(list);
 
-            double elapsedTimeInSecond = (double) average / 1_000_000_000;
+            double elapsedTimeInSecond =  average / 1_000_000_000;
             System.out.println("\n\n"+c.PrintConfig()+"\n\nAmount of Tests = "+list.size()+"\nAverage time (seconds) ='"+elapsedTimeInSecond + "'\n");
             System.out.println("---------------------------------------------------------------");
         }
