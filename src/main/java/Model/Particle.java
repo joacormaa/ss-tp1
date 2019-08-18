@@ -54,6 +54,9 @@ public class Particle {
         return angle;
     }
 
+    public String stringify(){
+        return id + " " + x + " " + y + " " + speed * Math.cos(angle) + " " + speed * Math.sin(angle);
+    }
 
     @Override
     public boolean equals(Object o) {

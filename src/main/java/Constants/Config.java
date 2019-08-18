@@ -75,7 +75,7 @@ public class Config {
         return SYSTEM_LENGTH;
     }
 
-    public int PARTICLES_QUANTITY() {
+    public Integer PARTICLES_QUANTITY() {
         return PARTICLE_QUANTITY;
     }
 

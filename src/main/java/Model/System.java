@@ -41,4 +41,12 @@ public class System {
             particles.add(new Particle(i, x, y,c.PARTICLE_SPEED(),angle));
         }
     }
+
+    public String stringify(){
+        String out = "";
+        for (Particle p : particles) {
+            out = out.concat(p.stringify() + '\n');
+        }
+        return out;
+    }
 }
