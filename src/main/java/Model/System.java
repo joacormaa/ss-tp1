@@ -37,7 +37,7 @@ public class System {
         for(int i = 0; i < c.PARTICLES_QUANTITY(); i++) {
             double x = Math.random() * c.SYSTEM_LENGTH();
             double y = Math.random() * c.SYSTEM_LENGTH();
-            double angle = Math.random() * 360;
+            double angle = Math.random() * 2* Math.PI - Math.PI;
             particles.add(new Particle(i, x, y,c.PARTICLE_SPEED(),angle));
         }
     }

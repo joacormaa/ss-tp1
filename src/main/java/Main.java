@@ -1,3 +1,4 @@
+import Constants.Config;
 import FlockSimulator.FlockSimManager;
 import Model.Particle;
 import Model.System;
@@ -18,8 +19,9 @@ public class Main {
     private static void runFlockSimulation() {
         System system = new System(0);
         FlockSimManager flockSimManager = new FlockSimManager(system);
+        Config c = Config.getInstance();
 
-        for(int i=0; i<1000; i++){
+        for(int i=0; i<c.AMOUNT_OF_FRAMES(); i++){
             flockSimManager.stepForward(1);
         }
         flockSimManager.printSystemOverTime();

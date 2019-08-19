@@ -8,6 +8,10 @@ public class Helper {
         return num;
     }
 
+    public static boolean AngleIsRadians(double angle) {
+        return -Math.PI<= angle && angle <= Math.PI;
+    }
+
     public static double getModule(double number, double mod) {
         double num = number%mod;
         if(num < 0) num = mod+num;

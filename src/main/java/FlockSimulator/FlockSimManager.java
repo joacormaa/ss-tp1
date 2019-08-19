@@ -5,8 +5,6 @@ import Model.Particle;
 import Model.System;
 import NeighbourLogic.Helper;
 import NeighbourLogic.SystemNeighbourManager;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -64,7 +62,17 @@ public class FlockSimManager {
             sineSum+=Math.sin(q.getAngle());
             i++;
         }
-        return Math.atan2(cosineSum/i,sineSum/i);
+        double baseValue = Math.atan2(sineSum/i,cosineSum/i);
+
+        return baseValue + getNoise();
+    }
+
+    private double getNoise() {
+        c.MAX_NOISE();
+        double rand = Math.random() * c.MAX_NOISE()*2;
+
+        return rand - c.MAX_NOISE();
+
     }
 
     private System getLastSystem() {
@@ -79,7 +87,6 @@ public class FlockSimManager {
             outXYZ = outXYZ.concat('\n' + s.stringify());
         }
 
-        //String json = new Gson().toJson(systems);
         FileWriter fileWriter;
         try {
             fileWriter = new FileWriter(c.OUTPUT_PATH());
@@ -88,13 +95,5 @@ public class FlockSimManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private String getJsonRepresentation(){
-
-        GsonBuilder builder = new GsonBuilder();
-        Gson gson = builder.create();
-
-        return gson.toJson(systems);
     }
 }

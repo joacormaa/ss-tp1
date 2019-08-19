@@ -1,5 +1,6 @@
 package Constants;
 
+import NeighbourLogic.Helper;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -21,6 +22,8 @@ public class Config {
     private int CELL_AMOUNT;
     private double CELL_LENGTH;
     private double PARTICLE_SPEED;
+    private double MAX_NOISE;
+    private int AMOUNT_OF_FRAMES;
 
 
     private static Config instance;
@@ -42,6 +45,7 @@ public class Config {
             exit(-1);
         }
 
+        if(!Helper.AngleIsRadians(this.MAX_NOISE));
         PARTICLE_INFLUENCE_RADIUS = 2*PARTICLE_RADIUS+PARTICLE_RC;
         CELL_AMOUNT = (int)Math.floor(SYSTEM_LENGTH/PARTICLE_INFLUENCE_RADIUS);
         if(CELL_AMOUNT==0)CELL_AMOUNT=1;
@@ -60,6 +64,8 @@ public class Config {
         String PARTICLE_RADIUS_STR = document.getElementsByTagName("PARTICLE_RADIUS").item(0).getTextContent();
         String PARTICLE_RC_STR = document.getElementsByTagName("PARTICLE_RC").item(0).getTextContent();
         String PARTICLE_SPEED_STR = document.getElementsByTagName("PARTICLE_SPEED").item(0).getTextContent();
+        String AMOUNT_OF_FRAMES_STR = document.getElementsByTagName("AMOUNT_OF_FRAMES").item(0).getTextContent();
+        String MAX_NOISE_STR = document.getElementsByTagName("MAX_NOISE").item(0).getTextContent();
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
         this.SYSTEM_LENGTH=Double.parseDouble(SYSTEM_LENGTH_STR);
@@ -67,6 +73,8 @@ public class Config {
         this.PARTICLE_RADIUS = Double.parseDouble(PARTICLE_RADIUS_STR);
         this.PARTICLE_RC = Double.parseDouble(PARTICLE_RC_STR);
         this.PARTICLE_SPEED = Double.parseDouble(PARTICLE_SPEED_STR);
+        this.AMOUNT_OF_FRAMES = Integer.parseInt(AMOUNT_OF_FRAMES_STR);
+        this.MAX_NOISE = Double.parseDouble(MAX_NOISE_STR);
     }
 
     public double PARTICLE_SPEED(){return PARTICLE_SPEED;}
@@ -101,6 +109,14 @@ public class Config {
 
     public double CELL_LENGTH() {
         return CELL_LENGTH;
+    }
+
+    public double MAX_NOISE() {
+        return MAX_NOISE;
+    }
+
+    public double AMOUNT_OF_FRAMES() {
+        return AMOUNT_OF_FRAMES;
     }
 }
 

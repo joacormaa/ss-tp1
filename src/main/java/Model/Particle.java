@@ -1,6 +1,7 @@
 package Model;
 
 import Constants.Config;
+import NeighbourLogic.Helper;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class Particle {
         this.speed=speed;
         this.angle=angle;
     }
+
 
     public int getId() {
         return id;
