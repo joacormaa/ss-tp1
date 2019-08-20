@@ -7,8 +7,12 @@ import Model.System;
 import NeighbourLogic.Helper;
 import NeighbourLogic.SystemNeighbourManager;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 public class FlockSimManager {
@@ -18,17 +22,28 @@ public class FlockSimManager {
     private List<SystemMetrics> metrics;
     private SystemNeighbourManager snm;
     private Config c;
+    private FlockSimPrinter printer;
 
     public FlockSimManager(System system){
         this.snm=new SystemNeighbourManager();
         this.systems=new LinkedList<>();
         this.metrics= new LinkedList<>();
         this.c=Config.getInstance();
+        this.printer = new FlockSimPrinter();
         systems.add(system);
         metrics.add(new SystemMetrics(system));
     }
 
     public void stepForward(int delta){
+        System nextSystem = getNextSystem(delta);
+        systems.add(nextSystem);
+        SystemMetrics nextSystemMetrics = new SystemMetrics(nextSystem);
+        metrics.add(nextSystemMetrics);
+
+        printer.outputStep(nextSystem,nextSystemMetrics);
+    }
+
+    private System getNextSystem(int delta) {
         System lastSystem = getLastSystem();
         Map<Particle, Set<Particle>> neighbours = snm.getNeighbours(lastSystem);
 
@@ -38,9 +53,7 @@ public class FlockSimManager {
             Particle next = getNextParticle(p,neighbours,delta);
             nextParticles.add(next);
         }
-        System nextSystem = new System(lastSystem.getTime()+delta,nextParticles);
-        systems.add(nextSystem);
-        metrics.add(new SystemMetrics(nextSystem));
+        return new System(lastSystem.getTime()+delta,nextParticles);
     }
 
     private Particle getNextParticle(Particle p, Map<Particle, Set<Particle>> neighbourMap, int delta) {
@@ -84,33 +97,7 @@ public class FlockSimManager {
     private System getLastSystem() {
         return systems.get(systems.size()-1);
     }
-
-    public String printMetricsOverTime(){
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("time");
-        sb.append(',');
-        sb.append("orden");
-        sb.append('\n');
-        for(SystemMetrics m : metrics){
-            sb.append(m.getTime());
-            sb.append(',');
-            sb.append(m.getOrden());
-            sb.append('\n');
-        }
-        return sb.toString();
-    }
-
-    public String printSystemOverTime(){
-        StringBuilder sb = new StringBuilder();
-
-        for (System s: systems){
-            sb.append(c.PARTICLES_QUANTITY().toString());
-            sb.append('\n');
-            sb.append('\n');
-            sb.append(s.stringify());
-        }
-
-        return sb.toString();
+    private SystemMetrics getLastSystemMetrics() {
+        return metrics.get(metrics.size()-1);
     }
 }
