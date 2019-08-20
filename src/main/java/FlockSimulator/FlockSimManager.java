@@ -6,20 +6,13 @@ import Model.Particle;
 import Model.System;
 import NeighbourLogic.Helper;
 import NeighbourLogic.SystemNeighbourManager;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 public class FlockSimManager {
 
 
-    private List<System> systems;
-    private List<SystemMetrics> metrics;
+    private List<System> systems;           //todo: change Collection to Element to free memory
+    private List<SystemMetrics> metrics;    //todo: change Collection to Element to free memory
     private SystemNeighbourManager snm;
     private Config c;
     private FlockSimPrinter printer;
@@ -87,17 +80,12 @@ public class FlockSimManager {
     }
 
     private double getNoise() {
-        c.MAX_NOISE();
         double rand = Math.random() * c.MAX_NOISE()*2;
-
         return rand - c.MAX_NOISE();
 
     }
 
     private System getLastSystem() {
         return systems.get(systems.size()-1);
-    }
-    private SystemMetrics getLastSystemMetrics() {
-        return metrics.get(metrics.size()-1);
     }
 }

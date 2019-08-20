@@ -24,7 +24,7 @@ public class Config {
     private double PARTICLE_SPEED;
     private double MAX_NOISE;
     private int AMOUNT_OF_FRAMES;
-
+    private boolean RANDOM_PARTICLE_CREATION;
 
     private static Config instance;
 
@@ -66,6 +66,7 @@ public class Config {
         String PARTICLE_SPEED_STR = document.getElementsByTagName("PARTICLE_SPEED").item(0).getTextContent();
         String AMOUNT_OF_FRAMES_STR = document.getElementsByTagName("AMOUNT_OF_FRAMES").item(0).getTextContent();
         String MAX_NOISE_STR = document.getElementsByTagName("MAX_NOISE").item(0).getTextContent();
+        String RANDOM_PARTICLE_CREATION_STR = document.getElementsByTagName("RANDOM_PARTICLE_CREATION").item(0).getTextContent();
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
         this.SYSTEM_LENGTH=Double.parseDouble(SYSTEM_LENGTH_STR);
@@ -75,6 +76,7 @@ public class Config {
         this.PARTICLE_SPEED = Double.parseDouble(PARTICLE_SPEED_STR);
         this.AMOUNT_OF_FRAMES = Integer.parseInt(AMOUNT_OF_FRAMES_STR);
         this.MAX_NOISE = Double.parseDouble(MAX_NOISE_STR);
+        this.RANDOM_PARTICLE_CREATION = Boolean.parseBoolean(RANDOM_PARTICLE_CREATION_STR);
     }
 
     public double PARTICLE_SPEED(){return PARTICLE_SPEED;}
@@ -118,5 +120,7 @@ public class Config {
     public double AMOUNT_OF_FRAMES() {
         return AMOUNT_OF_FRAMES;
     }
+
+    public boolean RANDOM_PARTICLE_CREATION(){return RANDOM_PARTICLE_CREATION;}
 }
 

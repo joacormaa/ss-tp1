@@ -31,12 +31,12 @@ public class FlockSimPrinter {
         appendToFile(sb.toString(),path);
     }
 
-    public void outputStep(System system, SystemMetrics systemMetrics){
+    void outputStep(System system, SystemMetrics systemMetrics){
         appendToFile(printSystem(system),c.OUTPUT_PATH()+"/"+PARTICLE_OUTPUT_PATH);
         appendToFile(printSystemMetrics(systemMetrics),c.OUTPUT_PATH()+"/"+METRIC_OUTPUT_PATH);
     }
 
-    void resetFile(String str){
+    private void resetFile(String str){
         File f = new File(str);
         if(f.exists())
             f.delete();
@@ -53,7 +53,7 @@ public class FlockSimPrinter {
         }
     }
 
-    void appendToFile(String str, String path) {
+    private void appendToFile(String str, String path) {
         try {
             Files.write(Paths.get(path), str.getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
@@ -61,7 +61,7 @@ public class FlockSimPrinter {
         }
     }
 
-    String printSystemMetrics(SystemMetrics m){
+    private String printSystemMetrics(SystemMetrics m){
         StringBuilder sb = new StringBuilder();
         sb.append(m.getTime());
         sb.append(',');
@@ -70,7 +70,7 @@ public class FlockSimPrinter {
         return sb.toString();
     }
 
-    String printSystem(System system){
+    private String printSystem(System system){
         StringBuilder sb = new StringBuilder();
         sb.append(system.getParticles().size());
         sb.append('\n');
