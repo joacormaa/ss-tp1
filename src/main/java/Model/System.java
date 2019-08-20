@@ -43,10 +43,11 @@ public class System {
     }
 
     public String stringify(){
-        String out = "";
+        StringBuilder sb = new StringBuilder();
         for (Particle p : particles) {
-            out = out.concat(p.stringify() + '\n');
+            sb.append(p.stringify());
+            sb.append('\n');
         }
-        return out;
+        return sb.toString();
     }
 }

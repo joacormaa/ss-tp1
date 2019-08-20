@@ -1,6 +1,7 @@
 package FlockSimulator;
 
 import Constants.Config;
+import Metrics.SystemMetrics;
 import Model.Particle;
 import Model.System;
 import NeighbourLogic.Helper;
@@ -12,15 +13,19 @@ import java.util.*;
 
 public class FlockSimManager {
 
+
     private List<System> systems;
+    private List<SystemMetrics> metrics;
     private SystemNeighbourManager snm;
     private Config c;
 
     public FlockSimManager(System system){
         this.snm=new SystemNeighbourManager();
         this.systems=new LinkedList<>();
+        this.metrics= new LinkedList<>();
         this.c=Config.getInstance();
         systems.add(system);
+        metrics.add(new SystemMetrics(system));
     }
 
     public void stepForward(int delta){
@@ -35,6 +40,7 @@ public class FlockSimManager {
         }
         System nextSystem = new System(lastSystem.getTime()+delta,nextParticles);
         systems.add(nextSystem);
+        metrics.add(new SystemMetrics(nextSystem));
     }
 
     private Particle getNextParticle(Particle p, Map<Particle, Set<Particle>> neighbourMap, int delta) {
@@ -79,21 +85,26 @@ public class FlockSimManager {
         return systems.get(systems.size()-1);
     }
 
-    public void printSystemOverTime(){
-        String outXYZ = "";
+    public String printMetricsOverTime(){
+        StringBuilder sb = new StringBuilder();
+        for(SystemMetrics m : metrics){
+            sb.append(m.stringify());
+            sb.append('\n');
+            sb.append('\n');
+        }
+        return sb.toString();
+    }
+
+    public String printSystemOverTime(){
+        StringBuilder sb = new StringBuilder();
 
         for (System s: systems){
-            outXYZ = outXYZ.concat(c.PARTICLES_QUANTITY().toString() + '\n');
-            outXYZ = outXYZ.concat('\n' + s.stringify());
+            sb.append(c.PARTICLES_QUANTITY().toString());
+            sb.append('\n');
+            sb.append('\n');
+            sb.append(s.stringify());
         }
 
-        FileWriter fileWriter;
-        try {
-            fileWriter = new FileWriter(c.OUTPUT_PATH());
-            fileWriter.write(outXYZ);
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return sb.toString();
     }
 }

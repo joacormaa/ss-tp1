@@ -57,7 +57,17 @@ public class Particle {
     }
 
     public String stringify(){
-        return id + " " + x + " " + y + " " + speed * Math.cos(angle) + " " + speed * Math.sin(angle);
+        StringBuilder sb = new StringBuilder();
+        sb.append(id);
+        sb.append(' ');
+        sb.append(x);
+        sb.append(' ');
+        sb.append(y);
+        sb.append(' ');
+        sb.append(speed * Math.cos(angle));
+        sb.append(' ');
+        sb.append(speed * Math.sin(angle));
+        return sb.toString();
     }
 
     @Override
