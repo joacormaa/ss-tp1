@@ -31,7 +31,11 @@ public class SystemMetrics {
         return mod / (system.getParticles().size()*c.PARTICLE_SPEED());
     }
 
-    public String stringify() {
-        return String.valueOf(time) + ' ' + orden;
+    public int getTime() {
+        return time;
+    }
+
+    public double getOrden() {
+        return orden;
     }
 }

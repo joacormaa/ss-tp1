@@ -86,10 +86,16 @@ public class FlockSimManager {
     }
 
     public String printMetricsOverTime(){
+
         StringBuilder sb = new StringBuilder();
+        sb.append("time");
+        sb.append(',');
+        sb.append("orden");
+        sb.append('\n');
         for(SystemMetrics m : metrics){
-            sb.append(m.stringify());
-            sb.append('\n');
+            sb.append(m.getTime());
+            sb.append(',');
+            sb.append(m.getOrden());
             sb.append('\n');
         }
         return sb.toString();
