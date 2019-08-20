@@ -11,33 +11,31 @@ import java.util.*;
 public class FlockSimManager {
 
 
-    private List<System> systems;           //todo: change Collection to Element to free memory
-    private List<SystemMetrics> metrics;    //todo: change Collection to Element to free memory
+    private System lastSystem;           //todo: change Collection to Element to free memory
+    private SystemMetrics lastMetric;    //todo: change Collection to Element to free memory
     private SystemNeighbourManager snm;
     private Config c;
     private FlockSimPrinter printer;
 
     public FlockSimManager(System system){
         this.snm=new SystemNeighbourManager();
-        this.systems=new LinkedList<>();
-        this.metrics= new LinkedList<>();
+        this.lastSystem= system;
+        this.lastMetric=new SystemMetrics(system);
         this.c=Config.getInstance();
         this.printer = new FlockSimPrinter();
-        systems.add(system);
-        metrics.add(new SystemMetrics(system));
     }
 
     public void stepForward(int delta){
         System nextSystem = getNextSystem(delta);
-        systems.add(nextSystem);
         SystemMetrics nextSystemMetrics = new SystemMetrics(nextSystem);
-        metrics.add(nextSystemMetrics);
 
         printer.outputStep(nextSystem,nextSystemMetrics);
+
+        lastSystem=nextSystem;
+        lastMetric=nextSystemMetrics;
     }
 
     private System getNextSystem(int delta) {
-        System lastSystem = getLastSystem();
         Map<Particle, Set<Particle>> neighbours = snm.getNeighbours(lastSystem);
 
         Collection<Particle> previousParticles = lastSystem.getParticles();
@@ -80,12 +78,7 @@ public class FlockSimManager {
     }
 
     private double getNoise() {
-        double rand = Math.random() * c.MAX_NOISE()*2;
-        return rand - c.MAX_NOISE();
-
-    }
-
-    private System getLastSystem() {
-        return systems.get(systems.size()-1);
+        double rand = Math.random()*2-1;
+        return rand * c.MAX_NOISE();
     }
 }
