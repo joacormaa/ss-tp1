@@ -22,7 +22,7 @@ public class Config {
     private int CELL_AMOUNT;
     private double CELL_LENGTH;
     private double PARTICLE_SPEED;
-    private double MAX_NOISE;
+    private double NOISE_COEFFICIENT;
     private int AMOUNT_OF_FRAMES;
     private boolean RANDOM_PARTICLE_CREATION;
 
@@ -45,7 +45,7 @@ public class Config {
             exit(-1);
         }
 
-        if(!Helper.AngleIsRadians(this.MAX_NOISE));
+        if(!Helper.AngleIsRadians(this.NOISE_COEFFICIENT));
         PARTICLE_INFLUENCE_RADIUS = 2*PARTICLE_RADIUS+PARTICLE_RC;
         CELL_AMOUNT = (int)Math.floor(SYSTEM_LENGTH/PARTICLE_INFLUENCE_RADIUS);
         if(CELL_AMOUNT==0)CELL_AMOUNT=1;
@@ -65,7 +65,7 @@ public class Config {
         String PARTICLE_RC_STR = document.getElementsByTagName("PARTICLE_RC").item(0).getTextContent();
         String PARTICLE_SPEED_STR = document.getElementsByTagName("PARTICLE_SPEED").item(0).getTextContent();
         String AMOUNT_OF_FRAMES_STR = document.getElementsByTagName("AMOUNT_OF_FRAMES").item(0).getTextContent();
-        String MAX_NOISE_STR = document.getElementsByTagName("MAX_NOISE").item(0).getTextContent();
+        String MAX_NOISE_STR = document.getElementsByTagName("NOISE_COEFFICIENT").item(0).getTextContent();
         String RANDOM_PARTICLE_CREATION_STR = document.getElementsByTagName("RANDOM_PARTICLE_CREATION").item(0).getTextContent();
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
@@ -75,7 +75,7 @@ public class Config {
         this.PARTICLE_RC = Double.parseDouble(PARTICLE_RC_STR);
         this.PARTICLE_SPEED = Double.parseDouble(PARTICLE_SPEED_STR);
         this.AMOUNT_OF_FRAMES = Integer.parseInt(AMOUNT_OF_FRAMES_STR);
-        this.MAX_NOISE = Double.parseDouble(MAX_NOISE_STR);
+        this.NOISE_COEFFICIENT = Double.parseDouble(MAX_NOISE_STR);
         this.RANDOM_PARTICLE_CREATION = Boolean.parseBoolean(RANDOM_PARTICLE_CREATION_STR);
     }
 
@@ -113,8 +113,8 @@ public class Config {
         return CELL_LENGTH;
     }
 
-    public double MAX_NOISE() {
-        return MAX_NOISE;
+    public double NOISE_COEFFICIENT() {
+        return NOISE_COEFFICIENT;
     }
 
     public double AMOUNT_OF_FRAMES() {

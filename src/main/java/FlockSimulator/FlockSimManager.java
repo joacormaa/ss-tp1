@@ -9,10 +9,8 @@ import NeighbourLogic.SystemNeighbourManager;
 import java.util.*;
 
 public class FlockSimManager {
-
-
-    private System lastSystem;           //todo: change Collection to Element to free memory
-    private SystemMetrics lastMetric;    //todo: change Collection to Element to free memory
+    private System lastSystem;
+    private SystemMetrics lastMetric;
     private SystemNeighbourManager snm;
     private Config c;
     private FlockSimPrinter printer;
@@ -79,6 +77,6 @@ public class FlockSimManager {
 
     private double getNoise() {
         double rand = Math.random()*2-1;
-        return rand * c.MAX_NOISE();
+        return rand * c.NOISE_COEFFICIENT()/2;
     }
 }
