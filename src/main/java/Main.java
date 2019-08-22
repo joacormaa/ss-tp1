@@ -20,7 +20,7 @@ public class Main {
 
     private static void runOrderComparison() {
         FlockSimOrderComparer oc = new FlockSimOrderComparer();
-        oc.compareDensity(0,1000,50);
+        oc.compareDensity(5,1000,50);
         oc.compareNoise(0,5,0.25);
     }
 

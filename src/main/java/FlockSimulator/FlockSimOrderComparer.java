@@ -26,6 +26,7 @@ public class FlockSimOrderComparer {
     }
 
     public void compareDensity(int particleMin, int particleMax, int step){
+        int amountOfParticlesBK = c.PARTICLES_QUANTITY();
         resetFile(c.OUTPUT_PATH()+"/"+DENSITY_OUTPUT_PATH);
 
         int currParticle = particleMin;
@@ -48,14 +49,17 @@ public class FlockSimOrderComparer {
             currParticle+=step;
         }
         outputDensityComparison();
+        c.setAmountOfParticles(amountOfParticlesBK);
     }
 
     public void compareNoise(double noiseMin, double noiseMax, double step){
+        double noiseBK = c.NOISE_COEFFICIENT();
         resetFile(c.OUTPUT_PATH()+"/"+NOISE_OUTPUT_PATH);
 
         double currNoise = noiseMin;
 
         while(currNoise<=noiseMax){
+            c.setNoiseCoefficient(currNoise);
             System system = new System(0);
             FlockSimManager flockSimManager = new FlockSimManager(system,false);
             Config c = Config.getInstance();
@@ -68,9 +72,9 @@ public class FlockSimOrderComparer {
 
             noiseMap.put(currNoise,order);
             currNoise+=step;
-            c.setNoiseCoefficient(currNoise);
         }
         outputNoiseComparison();
+        c.setNoiseCoefficient(noiseBK);
     }
 
     private void outputDensityComparison(){
