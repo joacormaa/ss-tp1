@@ -3,6 +3,7 @@ package FlockSimulator;
 import Constants.Config;
 import Metrics.SystemMetrics;
 import Model.System;
+import NeighbourLogic.Helper;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,46 +21,22 @@ public class FlockSimPrinter {
 
     FlockSimPrinter(){
         this.c = Config.getInstance();
-        resetFile(c.OUTPUT_PATH()+"/"+PARTICLE_OUTPUT_PATH);
-        resetFile(c.OUTPUT_PATH()+"/"+METRIC_OUTPUT_PATH);
+        Helper.resetFile(c.OUTPUT_PATH()+"/"+PARTICLE_OUTPUT_PATH);
+        Helper.resetFile(c.OUTPUT_PATH()+"/"+METRIC_OUTPUT_PATH);
         addHeader(c.OUTPUT_PATH()+"/"+METRIC_OUTPUT_PATH);
     }
 
     private void addHeader(String path) {
         StringBuilder sb = new StringBuilder();
         sb.append("time").append(',').append("orden").append('\n');
-        appendToFile(sb.toString(),path);
+        Helper.appendToFile(sb.toString(),path);
     }
 
     void outputStep(System system, SystemMetrics systemMetrics){
-        appendToFile(printSystem(system),c.OUTPUT_PATH()+"/"+PARTICLE_OUTPUT_PATH);
-        appendToFile(printSystemMetrics(systemMetrics),c.OUTPUT_PATH()+"/"+METRIC_OUTPUT_PATH);
+        Helper.appendToFile(printSystem(system),c.OUTPUT_PATH()+"/"+PARTICLE_OUTPUT_PATH);
+        Helper.appendToFile(printSystemMetrics(systemMetrics),c.OUTPUT_PATH()+"/"+METRIC_OUTPUT_PATH);
     }
 
-    private void resetFile(String str){
-        File f = new File(str);
-        if(f.exists())
-            f.delete();
-
-        File parent = f.getParentFile();
-        if (!parent.exists() && !parent.mkdirs()) {
-            throw new IllegalStateException("Couldn't create dir: " + parent);
-        }
-
-        try {
-            f.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void appendToFile(String str, String path) {
-        try {
-            Files.write(Paths.get(path), str.getBytes(), StandardOpenOption.APPEND);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private String printSystemMetrics(SystemMetrics m){
         StringBuilder sb = new StringBuilder();
