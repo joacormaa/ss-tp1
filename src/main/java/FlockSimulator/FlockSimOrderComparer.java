@@ -8,12 +8,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FlockSimOrderComparer {
-    private Map<Double, Double> densityMap;
-    private Map<Double, Double> noiseMap;
+    private Map<Double, List<Double>> densityMap;
+    private Map<Double, List<Double>> noiseMap;
 
     private Config c;
     private static String DENSITY_OUTPUT_PATH = "density.csv";
@@ -25,7 +27,7 @@ public class FlockSimOrderComparer {
         this.c = Config.getInstance();
     }
 
-    public void compareDensity(int particleMin, int particleMax, int step){
+    public void compareDensity(int particleMin, int particleMax, int step, int simulationRuns){
         int amountOfParticlesBK = c.PARTICLES_QUANTITY();
         resetFile(c.OUTPUT_PATH()+"/"+DENSITY_OUTPUT_PATH);
 
@@ -33,26 +35,39 @@ public class FlockSimOrderComparer {
 
         while(currParticle<=particleMax){
             c.setAmountOfParticles(currParticle);
-            System system = new System(0);
-            FlockSimManager flockSimManager = new FlockSimManager(system,false);
+            List<FlockSimManager> flockSimulations = new ArrayList<>();
+            for(int i=0; i<simulationRuns;i++){
+                System system = new System(0);
+                flockSimulations.add(new FlockSimManager(system,false));
+            }
             Config c = Config.getInstance();
 
 
             for(int i=0; i<c.AMOUNT_OF_FRAMES(); i++){
-                flockSimManager.stepForward(1);
+                for(FlockSimManager fsm : flockSimulations){
+                    fsm.stepForward(1);
+                }
             }
 
             double density = currParticle / (c.SYSTEM_LENGTH()*c.SYSTEM_LENGTH());
-            double order = flockSimManager.getLastMetric().getOrden();
-
-            densityMap.put(density,order);
+            for(FlockSimManager fsm : flockSimulations){
+                double order = fsm.getLastMetric().getOrden();
+                putValue(densityMap,density,order);
+            }
             currParticle+=step;
         }
-        outputDensityComparison();
+        outputDensityComparison(simulationRuns);
         c.setAmountOfParticles(amountOfParticlesBK);
     }
 
-    public void compareNoise(double noiseMin, double noiseMax, double step){
+    private void putValue(Map<Double, List<Double>> map, double key, double value) {
+        List<Double> list = map.getOrDefault(key,new ArrayList<>());
+        list.add(value);
+        map.put(key,list);
+
+    }
+
+    public void compareNoise(double noiseMin, double noiseMax, double step, int simulationRuns){
         double noiseBK = c.NOISE_COEFFICIENT();
         resetFile(c.OUTPUT_PATH()+"/"+NOISE_OUTPUT_PATH);
 
@@ -60,39 +75,61 @@ public class FlockSimOrderComparer {
 
         while(currNoise<=noiseMax){
             c.setNoiseCoefficient(currNoise);
-            System system = new System(0);
-            FlockSimManager flockSimManager = new FlockSimManager(system,false);
+            List<FlockSimManager> flockSimulations = new ArrayList<>();
+            for(int i=0; i<simulationRuns; i++){
+                System system = new System(0);
+                flockSimulations.add(new FlockSimManager(system,false));
+            }
             Config c = Config.getInstance();
 
             for(int i=0; i<c.AMOUNT_OF_FRAMES(); i++){
-                flockSimManager.stepForward(1);
+                for(FlockSimManager fsm : flockSimulations){
+                    fsm.stepForward(1);
+                }
             }
 
-            double order = flockSimManager.getLastMetric().getOrden();
-
-            noiseMap.put(currNoise,order);
+            for(FlockSimManager fsm : flockSimulations){
+                double order = fsm.getLastMetric().getOrden();
+                putValue(noiseMap,currNoise,order);
+            }
             currNoise+=step;
         }
-        outputNoiseComparison();
+        outputNoiseComparison(simulationRuns);
         c.setNoiseCoefficient(noiseBK);
     }
 
-    private void outputDensityComparison(){
+    private void outputDensityComparison(int simulationRuns){
         StringBuilder sb = new StringBuilder();
-        sb.append("density, order\n");
-        for(Double noise : densityMap.keySet()){
-            double density = densityMap.get(noise);
-            sb.append(noise).append(", ").append(density).append('\n');
+        sb.append("noise\n");
+        for(int i=0; i<simulationRuns;i++){
+            sb.append(",order").append(i);
+        }
+        sb.append('\n');
+        for(Double density : densityMap.keySet()){
+            List<Double> orders = densityMap.get(density);
+            sb.append(density);
+            for(Double order : orders){
+                sb.append(',').append(order.toString());
+            }
+            sb.append('\n');
         }
         appendToFile(sb.toString(),c.OUTPUT_PATH()+"/"+DENSITY_OUTPUT_PATH );
     }
 
-    private void outputNoiseComparison(){
+    private void outputNoiseComparison(int simulationRuns){
         StringBuilder sb = new StringBuilder();
-        sb.append("noise, order\n");
+        sb.append("noise");
+        for(int i=0; i<simulationRuns;i++){
+            sb.append(",order").append(i);
+        }
+        sb.append('\n');
         for(Double noise : noiseMap.keySet()){
-            double order = noiseMap.get(noise);
-            sb.append(noise).append(", ").append(order).append('\n');
+            List<Double> orders = noiseMap.get(noise);
+            sb.append(noise);
+            for(Double order : orders){
+                sb.append(',').append(order.toString());
+            }
+            sb.append('\n');
         }
         appendToFile(sb.toString(),c.OUTPUT_PATH()+"/"+NOISE_OUTPUT_PATH );
     }
