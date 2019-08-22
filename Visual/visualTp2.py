@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.metrics import mean_squared_error
 
 df = pd.read_csv('../output/noise.csv')
 df.sort_values(by=['noise'], inplace=True)
