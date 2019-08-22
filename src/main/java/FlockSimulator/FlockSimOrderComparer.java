@@ -30,11 +30,12 @@ public class FlockSimOrderComparer {
 
         int currParticle = particleMin;
 
-        while(currParticle<particleMax){
+        while(currParticle<=particleMax){
             c.setAmountOfParticles(currParticle);
             System system = new System(0);
             FlockSimManager flockSimManager = new FlockSimManager(system,false);
             Config c = Config.getInstance();
+
 
             for(int i=0; i<c.AMOUNT_OF_FRAMES(); i++){
                 flockSimManager.stepForward(1);
@@ -54,7 +55,7 @@ public class FlockSimOrderComparer {
 
         double currNoise = noiseMin;
 
-        while(currNoise<noiseMax){
+        while(currNoise<=noiseMax){
             System system = new System(0);
             FlockSimManager flockSimManager = new FlockSimManager(system,false);
             Config c = Config.getInstance();
