@@ -7,3 +7,9 @@ output.txt
 target/*
 
 analisis/
+
+NewVis/
+
+Visual/.idea/
+
+Visual/venv/
