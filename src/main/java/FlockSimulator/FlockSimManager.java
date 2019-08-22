@@ -14,20 +14,24 @@ public class FlockSimManager {
     private SystemNeighbourManager snm;
     private Config c;
     private FlockSimPrinter printer;
+    private boolean printOutput;
 
-    public FlockSimManager(System system){
+    public FlockSimManager(System system,boolean printOutput){
         this.snm=new SystemNeighbourManager();
         this.lastSystem= system;
         this.lastMetric=new SystemMetrics(system);
         this.c=Config.getInstance();
         this.printer = new FlockSimPrinter();
+        this.printOutput=printOutput;
     }
 
     public void stepForward(int delta){
         System nextSystem = getNextSystem(delta);
         SystemMetrics nextSystemMetrics = new SystemMetrics(nextSystem);
 
-        printer.outputStep(nextSystem,nextSystemMetrics);
+        if(printOutput){
+            printer.outputStep(nextSystem,nextSystemMetrics);
+        }
 
         lastSystem=nextSystem;
         lastMetric=nextSystemMetrics;
@@ -78,5 +82,9 @@ public class FlockSimManager {
     private double getNoise() {
         double rand = Math.random()*2-1;
         return rand * c.NOISE_COEFFICIENT()/2;
+    }
+
+    public SystemMetrics getLastMetric() {
+        return lastMetric;
     }
 }

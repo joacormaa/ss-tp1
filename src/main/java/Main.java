@@ -1,5 +1,6 @@
 import Constants.Config;
 import FlockSimulator.FlockSimManager;
+import FlockSimulator.FlockSimOrderComparer;
 import Model.Particle;
 import Model.System;
 import NeighbourLogic.SystemNeighbourManager;
@@ -12,14 +13,21 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        runFlockSimulation();
+        runOrderComparison();
+        //runFlockSimulation();
         //runNeighbourOutput();
+    }
+
+    private static void runOrderComparison() {
+        FlockSimOrderComparer oc = new FlockSimOrderComparer();
+        oc.compareDensity(0,1000,50);
+        oc.compareNoise(0,5,0.25);
     }
 
 
     private static void runFlockSimulation() {
         System system = new System(0);
-        FlockSimManager flockSimManager = new FlockSimManager(system);
+        FlockSimManager flockSimManager = new FlockSimManager(system,true);
         Config c = Config.getInstance();
 
         for(int i=0; i<c.AMOUNT_OF_FRAMES(); i++){

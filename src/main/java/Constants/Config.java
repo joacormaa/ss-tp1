@@ -122,5 +122,13 @@ public class Config {
     }
 
     public boolean RANDOM_PARTICLE_CREATION(){return RANDOM_PARTICLE_CREATION;}
+
+    public void setNoiseCoefficient(double noiseCoefficient){
+        this.NOISE_COEFFICIENT=noiseCoefficient;
+    }
+
+    public void setAmountOfParticles(int amountOfParticles){
+        this.PARTICLE_QUANTITY = amountOfParticles;
+    }
 }
 
