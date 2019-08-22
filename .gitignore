@@ -5,3 +5,5 @@ output.txt
 *.ipr
 *.iws
 target/*
+
+analisis/
