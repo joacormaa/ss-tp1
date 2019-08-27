@@ -9,8 +9,8 @@ import NeighbourLogic.SystemNeighbourManager;
 import java.util.*;
 
 public class FlockSimManager {
-    private System lastSystem;
-    private SystemMetrics lastMetric;
+    private List<System> systems;
+    private List<SystemMetrics> metrics;
     private SystemNeighbourManager snm;
     private Config c;
     private FlockSimPrinter printer;
@@ -18,8 +18,10 @@ public class FlockSimManager {
 
     public FlockSimManager(System system,boolean printOutput){
         this.snm=new SystemNeighbourManager();
-        this.lastSystem= system;
-        this.lastMetric=new SystemMetrics(system);
+        this.systems= new LinkedList<>();
+        this.systems.add(system);
+        this.metrics=new LinkedList<>();
+        this.metrics.add(new SystemMetrics(system));
         this.c=Config.getInstance();
         this.printer = new FlockSimPrinter();
         this.printOutput=printOutput;
@@ -29,24 +31,24 @@ public class FlockSimManager {
         System nextSystem = getNextSystem(delta);
         SystemMetrics nextSystemMetrics = new SystemMetrics(nextSystem);
 
-        if(printOutput){
-            printer.outputStep(nextSystem,nextSystemMetrics);
-        }
-
-        lastSystem=nextSystem;
-        lastMetric=nextSystemMetrics;
+        this.systems.add(nextSystem);
+        this.metrics.add(nextSystemMetrics);
     }
 
     private System getNextSystem(int delta) {
-        Map<Particle, Set<Particle>> neighbours = snm.getNeighbours(lastSystem);
+        Map<Particle, Set<Particle>> neighbours = snm.getNeighbours(getLastSystem());
 
-        Collection<Particle> previousParticles = lastSystem.getParticles();
+        Collection<Particle> previousParticles = getLastSystem().getParticles();
         Collection<Particle> nextParticles = new ArrayList<>();
         for(Particle p : previousParticles){
             Particle next = getNextParticle(p,neighbours,delta);
             nextParticles.add(next);
         }
-        return new System(lastSystem.getTime()+delta,nextParticles);
+        return new System(getLastSystem().getTime()+delta,nextParticles);
+    }
+
+    private System getLastSystem() {
+        return systems.get(systems.size()-1);
     }
 
     private Particle getNextParticle(Particle p, Map<Particle, Set<Particle>> neighbourMap, int delta) {
@@ -85,6 +87,13 @@ public class FlockSimManager {
     }
 
     public SystemMetrics getLastMetric() {
-        return lastMetric;
+        return metrics.get(metrics.size()-1);
+    }
+
+    public void printSystemsOverTime() {
+        if(printOutput){
+            for(int i = 0; i < systems.size(); i++)
+            printer.outputStep(systems.get(i),metrics.get(i));
+        }
     }
 }

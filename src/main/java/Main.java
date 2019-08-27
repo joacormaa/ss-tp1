@@ -13,8 +13,8 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        runOrderComparison();
-        //runFlockSimulation();
+        //runOrderComparison();
+        runFlockSimulation();
         //runNeighbourOutput();
     }
 
@@ -30,9 +30,11 @@ public class Main {
         FlockSimManager flockSimManager = new FlockSimManager(system,true);
         Config c = Config.getInstance();
 
-        for(int i=0; i<c.AMOUNT_OF_FRAMES(); i++){
+        for(int i=0; i<c.AMOUNT_OF_FRAMES(); i++) {
             flockSimManager.stepForward(1);
         }
+
+        flockSimManager.printSystemsOverTime();
     }
 
     public static void runNeighbourOutput(){
