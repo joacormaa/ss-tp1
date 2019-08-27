@@ -37,10 +37,15 @@ public class System {
         if(isRandom)
         {
             for(int i = 0; i < c.PARTICLES_QUANTITY(); i++) {
-                double x = Math.random() * c.SYSTEM_LENGTH();
-                double y = Math.random() * c.SYSTEM_LENGTH();
-                double angle = Math.random() * 2* Math.PI - Math.PI;
-                particles.add(new Particle(i, x, y,c.PARTICLE_SPEED(),angle));
+                Particle newParticle = new Particle(0,0,0,0,0,0,false);
+                do {
+                    double x = Math.random() * c.SYSTEM_LENGTH();
+                    double y = Math.random() * c.SYSTEM_LENGTH();
+                    double angle = Math.random() * 2* Math.PI - Math.PI;
+                    newParticle = new Particle(i, x, y, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle, false);
+
+                } while (thereIsCollision(newParticle, particles));
+                particles.add(newParticle);
             }
         }else{
             int sqrtParticles = (int) Math.ceil(Math.sqrt(c.PARTICLES_QUANTITY()));
@@ -49,10 +54,22 @@ public class System {
             for(int i=0; i< sqrtParticles;i++){
                 for(int j=0; j<sqrtParticles;j++){
                     double angle = ((i+j)%4-1) * Math.PI/2;
-                    particles.add(new Particle(id++,step*j,step*i,c.PARTICLE_SPEED(),angle));
+                    particles.add(new Particle(id++,step*j,step*i, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle, false));
                 }
             }
         }
+    }
+
+    private boolean thereIsCollision(Particle newParticle, Collection<Particle> particles) {
+        if(particles.isEmpty()) return true;
+        for(Particle p : particles) {
+            if(thereIsCollision(p, newParticle)) return false;
+        }
+        return true;
+    }
+
+    private boolean thereIsCollision(Particle p1, Particle p2) {
+        return Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2) <= Math.pow(p1.getRadius() + p2.getRadius(), 2);
     }
 
     public String stringify(){

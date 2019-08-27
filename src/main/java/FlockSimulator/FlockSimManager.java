@@ -12,6 +12,9 @@ public class FlockSimManager {
     private List<System> systems;
     private List<SystemMetrics> metrics;
     private SystemNeighbourManager snm;
+    private Double[][] collisionTimesWithVerticalWalls;
+    private Double[][] collisionTimesWithHorizontalWalls;
+    private Double[][] collisionTimesBetweenParticles;
     private Config c;
     private FlockSimPrinter printer;
     private boolean printOutput;
@@ -22,9 +25,56 @@ public class FlockSimManager {
         this.systems.add(system);
         this.metrics=new LinkedList<>();
         this.metrics.add(new SystemMetrics(system));
+        this.collisionTimesWithVerticalWalls = new Double[c.PARTICLES_QUANTITY()][2];
+        this.collisionTimesWithHorizontalWalls = new Double[c.PARTICLES_QUANTITY()][2];
+        this.collisionTimesBetweenParticles = new Double[c.PARTICLES_QUANTITY()][c.PARTICLES_QUANTITY()];
         this.c=Config.getInstance();
         this.printer = new FlockSimPrinter();
         this.printOutput=printOutput;
+
+        initializeCollisionTimes();
+    }
+
+    private void initializeCollisionTimes() {
+        List<Particle> particles = (List)getLastSystem().getParticles();
+        Double collisionTime = Double.valueOf(0);
+        for(int i = 0; i < c.PARTICLES_QUANTITY(); i++) {
+            for(int j = 0; j < c.PARTICLES_QUANTITY(); j++) {
+                if(j < 2) {
+                    Particle particle = particles.get(i);
+                    if(particle.getXSpeed() < 0) {
+                        collisionTime = (c.VERTICAL_WALL_1_X() + particle.getRadius() - particle.getX())/particle.getXSpeed();
+                        collisionTimesWithVerticalWalls[i][0] = collisionTime;
+                        collisionTimesWithVerticalWalls[i][1] = null;
+                    }
+                    else {
+                        collisionTime = (c.VERTICAL_WALL_2_X() - particle.getRadius() - particle.getX())/particle.getXSpeed();
+                        collisionTimesWithVerticalWalls[i][1] = collisionTime;
+                        collisionTimesWithVerticalWalls[i][0] = null;
+                    }
+
+                    if(particle.getYSpeed() < 0) {
+                        collisionTime = (c.HORIZONTAL_WALL_1_Y() + particle.getRadius() - particle.getY())/particle.getYSpeed();
+                        collisionTimesWithHorizontalWalls[i][0] = collisionTime;
+                        collisionTimesWithHorizontalWalls[i][1] = null;
+                    }
+                    else {
+                        collisionTime = (c.HORIZONTAL_WALL_2_Y() - particle.getRadius() - particle.getY())/particle.getYSpeed();
+                        collisionTimesWithHorizontalWalls[i][1] = collisionTime;
+                        collisionTimesWithHorizontalWalls[i][0] = null;
+                    }
+                }
+                if(i < j) {
+                    collisionTime = Double.valueOf(423); //TODO
+                    collisionTimesBetweenParticles[i][j] = collisionTime;
+                }
+                else {
+                    collisionTimesBetweenParticles[i][j] = null;
+                }
+            }
+        }
+
+
     }
 
     public void stepForward(int delta){
@@ -64,7 +114,7 @@ public class FlockSimManager {
 
         final double angle = getAngle(p, neighbours);
 
-        return new Particle(p.getId(),x,y,p.getSpeed(),angle);
+        return new Particle(p.getId(),x,y, p.getRadius(), p.getSpeed(),angle, false);
     }
 
     private double getAngle(Particle p, Collection<Particle> neighbours) {
