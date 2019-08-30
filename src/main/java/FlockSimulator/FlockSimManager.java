@@ -24,7 +24,7 @@ public class FlockSimManager {
         this.systems.add(system);
         this.metrics=new LinkedList<>();
         this.metrics.add(new SystemMetrics(system));
-        collisionTimes = new Collision[c.PARTICLES_QUANTITY()][4 + c.PARTICLES_QUANTITY()];
+        collisionTimes = new Collision[c.PARTICLES_QUANTITY()][6 + c.PARTICLES_QUANTITY()];
         this.c=Config.getInstance();
         this.printer = new FlockSimPrinter();
         this.printOutput=printOutput;

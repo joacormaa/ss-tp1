@@ -25,10 +25,10 @@ public class Config {
     private double NOISE_COEFFICIENT;
     private int AMOUNT_OF_FRAMES;
     private boolean RANDOM_PARTICLE_CREATION;
-    private double HORIZONTAL_WALL_1_Y;
-    private double HORIZONTAL_WALL_2_Y;
-    private double VERTICAL_WALL_1_X;
-    private double VERTICAL_WALL_2_X;
+    private double HORIZONTAL_WALL_WIDTH;
+    private double VERTICAL_WALL_WIDTH;
+    private double VERTICAL_WALL_HOLE;
+    private double VERTICAL_WALL_HOLE_POSITION;
 
     private static Config instance;
 
@@ -70,10 +70,10 @@ public class Config {
         String PARTICLE_SPEED_STR = document.getElementsByTagName("PARTICLE_SPEED").item(0).getTextContent();
         String AMOUNT_OF_FRAMES_STR = document.getElementsByTagName("AMOUNT_OF_FRAMES").item(0).getTextContent();
         String MAX_NOISE_STR = document.getElementsByTagName("NOISE_COEFFICIENT").item(0).getTextContent();
-        String HORIZONTAL_WALL_1_Y = document.getElementsByTagName("HORIZONTAL_WALL_1_Y").item(0).getTextContent();
-        String HORIZONTAL_WALL_2_Y = document.getElementsByTagName("HORIZONTAL_WALL_2_Y").item(0).getTextContent();
-        String VERTICAL_WALL_1_X = document.getElementsByTagName("VERTICAL_WALL_1_X").item(0).getTextContent();
-        String VERTICAL_WALL_2_X = document.getElementsByTagName("VERTICAL_WALL_2_X").item(0).getTextContent();
+        String HORIZONTAL_WALL_WIDTH = document.getElementsByTagName("HORIZONTAL_WALL_WIDTH").item(0).getTextContent();
+        String VERTICAL_WALL_WIDTH = document.getElementsByTagName("VERTICAL_WALL_WIDTH").item(0).getTextContent();
+        String VERTICAL_WALL_HOLE = document.getElementsByTagName("VERTICAL_WALL_HOLE").item(0).getTextContent();
+        String VERTICAL_WALL_HOLE_POSITION = document.getElementsByTagName("VERTICAL_WALL_HOLE_POSITION").item(0).getTextContent();
         String RANDOM_PARTICLE_CREATION_STR = document.getElementsByTagName("RANDOM_PARTICLE_CREATION").item(0).getTextContent();
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
@@ -84,10 +84,10 @@ public class Config {
         this.PARTICLE_SPEED = Double.parseDouble(PARTICLE_SPEED_STR);
         this.AMOUNT_OF_FRAMES = Integer.parseInt(AMOUNT_OF_FRAMES_STR);
         this.NOISE_COEFFICIENT = Double.parseDouble(MAX_NOISE_STR);
-        this.HORIZONTAL_WALL_1_Y = Double.parseDouble(HORIZONTAL_WALL_1_Y);
-        this.HORIZONTAL_WALL_2_Y = Double.parseDouble(HORIZONTAL_WALL_2_Y);
-        this.VERTICAL_WALL_1_X = Double.parseDouble(VERTICAL_WALL_1_X);
-        this.VERTICAL_WALL_2_X = Double.parseDouble(VERTICAL_WALL_2_X);
+        this.HORIZONTAL_WALL_WIDTH = Double.parseDouble(HORIZONTAL_WALL_WIDTH);
+        this.VERTICAL_WALL_WIDTH = Double.parseDouble(VERTICAL_WALL_WIDTH);
+        this.VERTICAL_WALL_HOLE = Double.parseDouble(VERTICAL_WALL_HOLE);
+        this.VERTICAL_WALL_HOLE_POSITION = Double.parseDouble(VERTICAL_WALL_HOLE_POSITION);
         this.RANDOM_PARTICLE_CREATION = Boolean.parseBoolean(RANDOM_PARTICLE_CREATION_STR);
     }
 
@@ -135,13 +135,13 @@ public class Config {
 
     public boolean RANDOM_PARTICLE_CREATION(){return RANDOM_PARTICLE_CREATION;}
 
-    public double HORIZONTAL_WALL_1_Y(){return HORIZONTAL_WALL_1_Y;}
+    public double HORIZONTAL_WALL_WIDTH(){return HORIZONTAL_WALL_WIDTH;}
 
-    public double HORIZONTAL_WALL_2_Y(){return HORIZONTAL_WALL_2_Y;}
+    public double VERTICAL_WALL_WIDTH(){return VERTICAL_WALL_WIDTH;}
 
-    public double VERTICAL_WALL_1_X(){return VERTICAL_WALL_1_X;}
+    public double VERTICAL_WALL_HOLE(){return VERTICAL_WALL_HOLE;}
 
-    public double VERTICAL_WALL_2_X(){return VERTICAL_WALL_2_X;}
+    public double VERTICAL_WALL_HOLE_POSITION(){return VERTICAL_WALL_HOLE_POSITION;}
 
     public void setNoiseCoefficient(double noiseCoefficient){
         this.NOISE_COEFFICIENT=noiseCoefficient;

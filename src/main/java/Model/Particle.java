@@ -13,16 +13,14 @@ public class Particle {
     private double radius;
     private transient double speed;
     private double angle;
-    private boolean fixed;
 
-    public Particle(int id, double x, double y, double radius, double speed, double angle, boolean fixed) {
+    public Particle(int id, double x, double y, double radius, double speed, double angle) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.speed=speed;
         this.angle=angle;
-        this.fixed = fixed;
     }
 
 
@@ -40,10 +38,6 @@ public class Particle {
 
     public double getRadius() {
         return radius;
-    }
-
-    public boolean isFixed() {
-        return fixed;
     }
 
     public boolean isAdjacentTo(Particle p) {

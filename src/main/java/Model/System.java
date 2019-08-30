@@ -10,6 +10,8 @@ public class System {
     private transient Config c;
     private int time;
     private Collection<Particle> particles;
+    private Collection<Particle> staticParticles;
+    private Collection<Wall> walls;
 
     public System(int time){
         this.time=time;
@@ -17,6 +19,8 @@ public class System {
         this.c = Config.getInstance();
 
         initializeParticles(c.RANDOM_PARTICLE_CREATION());
+        initializeStaticParticles();
+        initializeWalls();
     }
 
     public System(int time, Collection<Particle> particles){
@@ -37,12 +41,12 @@ public class System {
         if(isRandom)
         {
             for(int i = 0; i < c.PARTICLES_QUANTITY(); i++) {
-                Particle newParticle = new Particle(0,0,0,0,0,0,false);
+                Particle newParticle = new Particle(0,0,0,0,0,0);
                 do {
                     double x = Math.random() * c.SYSTEM_LENGTH();
                     double y = Math.random() * c.SYSTEM_LENGTH();
                     double angle = Math.random() * 2* Math.PI - Math.PI;
-                    newParticle = new Particle(i, x, y, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle, false);
+                    newParticle = new Particle(i, x, y, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle);
 
                 } while (thereIsCollision(newParticle, particles));
                 particles.add(newParticle);
@@ -54,10 +58,24 @@ public class System {
             for(int i=0; i< sqrtParticles;i++){
                 for(int j=0; j<sqrtParticles;j++){
                     double angle = ((i+j)%4-1) * Math.PI/2;
-                    particles.add(new Particle(id++,step*j,step*i, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle, false));
+                    particles.add(new Particle(id++,step*j,step*i, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle));
                 }
             }
         }
+    }
+
+    private void initializeWalls() {
+        walls.add(new Wall(false, Double.valueOf(0), c.HORIZONTAL_WALL_WIDTH()));
+        walls.add(new Wall(false, c.VERTICAL_WALL_WIDTH(), c.HORIZONTAL_WALL_WIDTH()));
+        walls.add(new Wall(true, Double.valueOf(0), c.VERTICAL_WALL_WIDTH()));
+        walls.add(new Wall(true, Double.valueOf(0), (c.HORIZONTAL_WALL_WIDTH()-c.VERTICAL_WALL_HOLE())/2));
+        walls.add(new Wall(true, (c.HORIZONTAL_WALL_WIDTH()+c.VERTICAL_WALL_HOLE())/2, (c.HORIZONTAL_WALL_WIDTH()-c.VERTICAL_WALL_HOLE())/2));
+        walls.add(new Wall(true, c.HORIZONTAL_WALL_WIDTH(), c.VERTICAL_WALL_WIDTH()));
+    }
+
+    private void initializeStaticParticles() {
+       // staticParticles.add(new StaticParticle(0,))
+
     }
 
     private boolean thereIsCollision(Particle newParticle, Collection<Particle> particles) {

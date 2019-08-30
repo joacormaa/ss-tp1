@@ -1,6 +1,7 @@
 package CollisionSimulator;
 
 import Model.Particle;
+import Model.StaticParticle;
 import Model.Wall;
 
 public class CollisionManager {
@@ -40,5 +41,9 @@ public class CollisionManager {
 
         if(productDeltaVDeltaR >= 0 || d < 0) return null;
         return (productDeltaVDeltaR + Math.sqrt(d))/(-squareDeltaV);
+    }
+
+    public Double getCollisionTime(Particle p, StaticParticle sp) {
+        return null;
     }
 }
