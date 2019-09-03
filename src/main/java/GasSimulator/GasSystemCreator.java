@@ -36,25 +36,27 @@ public class GasSystemCreator {
         return particles;
     }
 
-    private static List<Wall> initializeWalls() { //todo: check
+    private static List<Wall> initializeWalls() {
         Config c = Config.getInstance();
         List<Wall> walls = new ArrayList<>();
-        walls.add(new Wall(false, 0.0, c.HORIZONTAL_WALL_WIDTH(),0));
-        walls.add(new Wall(false, c.VERTICAL_WALL_WIDTH(), c.HORIZONTAL_WALL_WIDTH(),1));
-        walls.add(new Wall(true, 0.0, c.VERTICAL_WALL_WIDTH(),2));
-        walls.add(new Wall(true, c.HORIZONTAL_WALL_WIDTH()/2, c.VERTICAL_WALL_HOLE())/2,3));
-        walls.add(new Wall(true, (c.HORIZONTAL_WALL_WIDTH()+c.VERTICAL_WALL_HOLE())/2, (c.HORIZONTAL_WALL_WIDTH()-c.VERTICAL_WALL_HOLE())/2,4));
-        walls.add(new Wall(true, c.HORIZONTAL_WALL_WIDTH(), c.VERTICAL_WALL_WIDTH(),5));
+        walls.add(new Wall(false, 0.0,c.VERTICAL_WALL_LENGTH(), c.HORIZONTAL_WALL_LENGTH(),0));
+        walls.add(new Wall(false, 0.0,0.0, c.VERTICAL_WALL_LENGTH(),1));
+        walls.add(new Wall(true, 0.0,0.0, c.VERTICAL_WALL_LENGTH(),2));
+        double midBottomWalWidth = c.VERTICAL_WALL_LENGTH()-c.HOLE_POSITION()-c.HOLE_LENGTH();
+        walls.add(new Wall(true, c.HORIZONTAL_WALL_LENGTH()/2, 0.0, midBottomWalWidth,3));
+        walls.add(new Wall(true, c.HORIZONTAL_WALL_LENGTH()/2, c.VERTICAL_WALL_LENGTH()-c.HOLE_LENGTH(),c.HOLE_POSITION(),4));
+        walls.add(new Wall(true, c.HORIZONTAL_WALL_LENGTH(), 0.0,c.VERTICAL_WALL_LENGTH(),5));
         return walls;
     }
 
-    private static List<StaticParticle> initializeStaticParticles() {//todo: check
+    private static List<StaticParticle> initializeStaticParticles() {
         List<StaticParticle> staticParticles = new ArrayList<>();
-        staticParticles.add(new StaticParticle(0,c.HORIZONTAL_WALL_WIDTH()/2));
+        Config c = Config.getInstance();
+        staticParticles.add(new StaticParticle(0,c.HORIZONTAL_WALL_LENGTH()/2, c.VERTICAL_WALL_LENGTH()-c.HOLE_POSITION(), c.WALL_WIDTH()/2));
         return staticParticles;
     }
 
-    private static boolean thereIsCollision(Particle newParticle, Collection<Particle> particles) {
+    private static boolean thereIsCollision(Particle newParticle, Collection<Particle> particles) { //todo: chequear colisiones con paredes tambien
         if(particles.isEmpty()) return true;
         for(Particle p : particles) {
             if(thereIsCollision(p, newParticle)) return false;

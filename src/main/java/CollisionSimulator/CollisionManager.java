@@ -8,6 +8,7 @@ import Model.Wall;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 
 public class CollisionManager {
 
@@ -26,6 +27,12 @@ public class CollisionManager {
         collisionsWithStaticParticles = new Collision[particleQ][2]; // 2 particulas estaticas
         collisionsWithParticles = new Collision[particleQ][particleQ];
         initializeCollisionTimes();
+        this.pq = new MyBetterPriorityQueue<>((collision, t1) -> {
+            if(collision==t1) return 0;
+            if(collision.collisionTime<t1.collisionTime)
+                return -1;
+            return 1;
+        });
     }
 
     public Collision<?> getNextCollision() {
@@ -105,19 +112,54 @@ public class CollisionManager {
         }
     }
 
-    private Double getCollisionTime(Particle p, StaticParticle sp) {
-        return null; //todo: missing
-    }
-
 
     private Double getCollisionTime(Particle p, Wall w) {
-        Double particlePosition = w.isVertical() ? p.getX():p.getY();
-        Double particleSpeed = w.isVertical() ? p.getXSpeed():p.getYSpeed();
-        if((particlePosition < w.getPosition() && particleSpeed < 0) || (particlePosition > w.getPosition() && particleSpeed > 0))
-            return null;
+        if(w.isVertical()){
+            double pX = p.getX();
+            double wX = w.getX();
+            double vX = p.getXSpeed();
+            if((pX < wX && vX < 0) || (pX > wX && vX > 0))
+                return null;
 
-        Integer coefficient = particlePosition < w.getPosition() ? -1 : 1;
-        return (w.getPosition() + coefficient * p.getRadius() - particlePosition)/particleSpeed;
+            double offset =0;
+            if(pX<wX){
+                offset = -p.getRadius();
+            }
+            else{
+                offset = p.getRadius() + w.getWidth();
+            }
+            double time = (wX + offset  - pX)/vX;
+
+            double finalYPos = p.getYSpeed()*time+p.getY();
+
+            if(finalYPos<w.getY() || finalYPos>(w.getY()+w.getLength())){
+                return null;
+            }
+            return time;
+        }
+        else {
+            double pY = p.getY();
+            double wY = w.getY();
+            double vY = p.getYSpeed();
+            if((pY < wY && vY < 0) || (pY > wY && vY > 0))
+                return null;
+
+            double offset =0;
+            if(pY<wY){
+                offset = -p.getRadius();
+            }
+            else{
+                offset = p.getRadius() + w.getWidth();
+            }
+            double time = (wY + offset  - pY)/vY;
+
+            double finalXPos = p.getXSpeed()*time+p.getX();
+
+            if(finalXPos<w.getX() || finalXPos>(w.getX()+w.getLength())){
+                return null;
+            }
+            return time;
+        }
     }
 
     private Double getCollisionTime(Particle p1, Particle p2) {

@@ -1,15 +1,22 @@
 package Model;
 
+import Constants.Config;
+
 public class Wall {
     private boolean isVertical;
-    private Double position;
-    private Double width;
+    private double x;
+    private double y;
+    private double length;
     private int id;
+    private double width;
 
-    public Wall(boolean isVertical, Double position, Double width, int id) {
+    public Wall(boolean isVertical, double x, double y, double length, int id) {
+        this.width = Config.getInstance().WALL_WIDTH();
         this.isVertical = isVertical;
-        this.position = position;
-        this.width = width;
+        this.x = x;
+        this.y = y;
+        this.length = length;
+        this.id=id;
     }
 
     public int getId(){
@@ -20,11 +27,19 @@ public class Wall {
         return isVertical;
     }
 
-    public Double getPosition() {
-        return position;
+    public double getX() {
+        return x;
     }
 
-    public Double getWidth() {
+    public double getY() {
+        return y;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public double getWidth() {
         return width;
     }
 }

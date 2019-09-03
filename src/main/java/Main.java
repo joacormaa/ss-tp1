@@ -46,12 +46,12 @@ public class Main {
     }
 
     public static void runNeighbourOutput(){
-
-        System system = new System(0);
-
-        SystemNeighbourManager snm = new SystemNeighbourManager();
-
-        snm.getNeighbours(system);
-        snm.outputNeighbours();
+//
+//        System system = new System(0);
+//
+//        SystemNeighbourManager snm = new SystemNeighbourManager();
+//
+//        snm.getNeighbours(system);
+//        snm.outputNeighbours();
     }
 }
