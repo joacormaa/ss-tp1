@@ -33,6 +33,7 @@ public class Config {
     private double HOLE_LENGTH;
     private double HOLE_POSITION;
     private double WALL_WIDTH;
+    private double PARTICLE_MASS;
 
     private static Config instance;
 
@@ -80,6 +81,7 @@ public class Config {
         String HOLE_LENGTH = document.getElementsByTagName("HOLE_LENGTH").item(0).getTextContent();
         String HOLE_POSITION = document.getElementsByTagName("HOLE_POSITION").item(0).getTextContent();
         String WALL_WIDTH = document.getElementsByTagName("WALL_WIDTH").item(0).getTextContent();
+        String PARTICLE_MASS = document.getElementsByTagName("PARTICLE_MASS").item(0).getTextContent();
 
         String PRINT_TIME = document.getElementsByTagName("PRINT_TIME").item(0).getTextContent();
 
@@ -98,6 +100,7 @@ public class Config {
         this.HOLE_LENGTH = Double.parseDouble(HOLE_LENGTH);
         this.HOLE_POSITION = Double.parseDouble(HOLE_POSITION);
         this.WALL_WIDTH = Double.parseDouble(WALL_WIDTH);
+        this.PARTICLE_MASS = Double.parseDouble(PARTICLE_MASS);
 
         this.PRINT_TIME = Double.parseDouble(PRINT_TIME);
 
@@ -169,5 +172,7 @@ public class Config {
     public double PRINT_TIME() {
         return PRINT_TIME;
     }
+
+    public double PARTICLE_MASS() {return PARTICLE_MASS;}
 }
 

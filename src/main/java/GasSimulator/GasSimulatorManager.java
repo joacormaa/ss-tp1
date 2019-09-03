@@ -70,6 +70,6 @@ public class GasSimulatorManager {
         final double x = p.getX()+x_velocity*delta;
         final double y = p.getY()+y_velocity*delta;
 
-        return new Particle(p.getId(),x,y, p.getRadius(), p.getSpeed(),p.getAngle());
+        return new Particle(p.getId(),x,y, p.getRadius(), p.getSpeed(),p.getAngle(),p.getMass());
     }
 }

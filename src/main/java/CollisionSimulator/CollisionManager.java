@@ -6,10 +6,7 @@ import Model.StaticParticle;
 import Model.System;
 import Model.Wall;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 
 public class CollisionManager {
 

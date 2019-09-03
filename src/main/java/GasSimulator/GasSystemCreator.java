@@ -28,7 +28,7 @@ public class GasSystemCreator {
                 double x = Math.random() * c.SYSTEM_LENGTH()/2;
                 double y = Math.random() * c.SYSTEM_LENGTH();
                 double angle = Math.random() * 2* Math.PI - Math.PI;
-                newParticle = new Particle(i, x, y, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle);
+                newParticle = new Particle(i, x, y, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle,c.PARTICLE_MASS());
 
             } while (thereIsCollision(newParticle, particles,staticParticles,walls));
             particles.add(newParticle);

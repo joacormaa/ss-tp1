@@ -40,7 +40,7 @@ public class FlockSimPrinter {
         StringBuilder sb = new StringBuilder();
         sb.append(m.getTime());
         sb.append(',');
-        sb.append(m.getOrden());
+        //sb.append(m.getOrden());
         sb.append('\n');
         return sb.toString();
     }
