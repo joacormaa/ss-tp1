@@ -1,23 +1,17 @@
-package FlockSimulator;
+package GasSimulator;
 
 import Constants.Config;
 import Metrics.SystemMetrics;
 import Model.System;
 import NeighbourLogic.Helper;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-
-public class FlockSimPrinter {
+public class GasSimulatorPrinter {
     private static String PARTICLE_OUTPUT_PATH = "particles.ov";
     private static String METRIC_OUTPUT_PATH = "metrics.csv";
     private Config c;
 
 
-    FlockSimPrinter(){
+    GasSimulatorPrinter(){
         this.c = Config.getInstance();
         Helper.resetFile(c.OUTPUT_PATH()+"/"+PARTICLE_OUTPUT_PATH);
         Helper.resetFile(c.OUTPUT_PATH()+"/"+METRIC_OUTPUT_PATH);
@@ -53,4 +47,5 @@ public class FlockSimPrinter {
         sb.append(system.stringify());
         return sb.toString();
     }
+
 }

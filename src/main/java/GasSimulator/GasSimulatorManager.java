@@ -9,7 +9,6 @@ import Model.Particle;
 import Model.System;
 import NeighbourLogic.Helper;
 import NeighbourLogic.SystemNeighbourManager;
-
 import java.util.*;
 
 public class GasSimulatorManager {
@@ -19,7 +18,7 @@ public class GasSimulatorManager {
     private CollisionManager cm;
 
     public GasSimulatorManager(){
-        this.lastSystem = new System(0);
+        this.lastSystem = GasSystemCreator.createInitialGasSystem();
         this.c=Config.getInstance();
         this.cm = new CollisionManager(lastSystem);
     }
@@ -43,7 +42,7 @@ public class GasSimulatorManager {
             }
             nextParticles.add(getNextParticle(p,delta));
         }
-        return new System(collision.getCollisionTime(), nextParticles);
+        return new System(collision.getCollisionTime(), nextParticles,lastSystem.getStaticParticles(),lastSystem.getWalls());
     }
 
     private Particle getNextParticle(Particle p, double delta) {

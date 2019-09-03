@@ -77,6 +77,8 @@ public class Particle {
         sb.append(speed * Math.cos(angle));
         sb.append(' ');
         sb.append(speed * Math.sin(angle));
+        sb.append(' ');
+        sb.append(radius);
         return sb.toString();
     }
 

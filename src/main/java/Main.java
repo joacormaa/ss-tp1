@@ -19,7 +19,6 @@ public class Main {
     }
 
     private static void runGasSimulation() {
-        System system = new System(0);
         GasSimulatorManager gsm = new GasSimulatorManager();
         Config c = Config.getInstance();
         for(int i=0; i<c.AMOUNT_OF_FRAMES();i++){
