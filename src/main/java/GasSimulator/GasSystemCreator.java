@@ -23,7 +23,7 @@ public class GasSystemCreator {
         Config c = Config.getInstance();
         List<Particle> particles = new ArrayList<>();
         for(int i = 0; i < c.PARTICLES_QUANTITY(); i++) {
-            Particle newParticle = new Particle(0,0,0,0,0,0);
+            Particle newParticle;
             do {
                 double x = Math.random() * c.SYSTEM_LENGTH()/2;
                 double y = Math.random() * c.SYSTEM_LENGTH();
@@ -57,11 +57,11 @@ public class GasSystemCreator {
     }
 
     private static boolean thereIsCollision(Particle newParticle, Collection<Particle> particles) { //todo: chequear colisiones con paredes tambien
-        if(particles.isEmpty()) return true;
+        if(particles.isEmpty()) return false;
         for(Particle p : particles) {
-            if(thereIsCollision(p, newParticle)) return false;
+            if(thereIsCollision(p, newParticle)) return true;
         }
-        return true;
+        return false;
     }
 
     private static boolean thereIsCollision(Particle p1, Particle p2) {

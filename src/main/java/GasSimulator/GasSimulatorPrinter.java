@@ -31,6 +31,7 @@ public class GasSimulatorPrinter {
 
 
     private String printSystemMetrics(SystemMetrics m){
+        if(m==null) return "";
         StringBuilder sb = new StringBuilder();
         sb.append(m.getTime());
         sb.append(',');

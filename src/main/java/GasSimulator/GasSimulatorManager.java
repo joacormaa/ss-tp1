@@ -16,6 +16,7 @@ public class GasSimulatorManager {
     private SystemMetrics lastSystemMetrics;//todo
     private Config c;
     private CollisionManager cm;
+    private GasSimulatorPrinter gsp;
 
     public GasSimulatorManager(){
         this.lastSystem = GasSystemCreator.createInitialGasSystem();
@@ -31,6 +32,8 @@ public class GasSimulatorManager {
         this.lastSystem=nextSystem;
         this.lastSystemMetrics=nextSystemMetrics;
         cm.updateCollisions(nextSystem,collision);
+        gsp.outputStep(lastSystem,lastSystemMetrics);
+
     }
 
     private System getNextSystem(Collision<?> collision) {
