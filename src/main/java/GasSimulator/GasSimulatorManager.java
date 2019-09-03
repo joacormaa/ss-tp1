@@ -4,6 +4,7 @@ import CollisionSimulator.Collision;
 import CollisionSimulator.CollisionManager;
 import Constants.Config;
 import FlockSimulator.FlockSimPrinter;
+import Log.Logger;
 import Metrics.SystemMetrics;
 import Model.Particle;
 import Model.System;
@@ -37,6 +38,7 @@ public class GasSimulatorManager {
         this.lastSystemMetrics=nextSystemMetrics;
         cm.updateCollisions(nextSystem,collision);
         if(hasToPrint()){
+            Logger.print("Printing Step");
             gsp.outputStep(lastSystem,lastSystemMetrics);
         }
 

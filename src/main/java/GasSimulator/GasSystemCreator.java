@@ -1,6 +1,7 @@
 package GasSimulator;
 
 import Constants.Config;
+import Log.Logger;
 import Model.Particle;
 import Model.StaticParticle;
 import Model.Wall;
@@ -13,9 +14,11 @@ import java.util.List;
 public class GasSystemCreator {
 
     public static System createInitialGasSystem(){
+        Logger.print("Creating Initial System");
         List<StaticParticle> staticParticleList = initializeStaticParticles();
         List<Wall> wallList = initializeWalls();
         List<Particle> particleList = initializeParticles(staticParticleList,wallList);
+        Logger.print("Finished Creating Initial System");
         return new System(0,particleList,staticParticleList,wallList);
     }
 
@@ -32,6 +35,7 @@ public class GasSystemCreator {
 
             } while (thereIsCollision(newParticle, particles,staticParticles,walls));
             particles.add(newParticle);
+            Logger.print("Added Particle #"+i);
         }
         return particles;
     }

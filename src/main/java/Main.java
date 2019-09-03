@@ -1,5 +1,6 @@
 import Constants.Config;
 import GasSimulator.GasSimulatorManager;
+import Log.Logger;
 import Model.Particle;
 import Model.System;
 import NeighbourLogic.SystemNeighbourManager;
@@ -22,6 +23,7 @@ public class Main {
         GasSimulatorManager gsm = new GasSimulatorManager();
         Config c = Config.getInstance();
         for(int i=0; i<c.AMOUNT_OF_FRAMES();i++){
+            Logger.print("Running Step '"+i+"'");
             gsm.stepForward();
         }
     }
