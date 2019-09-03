@@ -6,7 +6,10 @@ import Model.StaticParticle;
 import Model.System;
 import Model.Wall;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
 
 public class CollisionManager {
 
@@ -199,5 +202,68 @@ public class CollisionManager {
 
         if(productDeltaVDeltaR >= 0 || d < 0) return null;
         return (productDeltaVDeltaR + Math.sqrt(d))/(-squareDeltaV);
+    }
+
+    private Particle getCollisionResult(Particle p, Wall w){
+        if(w.isVertical()){
+            return new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), 180-p.getAngle(), p.getMass());
+        } else {
+            return new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), -p.getAngle(), p.getMass());
+        }
+    }
+
+    private Collection<Particle> getCollisionResult(Particle p1, Particle p2){
+        double[] deltaR = new double[2];
+        deltaR[0] = p2.getX() - p1.getX();
+        deltaR[1] = p2.getY() - p1.getY();
+
+        double[] deltaV = new double[2];
+        deltaV[0] = p2.getXSpeed() - p1.getXSpeed();
+        deltaV[1] = p2.getYSpeed() - p1.getYSpeed();
+
+        double productDeltaVDeltaR;
+        productDeltaVDeltaR = deltaR[0]*deltaV[0] + deltaR[1]*deltaV[1];
+
+        double sigma;
+        sigma = p1.getRadius() + p2.getRadius();
+
+        double j = 2*p1.getMass()*p2.getMass()*productDeltaVDeltaR/(sigma*(p1.getMass() + p2.getMass()));
+        double jx = (j*deltaR[0])/sigma;
+        double jy = (j*deltaR[1])/sigma;
+
+        double vx1 = p1.getXSpeed() + jx/p1.getMass();
+        double vy1 = p1.getYSpeed() + jy/p1.getMass();
+
+        double vx2 = p2.getXSpeed() - jx/p2.getMass();
+        double vy2 = p2.getYSpeed() - jy/p2.getMass();
+
+        Particle p1new = new Particle(p1.getId(), p1.getX(), p1.getY(), p1.getRadius(), Particle.getSpeed(vx1, vy1), Particle.getAngle(vx1, vy1), p1.getMass());
+        Particle p2new = new Particle(p2.getId(), p2.getX(), p2.getY(), p2.getRadius(), Particle.getSpeed(vx2, vy2), Particle.getAngle(vx2, vy2), p2.getMass());
+        Collection<Particle> ret = new LinkedList<>();
+        ret.add(p1new);
+        ret.add(p2new);
+        return ret;
+    }
+
+    private Particle getCollisionResult(Particle p, StaticParticle s){
+        double[] deltaR = new double[2];
+        deltaR[0] = s.getX() - p.getX();
+        deltaR[1] = s.getY() - p.getY();
+
+        double alpha = Math.acos(deltaR[0]/Math.sqrt(Math.pow(deltaR[0], 2) + Math.pow(deltaR[1], 2)));
+        double cn = 1;
+        double ct = 1;
+
+        double[][] operator = new double[2][2];
+        operator[0][0] = -cn*Math.pow(Math.cos(alpha), 2) + ct*Math.pow(Math.sin(alpha), 2);
+        operator[0][1] = -(cn+ct)*Math.sin(alpha)*Math.cos(alpha);
+        operator[1][0] = -(cn+ct)*Math.sin(alpha)*Math.cos(alpha);
+        operator[0][0] = -cn*Math.pow(Math.sin(alpha), 2) + ct*Math.pow(Math.cos(alpha), 2);
+
+        double lastVX = p.getXSpeed();
+        double lastVY = p.getYSpeed();
+        double newVX = operator[0][0] * lastVX + operator[0][1] * lastVY;
+        double newVY = operator[1][0] * lastVX + operator[1][1] * lastVY;
+        return new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), Particle.getSpeed(newVX, newVY), Particle.getAngle(newVX, newVY), p.getMass());
     }
 }

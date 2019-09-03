@@ -11,14 +11,16 @@ public class Particle {
     private double x;
     private double y;
     private double radius;
+    private double mass;
     private transient double speed;
     private double angle;
 
-    public Particle(int id, double x, double y, double radius, double speed, double angle) {
+    public Particle(int id, double x, double y, double radius, double speed, double angle, double mass) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.radius = radius;
+        this.mass = mass;
         this.speed=speed;
         this.angle=angle;
     }
@@ -61,6 +63,12 @@ public class Particle {
     public double getXSpeed() { return speed * Math.cos(angle);}
 
     public double getYSpeed() { return speed * Math.sin(angle);}
+
+    public double getMass() { return mass; }
+
+    public static double getSpeed(double xspeed, double yspeed){ return Math.sqrt(Math.pow(xspeed,2) + Math.pow(yspeed,2)); }
+
+    public static double getAngle(double xspeed, double yspeed){ return Math.atan(yspeed/xspeed);}
 
     public double getAngle() {
         return angle;
