@@ -1,9 +1,6 @@
 package CollisionSimulator;
 
-import java.util.PriorityQueue;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Queue;
+import java.util.*;
 
 public class MyBetterPriorityQueue<T> implements Queue<T> {
     private PriorityQueue<T> pq;
@@ -12,8 +9,12 @@ public class MyBetterPriorityQueue<T> implements Queue<T> {
         this.pq = new PriorityQueue<>();
     }
 
+    public MyBetterPriorityQueue(Comparator<T> comparator){
+        this.pq = new PriorityQueue<>(comparator);
+    }
+
     public void heapify(){
-        PriorityQueue aux = new PriorityQueue();
+        PriorityQueue<T> aux = new PriorityQueue<>(pq.comparator());
         for(T elem: this.pq){
             aux.offer(elem);
         }

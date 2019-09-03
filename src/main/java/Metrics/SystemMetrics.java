@@ -7,12 +7,13 @@ import Model.System;
 public class SystemMetrics {
     private transient System system;
     private double orden;
-    private int time;
+    private double time;
 
     public SystemMetrics(System system){
         this.system=system;
         this.time = system.getTime();
-        this.orden = calculateOrden();
+        //todo: encontrar otras metricas
+        //this.orden = calculateOrden();
     }
 
     private double calculateOrden() {
@@ -31,7 +32,7 @@ public class SystemMetrics {
         return mod / (system.getParticles().size()*c.PARTICLE_SPEED());
     }
 
-    public int getTime() {
+    public double getTime() {
         return time;
     }
 

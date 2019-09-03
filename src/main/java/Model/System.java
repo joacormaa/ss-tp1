@@ -8,28 +8,28 @@ import java.util.*;
 
 public class System {
     private transient Config c;
-    private int time;
+    private double time;
     private Collection<Particle> particles;
-    private Collection<Particle> staticParticles;
+    private Collection<StaticParticle> staticParticles;
     private Collection<Wall> walls;
 
-    public System(int time){
+    public System(double time){
         this.time=time;
         this.particles=new ArrayList<>();
         this.c = Config.getInstance();
 
-        initializeParticles(c.RANDOM_PARTICLE_CREATION());
+        initializeParticles();
         initializeStaticParticles();
         initializeWalls();
     }
 
-    public System(int time, Collection<Particle> particles){
+    public System(double time, Collection<Particle> particles){
         this.time=time;
         this.particles=particles;
         this.c = Config.getInstance();
     }
 
-    public int getTime() {
+    public double getTime() {
         return time;
     }
 
@@ -37,44 +37,31 @@ public class System {
         return particles;
     }
 
-    private void initializeParticles(boolean isRandom) {
-        if(isRandom)
-        {
-            for(int i = 0; i < c.PARTICLES_QUANTITY(); i++) {
-                Particle newParticle = new Particle(0,0,0,0,0,0);
-                do {
-                    double x = Math.random() * c.SYSTEM_LENGTH();
-                    double y = Math.random() * c.SYSTEM_LENGTH();
-                    double angle = Math.random() * 2* Math.PI - Math.PI;
-                    newParticle = new Particle(i, x, y, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle);
+    private void initializeParticles() {
+        for(int i = 0; i < c.PARTICLES_QUANTITY(); i++) {
+            Particle newParticle = new Particle(0,0,0,0,0,0);
+            do {
+                double x = Math.random() * c.SYSTEM_LENGTH()/2;
+                double y = Math.random() * c.SYSTEM_LENGTH();
+                double angle = Math.random() * 2* Math.PI - Math.PI;
+                newParticle = new Particle(i, x, y, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle);
 
-                } while (thereIsCollision(newParticle, particles));
-                particles.add(newParticle);
-            }
-        }else{
-            int sqrtParticles = (int) Math.ceil(Math.sqrt(c.PARTICLES_QUANTITY()));
-            double step = c.SYSTEM_LENGTH()/sqrtParticles;
-            int id=0;
-            for(int i=0; i< sqrtParticles;i++){
-                for(int j=0; j<sqrtParticles;j++){
-                    double angle = ((i+j)%4-1) * Math.PI/2;
-                    particles.add(new Particle(id++,step*j,step*i, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle));
-                }
-            }
+            } while (thereIsCollision(newParticle, particles));
+            particles.add(newParticle);
         }
     }
 
-    private void initializeWalls() {
-        walls.add(new Wall(false, Double.valueOf(0), c.HORIZONTAL_WALL_WIDTH()));
-        walls.add(new Wall(false, c.VERTICAL_WALL_WIDTH(), c.HORIZONTAL_WALL_WIDTH()));
-        walls.add(new Wall(true, Double.valueOf(0), c.VERTICAL_WALL_WIDTH()));
-        walls.add(new Wall(true, Double.valueOf(0), (c.HORIZONTAL_WALL_WIDTH()-c.VERTICAL_WALL_HOLE())/2));
-        walls.add(new Wall(true, (c.HORIZONTAL_WALL_WIDTH()+c.VERTICAL_WALL_HOLE())/2, (c.HORIZONTAL_WALL_WIDTH()-c.VERTICAL_WALL_HOLE())/2));
-        walls.add(new Wall(true, c.HORIZONTAL_WALL_WIDTH(), c.VERTICAL_WALL_WIDTH()));
+    private void initializeWalls() { //todo: check
+        walls.add(new Wall(false, 0.0, c.HORIZONTAL_WALL_WIDTH(),0));
+        walls.add(new Wall(false, c.VERTICAL_WALL_WIDTH(), c.HORIZONTAL_WALL_WIDTH(),1));
+        walls.add(new Wall(true, 0.0, c.VERTICAL_WALL_WIDTH(),2));
+        walls.add(new Wall(true, c.HORIZONTAL_WALL_WIDTH()/2, c.VERTICAL_WALL_HOLE())/2,3));
+        walls.add(new Wall(true, (c.HORIZONTAL_WALL_WIDTH()+c.VERTICAL_WALL_HOLE())/2, (c.HORIZONTAL_WALL_WIDTH()-c.VERTICAL_WALL_HOLE())/2,4));
+        walls.add(new Wall(true, c.HORIZONTAL_WALL_WIDTH(), c.VERTICAL_WALL_WIDTH(),5));
     }
 
-    private void initializeStaticParticles() {
-       // staticParticles.add(new StaticParticle(0,))
+    private void initializeStaticParticles() {//todo: check
+       staticParticles.add(new StaticParticle(0,c.HORIZONTAL_WALL_WIDTH()/2))
 
     }
 
@@ -97,5 +84,13 @@ public class System {
             sb.append('\n');
         }
         return sb.toString();
+    }
+
+    public Collection<Wall> getWalls() {
+        return walls;
+    }
+
+    public Collection<StaticParticle> getStaticParticles(){
+        return staticParticles;
     }
 }

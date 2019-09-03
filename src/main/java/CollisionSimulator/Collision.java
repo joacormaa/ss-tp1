@@ -1,37 +1,41 @@
 package CollisionSimulator;
 
-public class Collision<S, T> {
-    S elem1;
-    T elem2;
-    Double timeUntil;
+import Model.Particle;
 
-    public Collision(S elem1, T elem2, Double timeUntil) {
-        this.elem1 = elem1;
-        this.elem2 = elem2;
-        this.timeUntil = timeUntil;
+public class Collision<T> {
+
+    Particle p;
+    T q;
+    Double collisionTime;
+
+    public Collision(Particle p, T q, Double collisionTime)
+    {
+        this.p = p;
+        this.q = q;
+        this.collisionTime=collisionTime;
     }
 
-    public S getElem1() {
-        return elem1;
+    public Particle getP() {
+        return p;
     }
 
-    public void setElem1(S elem1) {
-        this.elem1 = elem1;
+    public void setP(Particle p) {
+        this.p = p;
     }
 
-    public T getElem2() {
-        return elem2;
+    public T getQ() {
+        return q;
     }
 
-    public void setElem2(T elem2) {
-        this.elem2 = elem2;
+    public void setQ(T q) {
+        this.q = q;
     }
 
-    public Double getTimeUntil() {
-        return timeUntil;
+    public Double getCollisionTime() {
+        return collisionTime;
     }
 
-    public void setTimeUntil(Double timeUntil) {
-        this.timeUntil = timeUntil;
+    public void setCollisionTime(Double collisionTime) {
+        this.collisionTime = collisionTime;
     }
 }
