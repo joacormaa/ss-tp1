@@ -13,14 +13,19 @@ import java.util.*;
 
 public class GasSimulatorManager {
     private System lastSystem;
-    private SystemMetrics lastSystemMetrics;//todo
+    private SystemMetrics lastSystemMetrics;
     private CollisionManager cm;
     private GasSimulatorPrinter gsp;
+    private Config c;
+
+    private double lastPrintTime;
 
     public GasSimulatorManager(){
         this.lastSystem = GasSystemCreator.createInitialGasSystem();
         this.cm = new CollisionManager(lastSystem);
         this.gsp = new GasSimulatorPrinter();
+        this.lastPrintTime = 0;
+        this.c=Config.getInstance();
     }
 
     public void stepForward(){
@@ -31,8 +36,18 @@ public class GasSimulatorManager {
         this.lastSystem=nextSystem;
         this.lastSystemMetrics=nextSystemMetrics;
         cm.updateCollisions(nextSystem,collision);
-        gsp.outputStep(lastSystem,lastSystemMetrics);
+        if(hasToPrint()){
+            gsp.outputStep(lastSystem,lastSystemMetrics);
+        }
 
+    }
+
+    private boolean hasToPrint() {
+        if(lastPrintTime+c.PRINT_TIME()<lastSystem.getTime()){
+            lastPrintTime=lastSystem.getTime();
+            return true;
+        }
+        return false;
     }
 
     private System getNextSystem(Collision<?> collision) {
