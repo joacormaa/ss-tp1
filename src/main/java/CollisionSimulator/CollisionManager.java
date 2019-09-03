@@ -201,7 +201,7 @@ public class CollisionManager {
         return (productDeltaVDeltaR + Math.sqrt(d))/(-squareDeltaV);
     }
 
-    private Particle getCollisionResult(Particle p, Wall w){
+    public Particle getCollisionResult(Particle p, Wall w){
         if(w.isVertical()){
             return new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), 180-p.getAngle(), p.getMass());
         } else {
@@ -209,7 +209,7 @@ public class CollisionManager {
         }
     }
 
-    private Collection<Particle> getCollisionResult(Particle p1, Particle p2){
+    public Collection<Particle> getCollisionResult(Particle p1, Particle p2){
         double[] deltaR = new double[2];
         deltaR[0] = p2.getX() - p1.getX();
         deltaR[1] = p2.getY() - p1.getY();
@@ -242,7 +242,7 @@ public class CollisionManager {
         return ret;
     }
 
-    private Particle getCollisionResult(Particle p, StaticParticle s){
+    public Particle getCollisionResult(Particle p, StaticParticle s){
         double[] deltaR = new double[2];
         deltaR[0] = s.getX() - p.getX();
         deltaR[1] = s.getY() - p.getY();

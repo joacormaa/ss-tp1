@@ -7,7 +7,9 @@ import FlockSimulator.FlockSimPrinter;
 import Log.Logger;
 import Metrics.SystemMetrics;
 import Model.Particle;
+import Model.StaticParticle;
 import Model.System;
+import Model.Wall;
 import NeighbourLogic.Helper;
 import NeighbourLogic.SystemNeighbourManager;
 import java.util.*;
@@ -56,10 +58,19 @@ public class GasSimulatorManager {
         List<Particle> nextParticles = new ArrayList<>();
         double delta = collision.getCollisionTime()-lastSystem.getTime();
         for(Particle p : lastSystem.getParticles()){
-            if(p.equals(collision.getP())||p.equals(collision.getQ())){
-                //todo: collided particle
+            if(!p.equals(collision.getP())&& !p.equals(collision.getQ())){
+                nextParticles.add(getNextParticle(p,delta));
             }
-            nextParticles.add(getNextParticle(p,delta));
+        }
+
+        Particle newP = getNextParticle(collision.getP(),delta);
+        if(collision.getQ() instanceof Wall){
+            nextParticles.add(cm.getCollisionResult(newP, (Wall) collision.getQ()));
+        } else if (collision.getQ() instanceof StaticParticle){
+            nextParticles.add(cm.getCollisionResult(newP, (StaticParticle) collision.getQ()));
+        } else {
+            Particle newQ = getNextParticle((Particle) collision.getQ(),delta);
+            nextParticles.addAll(cm.getCollisionResult(newP, newQ));
         }
         return new System(collision.getCollisionTime(), nextParticles,lastSystem.getStaticParticles(),lastSystem.getWalls());
     }
