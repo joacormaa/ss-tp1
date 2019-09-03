@@ -25,11 +25,11 @@ public class CollisionManager {
         collisionsWithStaticParticles = new Collision[2][particleQ]; // 2 particulas estaticas
         collisionsWithParticles = new Collision[particleQ][particleQ];
         initializeCollisionTimes();
-        this.pq = new MyBetterPriorityQueue<>((collision, t1) -> {
-            if(collision==t1) return 0;
-            if(collision==null || collision.getCollisionTime()==null) return 1;
-            if(t1==null || t1.getCollisionTime()==null) return -1;
-            if(collision.collisionTime<t1.collisionTime)
+        this.pq = new MyBetterPriorityQueue<>((c1, c2) -> {
+            if(c1==c2) return 0;
+            if(c1==null || c1.getCollisionTime()==null) return 1;
+            if(c2==null || c2.getCollisionTime()==null) return -1;
+            if(c1.getCollisionTime()<c2.getCollisionTime())
                 return -1;
             return 1;
         });

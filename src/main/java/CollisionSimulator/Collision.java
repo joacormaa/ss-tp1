@@ -4,9 +4,9 @@ import Model.Particle;
 
 public class Collision<T> {
 
-    Particle p;
-    T q;
-    Double collisionTime;
+    private Particle p;
+    private T q;
+    private Double collisionTime;
 
     public Collision(Particle p, T q, Double collisionTime)
     {
