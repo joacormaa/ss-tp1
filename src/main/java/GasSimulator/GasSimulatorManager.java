@@ -14,14 +14,13 @@ import java.util.*;
 public class GasSimulatorManager {
     private System lastSystem;
     private SystemMetrics lastSystemMetrics;//todo
-    private Config c;
     private CollisionManager cm;
     private GasSimulatorPrinter gsp;
 
     public GasSimulatorManager(){
         this.lastSystem = GasSystemCreator.createInitialGasSystem();
-        this.c=Config.getInstance();
         this.cm = new CollisionManager(lastSystem);
+        this.gsp = new GasSimulatorPrinter();
     }
 
     public void stepForward(){
