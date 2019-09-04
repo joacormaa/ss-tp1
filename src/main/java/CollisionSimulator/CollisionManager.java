@@ -11,10 +11,10 @@ import java.util.*;
 
 public class CollisionManager {
 
-    private Collision<Wall>[][] collisionsWithWalls;
-    private Collision<StaticParticle>[][] collisionsWithStaticParticles;
-    private Collision<Particle>[][] collisionsWithParticles;
-    private MyBetterPriorityQueue<Collision<?>> pq;
+    private Collision[][] collisionsWithWalls;
+    private Collision[][] collisionsWithStaticParticles;
+    private Collision[][] collisionsWithParticles;
+    private MyBetterPriorityQueue<Collision> pq;
     private System system;
     private Config c;
 
@@ -36,33 +36,22 @@ public class CollisionManager {
         });
     }
 
-    public Collision<?> getNextCollision() {
+    public Collision getNextCollision() {
         for (int i=0; i<collisionsWithParticles.length;i++) {
-            Collision<Particle>[] collisionsWithParticle = collisionsWithParticles[i];
+            Collision[] collisionsWithParticle = collisionsWithParticles[i];
             pq.addAll(Arrays.asList(collisionsWithParticle).subList(i+1,collisionsWithParticle.length));
         }
-        for (Collision<Wall>[] collisionsWithWall : collisionsWithWalls) {
+        for (Collision[] collisionsWithWall : collisionsWithWalls) {
             pq.addAll(Arrays.asList(collisionsWithWall));
         }
-        for (Collision<StaticParticle>[] collisionsWithStaticParticle : collisionsWithStaticParticles) {
+        for (Collision[] collisionsWithStaticParticle : collisionsWithStaticParticles) {
             pq.addAll(Arrays.asList(collisionsWithStaticParticle));
         }
 
         return pq.peek();
     }
 
-    private void printCollisionMatrix(Collision<?>[][] mat){
-        for(int i=0; i<mat.length;i++){
-            StringBuilder sb = new StringBuilder();
-            for(int j=0; j<mat[i].length;j++){
-                Double val = (mat[i][j]==null)?null:mat[i][j].getCollisionTime();
-                sb.append(val).append(',');
-            }
-            Logger.print(sb.append('\n').toString());
-        }
-    }
-
-    public void updateCollisions(System nextSystem, Collision<?> collision){
+    public void updateCollisions(System nextSystem, Collision collision){
         Collection<Particle> updatedParticles = getUpdatedParticles(nextSystem,collision);
         for(Particle p : updatedParticles){
             updateCollisionsForParticle(p, nextSystem);
@@ -70,18 +59,18 @@ public class CollisionManager {
         pq.heapify();
     }
 
-    private Collection<Particle> getUpdatedParticles(System nextSystem, Collision<?> collision) {
+    private Collection<Particle> getUpdatedParticles(System nextSystem, Collision collision) {
         List<Particle> updatedParticles = new ArrayList<>();
-        for(Particle p : nextSystem.getParticles()){
-            if(p.equals(collision.getQ())|| p.equals(collision.getP()))
-                updatedParticles.add(p);
+        updatedParticles.add(nextSystem.getParticles().get(collision.getPid()));
+        if(collision.getType()== Collision.Type.ParticleParticle){
+            updatedParticles.add(nextSystem.getParticles().get(collision.getQId()));
         }
         return updatedParticles;
     }
 
     private void updateCollisionsForParticle(Particle p, System system) {
         int pId =p.getId();
-        for(Particle q : system.getParticles()){
+        for(Particle q : system.getParticles().values()){
             int qId = q.getId();
             Double collisionTime = getCollisionTime(p,q);
             Double newCollisionTime = (collisionTime!=null)? collisionTime +system.getTime(): null;
@@ -91,13 +80,13 @@ public class CollisionManager {
                 collisionsWithParticles[qId][pId].setCollisionTime(newCollisionTime);
             }
         }
-        for(Wall q : system.getWalls()){
+        for(Wall q : system.getWalls().values()){
             int qId = q.getId();
             Double collisionTime = getCollisionTime(p,q);
             Double newCollisionTime = (collisionTime!=null)? collisionTime +system.getTime(): null;
             collisionsWithWalls[qId][pId].setCollisionTime(newCollisionTime);
         }
-        for(StaticParticle q : system.getStaticParticles()){
+        for(StaticParticle q : system.getStaticParticles().values()){
             int qId = q.getId();
             if(qId > 1) continue;
             Double collisionTime = getCollisionTime(p,q);
@@ -107,31 +96,34 @@ public class CollisionManager {
     }
 
     private void initializeCollisionTimes() {
-        Collection<Particle> particles = system.getParticles();
+        Collection<Particle> particles = system.getParticles().values();
         for(Particle p : particles){
-            for(StaticParticle q : system.getStaticParticles()){
+            for(StaticParticle q : system.getStaticParticles().values()){
                 int pId = p.getId();
                 int qId = q.getId();
 
                 if(qId > 1) continue;
 
                 Double collisionTime = getCollisionTime(p,q);
-                collisionsWithStaticParticles[qId][pId] = new Collision<>(p,q,collisionTime);
+                collisionsWithStaticParticles[qId][pId] = new Collision(p.getId(),q.getId(),
+                        collisionTime, Collision.Type.ParticleStaticParticle);
             }
-            for(Wall q : system.getWalls()){
+            for(Wall q : system.getWalls().values()){
                 int pId = p.getId();
                 int qId = q.getId();
 
                 Double collisionTime = getCollisionTime(p,q);
-                collisionsWithWalls[qId][pId] = new Collision<>(p,q,collisionTime);
+                collisionsWithWalls[qId][pId] = new Collision(p.getId(),q.getId(),
+                        collisionTime, Collision.Type.ParticleWall);
             }
-            for(Particle q : system.getParticles()){
+            for(Particle q : system.getParticles().values()){
                 if(q.getId()>p.getId()){ //triangular superior
                     int pId = p.getId();
                     int qId = q.getId();
 
                     Double collisionTime = getCollisionTime(p,q);
-                    collisionsWithParticles[pId][qId] = new Collision<>(p,q,collisionTime); //triangular superior
+                    collisionsWithParticles[pId][qId] = new Collision(p.getId(),q.getId(),
+                            collisionTime, Collision.Type.ParticleParticle); //triangular superior
 
                 }
             }
