@@ -28,7 +28,7 @@ public class GasSimulatorManager {
         this.c=Config.getInstance();
     }
 
-    public void stepForward(){
+    public double stepForward(){
         Collision<?> collision = cm.getNextCollision();
         System nextSystem = getNextSystem(collision);
         SystemMetrics nextSystemMetrics = new SystemMetrics(nextSystem);
@@ -40,7 +40,7 @@ public class GasSimulatorManager {
             Logger.print("Printing Step");
             gsp.outputStep(lastSystem,lastSystemMetrics);
         }
-
+        return nextSystem.getTime();
     }
 
     private boolean hasToPrint() {

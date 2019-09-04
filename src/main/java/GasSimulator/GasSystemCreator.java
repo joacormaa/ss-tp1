@@ -28,8 +28,8 @@ public class GasSystemCreator {
         for(int i = 0; i < c.PARTICLES_QUANTITY(); i++) {
             Particle newParticle;
             do {
-                double x = Math.random() * c.SYSTEM_LENGTH()/2;
-                double y = Math.random() * c.SYSTEM_LENGTH();
+                double x = Math.random() * c.HORIZONTAL_WALL_LENGTH()/2;
+                double y = Math.random() * c.VERTICAL_WALL_LENGTH();
                 double angle = Math.random() * 2* Math.PI - Math.PI;
                 newParticle = new Particle(i, x, y, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle,c.PARTICLE_MASS());
 

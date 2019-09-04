@@ -22,9 +22,11 @@ public class Main {
     private static void runGasSimulation() {
         GasSimulatorManager gsm = new GasSimulatorManager();
         Config c = Config.getInstance();
-        for(int i=0; i<c.AMOUNT_OF_FRAMES();i++){
+        double time=0;
+        for(int i=0; i<c.AMOUNT_OF_FRAMES() && time<5;i++){
             Logger.print("Running Step '"+i+"'");
-            gsm.stepForward();
+            time = gsm.stepForward();
+            Logger.print("time '"+time+"'");
         }
     }
 
