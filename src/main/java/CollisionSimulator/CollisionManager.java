@@ -207,7 +207,7 @@ public class CollisionManager {
 
     public Particle getCollisionResult(Particle p, Wall w){
         if(w.isVertical()){
-            Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), 180-p.getAngle(), p.getMass());
+            Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), (Math.PI-p.getAngle())%(2*Math.PI), p.getMass());
             Logger.print("Collision with V-Wall");
             Logger.printPolar(p, newP);
             return newP;
