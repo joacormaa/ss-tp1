@@ -48,7 +48,7 @@ public class GasSystemCreator {
         walls.add(new Wall(true, 0.0,0.0, c.VERTICAL_WALL_LENGTH(),2));
         double midBottomWalWidth = c.VERTICAL_WALL_LENGTH()-c.HOLE_POSITION()-c.HOLE_LENGTH();
         walls.add(new Wall(true, c.HORIZONTAL_WALL_LENGTH()/2, 0.0, midBottomWalWidth,3));
-        walls.add(new Wall(true, c.HORIZONTAL_WALL_LENGTH()/2, c.VERTICAL_WALL_LENGTH()-c.HOLE_LENGTH(),c.HOLE_POSITION(),4));
+        walls.add(new Wall(true, c.HORIZONTAL_WALL_LENGTH()/2, midBottomWalWidth+c.HOLE_LENGTH(),c.HOLE_POSITION(),4));
         walls.add(new Wall(true, c.HORIZONTAL_WALL_LENGTH(), 0.0,c.VERTICAL_WALL_LENGTH(),5));
         return walls;
     }
