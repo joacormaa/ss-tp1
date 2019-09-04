@@ -11,7 +11,7 @@ public class StaticParticle extends Particle {
     @Override
     public String stringify(){
         StringBuilder sb = new StringBuilder();
-        sb.append(id+c.PARTICLES_QUANTITY()-2);
+        sb.append(id+c.PARTICLES_QUANTITY());
         sb.append(' ');
         sb.append(x);
         sb.append(' ');
