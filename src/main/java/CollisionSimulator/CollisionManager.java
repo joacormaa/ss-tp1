@@ -199,9 +199,15 @@ public class CollisionManager {
 
     public Particle getCollisionResult(Particle p, Wall w){
         if(w.isVertical()){
-            return new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), 180-p.getAngle(), p.getMass());
+            Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), 180-p.getAngle(), p.getMass());
+            Logger.print("Collision with V-Wall");
+            Logger.printPolar(p, newP);
+            return newP;
         } else {
-            return new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), -p.getAngle(), p.getMass());
+            Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), -p.getAngle(), p.getMass());
+            Logger.print("Collision with H-Wall");
+            Logger.printPolar(p, newP);
+            return newP;
         }
     }
 
@@ -235,6 +241,11 @@ public class CollisionManager {
         Collection<Particle> ret = new LinkedList<>();
         ret.add(p1new);
         ret.add(p2new);
+
+        Logger.print("Collision between TWO");
+        Logger.printPolar(p1, p1new);
+        Logger.printPolar(p2, p2new);
+
         return ret;
     }
 
@@ -257,6 +268,10 @@ public class CollisionManager {
         double lastVY = p.getYSpeed();
         double newVX = operator[0][0] * lastVX + operator[0][1] * lastVY;
         double newVY = operator[1][0] * lastVX + operator[1][1] * lastVY;
-        return new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), Particle.getSpeed(newVX, newVY), Particle.getAngle(newVX, newVY), p.getMass());
+        Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), Particle.getSpeed(newVX, newVY), Particle.getAngle(newVX, newVY), p.getMass());
+
+        Logger.print("Collision with static");
+        Logger.printPolar(p, newP);
+        return newP;
     }
 }
