@@ -93,7 +93,7 @@ public class Particle {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Particle)) return false;
+        if (!(o instanceof Particle) || o instanceof StaticParticle) return false;
 
         Particle particle = (Particle) o;
 

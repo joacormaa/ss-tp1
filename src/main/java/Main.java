@@ -23,7 +23,7 @@ public class Main {
         GasSimulatorManager gsm = new GasSimulatorManager();
         Config c = Config.getInstance();
         double time=0;
-        for(int i=0; i<c.AMOUNT_OF_FRAMES() && time<5;i++){
+        for(int i=0; i<c.AMOUNT_OF_FRAMES();i++){
             Logger.print("Running Step '"+i+"'");
             time = gsm.stepForward();
             Logger.print("time '"+time+"'");
