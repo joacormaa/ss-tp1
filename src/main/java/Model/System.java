@@ -58,7 +58,7 @@ public class System {
             sb.append(p.stringify());
             sb.append('\n');
         }
-        for (StaticParticle p : staticParticles) {
+        for (StaticParticle p : staticParticles.values()) {
             if(p.getId()<=1) continue;
             sb.append(p.stringify());
             sb.append('\n');
