@@ -31,7 +31,7 @@ public class SystemNeighbourManager {
     }
 
     private void initializeNeighbourMap() {
-        for (Particle p : system.getParticles())  neighbours.put(p,new HashSet<>());
+        for (Particle p : system.getParticles().values())  neighbours.put(p,new HashSet<>());
     }
 
 
@@ -45,7 +45,7 @@ public class SystemNeighbourManager {
     }
 
     private void assignCells() {
-        for(Particle p : system.getParticles()) {
+        for(Particle p : system.getParticles().values()) {
             int cellX = (int) (p.getX()/c.CELL_LENGTH());
             int cellY = (int) (p.getY() / c.CELL_LENGTH());
             int cellId = cellX+cellY*c.CELL_AMOUNT();
@@ -99,7 +99,7 @@ public class SystemNeighbourManager {
 
     private String getNeighbourState() {
         StringBuilder sb = new StringBuilder();
-        for(Particle p: system.getParticles()){
+        for(Particle p: system.getParticles().values()){
 
             sb.append("Id: ");
             sb.append(p.getId());

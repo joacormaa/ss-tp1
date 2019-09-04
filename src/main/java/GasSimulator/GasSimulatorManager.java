@@ -29,7 +29,7 @@ public class GasSimulatorManager {
     }
 
     public double stepForward(){
-        Collision<?> collision = cm.getNextCollision();
+        Collision collision = cm.getNextCollision();
         System nextSystem = getNextSystem(collision);
         SystemMetrics nextSystemMetrics = new SystemMetrics(nextSystem);
 
@@ -51,25 +51,39 @@ public class GasSimulatorManager {
         return false;
     }
 
-    private System getNextSystem(Collision<?> collision) {
+    private System getNextSystem(Collision collision) {
         List<Particle> nextParticles = new ArrayList<>();
         double delta = collision.getCollisionTime()-lastSystem.getTime();
-        for(Particle p : lastSystem.getParticles()){
-            if(!p.equals(collision.getP())&& !p.equals(collision.getQ())){
+
+        Particle oldP =lastSystem.getParticles().get(collision.getPid());
+        Particle oldQ;
+        if(collision.getType()== Collision.Type.ParticleParticle){
+            oldQ = lastSystem.getParticles().get(collision.getQId());
+        }
+        else{
+            oldQ=null;
+        }
+
+        for(Particle p : lastSystem.getParticles().values()){
+            if(!p.equals(oldP) && !p.equals(oldQ)){
                 nextParticles.add(getNextParticle(p,delta));
             }
         }
 
-        Particle newP = getNextParticle(collision.getP(),delta);
-        if(collision.getQ() instanceof Wall){
-            nextParticles.add(cm.getCollisionResult(newP, (Wall) collision.getQ()));
-        } else if (collision.getQ() instanceof StaticParticle){
-            nextParticles.add(cm.getCollisionResult(newP, (StaticParticle) collision.getQ()));
-        } else {
-            Particle newQ = getNextParticle((Particle) collision.getQ(),delta);
+        Particle newP = getNextParticle(oldP,delta);
+        if(collision.getType() == Collision.Type.ParticleWall){
+            Wall w = lastSystem.getWalls().get(collision.getQId());
+            nextParticles.add(cm.getCollisionResult(newP, w));
+        }
+        else if (collision.getType() == Collision.Type.ParticleStaticParticle){
+            StaticParticle p = lastSystem.getStaticParticles().get(collision.getQId());
+            nextParticles.add(cm.getCollisionResult(newP, p));
+        }
+        else {
+            Particle newQ = getNextParticle(oldQ,delta);
             nextParticles.addAll(cm.getCollisionResult(newP, newQ));
         }
-        return new System(collision.getCollisionTime(), nextParticles,lastSystem.getStaticParticles(),lastSystem.getWalls());
+        return new System(collision.getCollisionTime(), nextParticles,lastSystem.getStaticParticles().values(),lastSystem.getWalls().values());
     }
 
     private Particle getNextParticle(Particle p, double delta) {

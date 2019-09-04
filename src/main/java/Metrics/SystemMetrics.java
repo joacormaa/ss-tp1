@@ -32,7 +32,7 @@ public class SystemMetrics {
         float sum=0;
         Config c = Config.getInstance();
         double limitPosition = c.HORIZONTAL_WALL_LENGTH()/2;
-        for(Particle p : system.getParticles()){
+        for(Particle p : system.getParticles().values()){
             counter++;
             sum+=(p.getX()<limitPosition)?0:1;
         }
@@ -45,7 +45,7 @@ public class SystemMetrics {
 
     private double calculateAvgKE() {
         double kineticEnergySum = 0;
-        for(Particle p : system.getParticles()){
+        for(Particle p : system.getParticles().values()){
             kineticEnergySum+=calculateKE(p);
         }
         return kineticEnergySum/system.getParticles().size();

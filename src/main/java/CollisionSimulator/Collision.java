@@ -1,35 +1,29 @@
 package CollisionSimulator;
 
-import Model.Particle;
+public class Collision{
 
-public class Collision<T> {
-
-    private Particle p;
-    private T q;
+    private int pId;
+    private int qId;
     private Double collisionTime;
+    private Type type;
 
-    public Collision(Particle p, T q, Double collisionTime)
+    public Collision(int pId, int qId, Double collisionTime, Type type)
     {
-        this.p = p;
-        this.q = q;
+        this.pId = pId;
+        this.qId = qId;
         this.collisionTime=collisionTime;
+        this.type=type;
     }
 
-    public Particle getP() {
-        return p;
+    public int getPid() {
+        return pId;
     }
 
-    public void setP(Particle p) {
-        this.p = p;
+
+    public int getQId() {
+        return qId;
     }
 
-    public T getQ() {
-        return q;
-    }
-
-    public void setQ(T q) {
-        this.q = q;
-    }
 
     public Double getCollisionTime() {
         return collisionTime;
@@ -37,5 +31,15 @@ public class Collision<T> {
 
     public void setCollisionTime(Double collisionTime) {
         this.collisionTime = collisionTime;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public enum Type {
+        ParticleParticle,
+        ParticleWall,
+        ParticleStaticParticle;
     }
 }
