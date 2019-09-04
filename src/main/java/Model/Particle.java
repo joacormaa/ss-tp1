@@ -44,7 +44,7 @@ public class Particle {
 
     public boolean isAdjacentTo(Particle p) {
         Config c = Config.getInstance();
-        double systemLength = c.SYSTEM_LENGTH();
+        double systemLength = /*c.SYSTEM_LENGTH()*/0;
         double xDifference = Math.abs(x - p.getX());
         if (xDifference > systemLength / 2)
             xDifference = systemLength - xDifference;
@@ -53,7 +53,8 @@ public class Particle {
         if (yDifference > systemLength / 2)
             yDifference = systemLength - yDifference;
 
-        return Math.sqrt(Math.pow(xDifference,2) + Math.pow(yDifference,2)) <= c.PARTICLE_INFLUENCE_RADIUS();
+        return false;
+        //return Math.sqrt(Math.pow(xDifference,2) + Math.pow(yDifference,2)) <= c.PARTICLE_INFLUENCE_RADIUS();
     }
 
     public double getSpeed() {

@@ -14,12 +14,9 @@ import static java.lang.System.exit;
 
 public class Config {
     private double PRINT_TIME;
-    private double SYSTEM_LENGTH;
     private int PARTICLE_QUANTITY;
     private double PARTICLE_RADIUS;
-    private double PARTICLE_RC;
     private String OUTPUT_PATH;
-    private double PARTICLE_INFLUENCE_RADIUS;
     private int CELL_AMOUNT;
     private double CELL_LENGTH;
     private double PARTICLE_SPEED;
@@ -55,10 +52,7 @@ public class Config {
         }
 
         if(!Helper.AngleIsRadians(this.NOISE_COEFFICIENT));
-        PARTICLE_INFLUENCE_RADIUS = 2*PARTICLE_RADIUS+PARTICLE_RC;
-        CELL_AMOUNT = (int)Math.floor(SYSTEM_LENGTH/PARTICLE_INFLUENCE_RADIUS);
         if(CELL_AMOUNT==0)CELL_AMOUNT=1;
-        CELL_LENGTH = SYSTEM_LENGTH/CELL_AMOUNT;
     }
 
     private void recoverValuesFromXML() throws ParserConfigurationException, IOException, SAXException {
@@ -68,10 +62,8 @@ public class Config {
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = documentBuilder.parse(file);
 
-        String SYSTEM_LENGTH_STR = document.getElementsByTagName("SYSTEM_LENGTH").item(0).getTextContent();
         String PARTICLE_QUANTITY_STR = document.getElementsByTagName("PARTICLE_QUANTITY").item(0).getTextContent();
         String PARTICLE_RADIUS_STR = document.getElementsByTagName("PARTICLE_RADIUS").item(0).getTextContent();
-        String PARTICLE_RC_STR = document.getElementsByTagName("PARTICLE_RC").item(0).getTextContent();
         String PARTICLE_SPEED_STR = document.getElementsByTagName("PARTICLE_SPEED").item(0).getTextContent();
         String AMOUNT_OF_FRAMES_STR = document.getElementsByTagName("AMOUNT_OF_FRAMES").item(0).getTextContent();
         String MAX_NOISE_STR = document.getElementsByTagName("NOISE_COEFFICIENT").item(0).getTextContent();
@@ -87,10 +79,8 @@ public class Config {
 
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
-        this.SYSTEM_LENGTH=Double.parseDouble(SYSTEM_LENGTH_STR);
         this.PARTICLE_QUANTITY = Integer.parseInt(PARTICLE_QUANTITY_STR);
         this.PARTICLE_RADIUS = Double.parseDouble(PARTICLE_RADIUS_STR);
-        this.PARTICLE_RC = Double.parseDouble(PARTICLE_RC_STR);
         this.PARTICLE_SPEED = Double.parseDouble(PARTICLE_SPEED_STR);
         this.AMOUNT_OF_FRAMES = Integer.parseInt(AMOUNT_OF_FRAMES_STR);
         this.NOISE_COEFFICIENT = Double.parseDouble(MAX_NOISE_STR);
@@ -108,10 +98,6 @@ public class Config {
 
     public double PARTICLE_SPEED(){return PARTICLE_SPEED;}
 
-    public double SYSTEM_LENGTH(){
-        return SYSTEM_LENGTH;
-    }
-
     public Integer PARTICLES_QUANTITY() {
         return PARTICLE_QUANTITY;
     }
@@ -120,16 +106,8 @@ public class Config {
         return PARTICLE_RADIUS;
     }
 
-    public double PARTICLE_RC() {
-        return PARTICLE_RC;
-    }
-
     public String OUTPUT_PATH() {
         return OUTPUT_PATH;
-    }
-
-    public double PARTICLE_INFLUENCE_RADIUS() {
-        return PARTICLE_INFLUENCE_RADIUS;
     }
 
     public int CELL_AMOUNT() {
