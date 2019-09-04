@@ -44,7 +44,7 @@ public class GasSystemCreator {
         Config c = Config.getInstance();
         List<Wall> walls = new ArrayList<>();
         walls.add(new Wall(false, 0.0,c.VERTICAL_WALL_LENGTH(), c.HORIZONTAL_WALL_LENGTH(),0));
-        walls.add(new Wall(false, 0.0,0.0, c.VERTICAL_WALL_LENGTH(),1));
+        walls.add(new Wall(false, 0.0,0.0, c.HORIZONTAL_WALL_LENGTH(),1));
         walls.add(new Wall(true, 0.0,0.0, c.VERTICAL_WALL_LENGTH(),2));
         double midBottomWalWidth = c.VERTICAL_WALL_LENGTH()-c.HOLE_POSITION()-c.HOLE_LENGTH();
         walls.add(new Wall(true, c.HORIZONTAL_WALL_LENGTH()/2, 0.0, midBottomWalWidth,3));

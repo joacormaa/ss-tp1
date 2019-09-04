@@ -3,15 +3,12 @@ package GasSimulator;
 import CollisionSimulator.Collision;
 import CollisionSimulator.CollisionManager;
 import Constants.Config;
-import FlockSimulator.FlockSimPrinter;
 import Log.Logger;
 import Metrics.SystemMetrics;
 import Model.Particle;
 import Model.StaticParticle;
 import Model.System;
 import Model.Wall;
-import NeighbourLogic.Helper;
-import NeighbourLogic.SystemNeighbourManager;
 import java.util.*;
 
 public class GasSimulatorManager {

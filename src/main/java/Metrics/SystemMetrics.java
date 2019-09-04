@@ -1,5 +1,6 @@
 package Metrics;
 
+import CollisionSimulator.Collision;
 import Constants.Config;
 import Model.Particle;
 import Model.System;
@@ -9,14 +10,21 @@ public class SystemMetrics {
     private double fp;
     private double temperature;
     private double time;
+    private double pressure;
+
+
+    private static double BOLTZMANN_CONSTANT = 1.38066E-23;
 
     public SystemMetrics(System system){
         this.system=system;
         this.time = system.getTime();
         this.fp = calculateFP();
         this.temperature = calculateTemperature();
-        //todo: encontrar otras metricas
-        //this.orden = calculateOrden();
+        this.pressure = calculatePressure();
+    }
+
+    private double calculatePressure() {
+        return 0; //todo: encontrar como hacerlo
     }
 
     private float calculateFP() {
@@ -32,10 +40,10 @@ public class SystemMetrics {
     }
 
     private double calculateTemperature(){
-        return calculateKE(); //todo: dividir por constante de boltzman etc...
+        return calculateAvgKE()*3f/2*BOLTZMANN_CONSTANT;
     }
 
-    private double calculateKE() {
+    private double calculateAvgKE() {
         double kineticEnergySum = 0;
         for(Particle p : system.getParticles()){
             kineticEnergySum+=calculateKE(p);
@@ -43,23 +51,19 @@ public class SystemMetrics {
         return kineticEnergySum/system.getParticles().size();
     }
     private double calculateKE(Particle p){
-        return 1/2*p.getMass()*Math.pow(p.getSpeed(),2);
+        return 1f/2*p.getMass()*Math.pow(p.getSpeed(),2);
     }
 
-    private double calculateOrden() {
+    public double getFp() {
+        return fp;
+    }
 
-        double vxSum =0;
-        double vySum =0;
-        Config c = Config.getInstance();
+    public double getTemperature() {
+        return temperature;
+    }
 
-        for (Particle p : system.getParticles()) {
-            vxSum+= p.getSpeed()*Math.cos(p.getAngle());
-            vySum+= p.getSpeed()*Math.sin(p.getAngle());
-        }
-
-        double mod = Math.hypot(vxSum,vySum);
-
-        return mod / (system.getParticles().size()*c.PARTICLE_SPEED());
+    public double getPressure() {
+        return pressure;
     }
 
     public double getTime() {

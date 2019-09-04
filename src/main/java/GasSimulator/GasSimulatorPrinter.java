@@ -29,15 +29,17 @@ public class GasSimulatorPrinter {
         Helper.appendToFile(printSystemMetrics(systemMetrics),c.OUTPUT_PATH()+"/"+METRIC_OUTPUT_PATH);
     }
 
-
     private String printSystemMetrics(SystemMetrics m){
-        return "";
-//        StringBuilder sb = new StringBuilder();
-//        sb.append(m.getTime());
-//        sb.append(',');
-//        sb.append(m.());
-//        sb.append('\n');
-//        return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append(m.getTime());
+        sb.append(',');
+        sb.append(m.getTemperature());
+        sb.append(',');
+        sb.append(m.getPressure());
+        sb.append(',');
+        sb.append(m.getFp());
+        sb.append('\n');
+        return sb.toString();
     }
 
     private String printSystem(System system){
