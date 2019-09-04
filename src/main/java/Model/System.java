@@ -36,6 +36,11 @@ public class System {
             sb.append(p.stringify());
             sb.append('\n');
         }
+        for (StaticParticle p : staticParticles) {
+            if(p.getId()<=1) continue;
+            sb.append(p.stringify());
+            sb.append('\n');
+        }
         return sb.toString();
     }
 

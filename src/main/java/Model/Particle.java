@@ -7,10 +7,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Particle {
-    private  int id;
-    private double x;
-    private double y;
-    private double radius;
+    protected  int id;
+    protected double x;
+    protected double y;
+    protected double radius;
     private double mass;
     private transient double speed;
     private double angle;

@@ -99,6 +99,7 @@ public class CollisionManager {
         }
         for(StaticParticle q : system.getStaticParticles()){
             int qId = q.getId();
+            if(qId > 1) continue;
             Double collisionTime = getCollisionTime(p,q);
             Double newCollisionTime = (collisionTime!=null)? collisionTime +system.getTime(): null;
             collisionsWithStaticParticles[qId][pId].setCollisionTime(newCollisionTime);
@@ -111,6 +112,8 @@ public class CollisionManager {
             for(StaticParticle q : system.getStaticParticles()){
                 int pId = p.getId();
                 int qId = q.getId();
+
+                if(qId > 1) continue;
 
                 Double collisionTime = getCollisionTime(p,q);
                 collisionsWithStaticParticles[qId][pId] = new Collision<>(p,q,collisionTime);
