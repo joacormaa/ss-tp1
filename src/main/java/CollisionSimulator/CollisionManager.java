@@ -207,7 +207,7 @@ public class CollisionManager {
 
     public Particle getCollisionResult(Particle p, Wall w){
         if(w.isVertical()){
-            Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), 180-p.getAngle(), p.getMass());
+            Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), (Math.PI-p.getAngle())%(2*Math.PI), p.getMass());
             Logger.print("Collision with V-Wall");
             Logger.printPolar(p, newP);
             return newP;
@@ -262,21 +262,21 @@ public class CollisionManager {
         deltaR[0] = s.getX() - p.getX();
         deltaR[1] = s.getY() - p.getY();
 
-        double alpha = Math.acos(deltaR[0]/Math.sqrt(Math.pow(deltaR[0], 2) + Math.pow(deltaR[1], 2)));
-        double cn = 1;
-        double ct = 1;
-
-        double[][] operator = new double[2][2];
-        operator[0][0] = -cn*Math.pow(Math.cos(alpha), 2) + ct*Math.pow(Math.sin(alpha), 2);
-        operator[0][1] = -(cn+ct)*Math.sin(alpha)*Math.cos(alpha);
-        operator[1][0] = -(cn+ct)*Math.sin(alpha)*Math.cos(alpha);
-        operator[0][0] = -cn*Math.pow(Math.sin(alpha), 2) + ct*Math.pow(Math.cos(alpha), 2);
-
-        double lastVX = p.getXSpeed();
-        double lastVY = p.getYSpeed();
-        double newVX = operator[0][0] * lastVX + operator[0][1] * lastVY;
-        double newVY = operator[1][0] * lastVX + operator[1][1] * lastVY;
-        Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), Particle.getSpeed(newVX, newVY), Particle.getAngle(newVX, newVY), p.getMass());
+        double alpha = Math.atan(deltaR[1]/deltaR[0]);
+//        double cn = 1;
+//        double ct = 1;
+//
+//        double[][] operator = new double[2][2];
+//        operator[0][0] = -cn*Math.pow(Math.cos(alpha), 2) + ct*Math.pow(Math.sin(alpha), 2);
+//        operator[0][1] = -(cn+ct)*Math.sin(alpha)*Math.cos(alpha);
+//        operator[1][0] = -(cn+ct)*Math.sin(alpha)*Math.cos(alpha);
+//        operator[0][0] = -cn*Math.pow(Math.sin(alpha), 2) + ct*Math.pow(Math.cos(alpha), 2);
+//
+//        double lastVX = p.getXSpeed();
+//        double lastVY = p.getYSpeed();
+//        double newVX = operator[0][0] * lastVX + operator[0][1] * lastVY;
+//        double newVY = operator[1][0] * lastVX + operator[1][1] * lastVY;
+        Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), (alpha+Math.PI+p.getAngle())%(2*Math.PI), p.getMass());
 
         Logger.print("Collision with static");
         Logger.printPolar(p, newP);

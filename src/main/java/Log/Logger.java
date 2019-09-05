@@ -18,8 +18,8 @@ public final class Logger {
         System.out.println(newS);
     }
     public static void printPolar(Particle p, Particle newP){
-        String s = "Last - ID:" + p.getId() + " X:" + p.getX() + " Y:" + p.getY() + " V:" + p.getSpeed() + " Angle:" + p.getAngle();
-        String newS = "New - ID:" + newP.getId() + " X:" + newP.getX() + " Y:" + newP.getY() + " V:" + newP.getSpeed() + " Angle:" + newP.getAngle();
+        String s = "Last - ID:" + p.getId() + " X:" + p.getX() + " Y:" + p.getY() + " V:" + p.getSpeed() + " Angle:" + Math.toDegrees(p.getAngle());
+        String newS = "New - ID:" + newP.getId() + " X:" + newP.getX() + " Y:" + newP.getY() + " V:" + newP.getSpeed() + " Angle:" + Math.toDegrees(newP.getAngle());
         System.out.println(s);
         System.out.println(newS);
     }
