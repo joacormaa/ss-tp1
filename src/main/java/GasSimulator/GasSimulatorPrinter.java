@@ -20,13 +20,16 @@ public class GasSimulatorPrinter {
 
     private void addHeader(String path) {
         StringBuilder sb = new StringBuilder();
-        sb.append("time").append(',').append("orden").append('\n');
+        sb.append("time").append(',').append("temperature").append(',').append("pressure")
+                .append(',').append("FP").append('\n');
         Helper.appendToFile(sb.toString(),path);
     }
 
-    void outputStep(System system, SystemMetrics systemMetrics){
-        Helper.appendToFile(printSystem(system),c.OUTPUT_PATH()+"/"+PARTICLE_OUTPUT_PATH);
+    void outputMetrics(SystemMetrics systemMetrics){
         Helper.appendToFile(printSystemMetrics(systemMetrics),c.OUTPUT_PATH()+"/"+METRIC_OUTPUT_PATH);
+    }
+    void outputStep(System system){
+        Helper.appendToFile(printSystem(system),c.OUTPUT_PATH()+"/"+PARTICLE_OUTPUT_PATH);
     }
 
     private String printSystemMetrics(SystemMetrics m){

@@ -1,6 +1,7 @@
 package Log;
 
 import Model.Particle;
+import Model.StaticParticle;
 
 public final class Logger {
     private Logger(){}
@@ -8,7 +9,7 @@ public final class Logger {
         System.out.println(s);
     }
     public static void print(Particle p){
-        String s = "ID:" + p.getId() + " Vx:" + p.getXSpeed() + " Vy:" + p.getYSpeed();
+        String s = "ID:" + p.getId() + " X:" + p.getX() + " Y:" + p.getY()+ " Vx:" + p.getXSpeed() + " Vy:" + p.getYSpeed();
         System.out.println(s);
     }
     public static void print(Particle p, Particle newP){

@@ -282,6 +282,7 @@ public class CollisionManager {
 
         Logger.print("Collision with static");
         Logger.printPolar(p, newP);
+        Logger.print(s);
         return newP;
     }
 }

@@ -58,10 +58,6 @@ public class GasSystemCreator {
         Config c = Config.getInstance();
         staticParticles.add(new StaticParticle(0,c.HORIZONTAL_WALL_LENGTH()/2, c.VERTICAL_WALL_LENGTH()-c.HOLE_POSITION(), c.WALL_WIDTH()/2));
         staticParticles.add(new StaticParticle(1,c.HORIZONTAL_WALL_LENGTH()/2, c.VERTICAL_WALL_LENGTH()-c.HOLE_POSITION()-c.HOLE_LENGTH(), c.WALL_WIDTH()/2));
-        staticParticles.add(new StaticParticle(2, 0, 0, 0 ));
-        staticParticles.add(new StaticParticle(3, c.HORIZONTAL_WALL_LENGTH(), 0, 0 ));
-        staticParticles.add(new StaticParticle(4, 0, c.VERTICAL_WALL_LENGTH(), 0 ));
-        staticParticles.add(new StaticParticle(5, c.HORIZONTAL_WALL_LENGTH(), c.VERTICAL_WALL_LENGTH(), 0 ));
         return staticParticles;
     }
 

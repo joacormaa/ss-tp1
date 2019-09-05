@@ -28,18 +28,25 @@ public class GasSimulatorManager {
         this.c=Config.getInstance();
     }
 
+    public SystemMetrics getLastSystemMetrics(){
+        return lastSystemMetrics;
+    }
+
     public double stepForward(){
         Collision collision = cm.getNextCollision();
         System nextSystem = getNextSystem(collision);
-        SystemMetrics nextSystemMetrics = new SystemMetrics(nextSystem);
+        SystemMetrics nextSystemMetrics = new SystemMetrics(nextSystem,collision);
 
         this.lastSystem=nextSystem;
         this.lastSystemMetrics=nextSystemMetrics;
         cm.updateCollisions(nextSystem,collision);
+
+        gsp.outputMetrics(lastSystemMetrics);
         if(hasToPrint()){
             Logger.print("Printing Step");
-            gsp.outputStep(lastSystem,lastSystemMetrics);
+            gsp.outputStep(lastSystem);
         }
+
         return nextSystem.getTime();
     }
 

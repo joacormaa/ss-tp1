@@ -1,6 +1,7 @@
 import Constants.Config;
 import GasSimulator.GasSimulatorManager;
 import Log.Logger;
+import Metrics.SystemMetrics;
 import Model.Particle;
 import Model.System;
 import NeighbourLogic.SystemNeighbourManager;
@@ -12,6 +13,10 @@ import java.util.List;
 
 public class Main {
 
+    private static int framesOfBalance =100;
+    private static float tolerance = 0.05f;
+    private static int currentFramesOfBalance =0;
+
     public static void main(String[] args) {
         //runOrderComparison();
         //runFlockSimulation();
@@ -22,12 +27,29 @@ public class Main {
     private static void runGasSimulation() {
         GasSimulatorManager gsm = new GasSimulatorManager();
         Config c = Config.getInstance();
-        double time=0;
-        for(int i=0; i<c.AMOUNT_OF_FRAMES();i++){
-            Logger.print("Running Step '"+i+"'");
+        double time;
+        boolean isBalanced = false;
+        int i=0;
+        while(!isBalanced){
+            Logger.print("Running Step '"+i+++"'");
             time = gsm.stepForward();
             Logger.print("time '"+time+"'");
+            isBalanced = checkBalance(gsm.getLastSystemMetrics());
         }
+    }
+
+    private static boolean checkBalance(SystemMetrics lastSystemMetrics) {
+        if( Math.abs(lastSystemMetrics.getFp()-0.5) <= tolerance){
+            currentFramesOfBalance++;
+            Logger.print("Frame: "+currentFramesOfBalance+" of balance");
+        }
+        else{
+            if(currentFramesOfBalance!=0)
+                Logger.print("Reset balance");
+            currentFramesOfBalance=0;
+        }
+        return currentFramesOfBalance==framesOfBalance;
+
     }
 
     private static void runOrderComparison() {

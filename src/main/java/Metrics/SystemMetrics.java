@@ -4,6 +4,7 @@ import CollisionSimulator.Collision;
 import Constants.Config;
 import Model.Particle;
 import Model.System;
+import Model.Wall;
 
 public class SystemMetrics {
     private transient System system;
@@ -15,16 +16,23 @@ public class SystemMetrics {
 
     private static double BOLTZMANN_CONSTANT = 1.38066E-23;
 
-    public SystemMetrics(System system){
+    public SystemMetrics(System system, Collision collision){
         this.system=system;
         this.time = system.getTime();
         this.fp = calculateFP();
         this.temperature = calculateTemperature();
-        this.pressure = calculatePressure();
+        this.pressure = calculatePressure(collision);
     }
 
-    private double calculatePressure() {
-        return 0; //todo: encontrar como hacerlo
+    private double calculatePressure(Collision collision) {
+        if(collision.getType()!=Collision.Type.ParticleWall)
+            return 0;
+        Wall w = system.getWalls().get(collision.getQId());
+        Particle p = system.getParticles().get(collision.getPid());
+
+        double perpendicularVelocity = (w.isVertical())?p.getXSpeed():p.getYSpeed();
+
+        return Math.abs(2*p.getMass()*perpendicularVelocity);
     }
 
     private float calculateFP() {
