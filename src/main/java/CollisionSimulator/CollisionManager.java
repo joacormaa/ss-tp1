@@ -141,7 +141,7 @@ public class CollisionManager {
 
             double vx = p.getXSpeed();
 
-            if(vx*(w.getX()-p.getX()) <= 0) return null;
+            if(vx*(w.getX()-p.getX()) < 0) return null;
 
             if(w.getX() == c.HORIZONTAL_WALL_LENGTH()/2){ //has hole
                 yInf = w.getY();
@@ -152,10 +152,10 @@ public class CollisionManager {
             }
 
             if(vx>0){
-                ret = (xp1-r-p.getX())/vx;
+                ret = ((xp1 + xp2)/2-r-p.getX())/vx;
             }
             else{
-                ret = (xp2+r-p.getX())/vx;
+                ret = ((xp1 + xp2)/2+r-p.getX())/vx;
             }
         }
         else {
@@ -165,16 +165,16 @@ public class CollisionManager {
 
             double vy = p.getYSpeed();
 
-            if(vy*(w.getY()-p.getY()) <= 0) return null;
+            if(vy*(w.getY()-p.getY()) < 0) return null;
 
             if(vy>0){
-                ret = (yp1-r-p.getY())/vy;
+                ret = ((yp1 + yp2)/2-r-p.getY())/vy;
             }
             else{
-                ret = (yp2+r-p.getY())/vy;
+                ret = ((yp1 + yp2)/2+r-p.getY())/vy;
             }
         }
-        return ret>0?ret:null;
+        return ret >= 0 ? ret : null;
     }
 
     private Double getCollisionTime(Particle p1, Particle p2) {
