@@ -58,9 +58,13 @@ public class System {
             sb.append(p.stringify());
             sb.append('\n');
         }
-        for (StaticParticle p : staticParticles.values()) {
-            sb.append(p.stringify());
-            sb.append('\n');
+//        for (StaticParticle p : staticParticles.values()) {
+//            sb.append(p.stringify());
+//            sb.append('\n');
+//        }
+        int i=0;
+        for (Wall w: walls.values()){
+            sb.append(w.stringify(particles.size()+c.PARTICLES_PER_WALL()*i++));
         }
         return sb.toString();
     }

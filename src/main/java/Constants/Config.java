@@ -14,6 +14,7 @@ import static java.lang.System.exit;
 
 public class Config {
     private double PRINT_TIME;
+    private int PARTICLES_PER_WALL;
     private int PARTICLE_QUANTITY;
     private double PARTICLE_RADIUS;
     private String OUTPUT_PATH;
@@ -76,6 +77,7 @@ public class Config {
         String PARTICLE_MASS = document.getElementsByTagName("PARTICLE_MASS").item(0).getTextContent();
 
         String PRINT_TIME = document.getElementsByTagName("PRINT_TIME").item(0).getTextContent();
+        String PARTICLES_PER_WALL = document.getElementsByTagName("PARTICLES_PER_WALL").item(0).getTextContent();
 
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
@@ -93,6 +95,7 @@ public class Config {
         this.PARTICLE_MASS = Double.parseDouble(PARTICLE_MASS);
 
         this.PRINT_TIME = Double.parseDouble(PRINT_TIME);
+        this.PARTICLES_PER_WALL = Integer.parseInt(PARTICLES_PER_WALL);
 
     }
 
@@ -152,5 +155,7 @@ public class Config {
     }
 
     public double PARTICLE_MASS() {return PARTICLE_MASS;}
+
+    public int PARTICLES_PER_WALL() {return PARTICLES_PER_WALL;}
 }
 

@@ -42,4 +42,35 @@ public class Wall {
     public double getWidth() {
         return width;
     }
+
+    public String stringify(int idBase) {
+        StringBuilder sb = new StringBuilder();
+        int pPerWall = Config.getInstance().PARTICLES_PER_WALL();
+        double amount=length/pPerWall;
+        for(int i=0; i<pPerWall; i++){
+
+            sb.append(idBase+i);
+            sb.append(' ');
+            double x,y;
+            if(isVertical){
+                y=this.y+i*amount;
+                x=this.x;
+            }
+            else{
+                x=this.x+i*amount;
+                y=this.y;
+            }
+            sb.append(x);
+            sb.append(' ');
+            sb.append(y);
+            sb.append(' ');
+            sb.append(0);
+            sb.append(' ');
+            sb.append(0);
+            sb.append(' ');
+            sb.append(0);
+            sb.append('\n');
+        }
+        return sb.toString();
+    }
 }

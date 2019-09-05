@@ -44,7 +44,8 @@ public class GasSimulatorPrinter {
 
     private String printSystem(System system){
         StringBuilder sb = new StringBuilder();
-        sb.append(6 + system.getParticles().size());
+
+        sb.append(system.getParticles().size() +c.PARTICLES_PER_WALL()*system.getWalls().size());
         sb.append('\n');
         sb.append('\n');
         sb.append(system.stringify());
