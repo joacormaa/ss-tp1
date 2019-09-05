@@ -234,7 +234,7 @@ public class CollisionManager {
         double sigma;
         sigma = p1.getRadius() + p2.getRadius();
 
-        double j = 2*p1.getMass()*p2.getMass()*productDeltaVDeltaR/(sigma*(p1.getMass() + p2.getMass()));
+        double j = (2*p1.getMass()*p2.getMass()*productDeltaVDeltaR)/(sigma*(p1.getMass() + p2.getMass()));
         double jx = (j*deltaR[0])/sigma;
         double jy = (j*deltaR[1])/sigma;
 
@@ -252,7 +252,9 @@ public class CollisionManager {
 
         Logger.print("Collision between TWO");
         Logger.printPolar(p1, p1new);
+        Logger.print("VEL: " + Math.sqrt(Math.pow(vx1,2) + Math.pow(vy1,2)));
         Logger.printPolar(p2, p2new);
+        Logger.print("VEL: " + Math.sqrt(Math.pow(vx2,2) + Math.pow(vy2,2)));
 
         return ret;
     }
@@ -263,20 +265,20 @@ public class CollisionManager {
         deltaR[1] = s.getY() - p.getY();
 
         double alpha = Math.atan(deltaR[1]/deltaR[0]);
-//        double cn = 1;
-//        double ct = 1;
-//
-//        double[][] operator = new double[2][2];
-//        operator[0][0] = -cn*Math.pow(Math.cos(alpha), 2) + ct*Math.pow(Math.sin(alpha), 2);
-//        operator[0][1] = -(cn+ct)*Math.sin(alpha)*Math.cos(alpha);
-//        operator[1][0] = -(cn+ct)*Math.sin(alpha)*Math.cos(alpha);
-//        operator[0][0] = -cn*Math.pow(Math.sin(alpha), 2) + ct*Math.pow(Math.cos(alpha), 2);
-//
-//        double lastVX = p.getXSpeed();
-//        double lastVY = p.getYSpeed();
-//        double newVX = operator[0][0] * lastVX + operator[0][1] * lastVY;
-//        double newVY = operator[1][0] * lastVX + operator[1][1] * lastVY;
-        Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), (alpha+Math.PI+p.getAngle())%(2*Math.PI), p.getMass());
+        double cn = 1;
+        double ct = 1;
+
+        double[][] operator = new double[2][2];
+        operator[0][0] = -cn*Math.pow(Math.cos(alpha), 2) + ct*Math.pow(Math.sin(alpha), 2);
+        operator[0][1] = -(cn+ct)*Math.sin(alpha)*Math.cos(alpha);
+        operator[1][0] = -(cn+ct)*Math.sin(alpha)*Math.cos(alpha);
+        operator[1][1] = -cn*Math.pow(Math.sin(alpha), 2) + ct*Math.pow(Math.cos(alpha), 2);
+
+        double lastVX = p.getXSpeed();
+        double lastVY = p.getYSpeed();
+        double newVX = operator[0][0] * lastVX + operator[0][1] * lastVY;
+        double newVY = operator[1][0] * lastVX + operator[1][1] * lastVY;
+        Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), Particle.getSpeed(newVX, newVY), Particle.getAngle(newVX, newVY), p.getMass());
 
         Logger.print("Collision with static");
         Logger.printPolar(p, newP);
