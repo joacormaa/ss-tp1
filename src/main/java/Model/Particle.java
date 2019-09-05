@@ -69,7 +69,7 @@ public class Particle {
 
     public static double getSpeed(double xspeed, double yspeed){ return Math.sqrt(Math.pow(xspeed,2) + Math.pow(yspeed,2)); }
 
-    public static double getAngle(double xspeed, double yspeed){ return Math.atan(yspeed/xspeed);}
+    public static double getAngle(double xspeed, double yspeed){ return Math.atan2(yspeed,xspeed);}
 
     public double getAngle() {
         return angle;

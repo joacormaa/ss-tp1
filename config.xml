@@ -15,4 +15,5 @@
 
     <PRINT_TIME>0.1</PRINT_TIME><!-->Segundos<-->
     <PARTICLES_PER_WALL>1000</PARTICLES_PER_WALL>
+    <LOG_ON>TRUE</LOG_ON>
 </xml>

@@ -1,6 +1,7 @@
 package Constants;
 
 import NeighbourLogic.Helper;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -15,6 +16,8 @@ import static java.lang.System.exit;
 public class Config {
     private double PRINT_TIME;
     private int PARTICLES_PER_WALL;
+    private boolean LOG_ON;
+
     private int PARTICLE_QUANTITY;
     private double PARTICLE_RADIUS;
     private String OUTPUT_PATH;
@@ -78,6 +81,7 @@ public class Config {
 
         String PRINT_TIME = document.getElementsByTagName("PRINT_TIME").item(0).getTextContent();
         String PARTICLES_PER_WALL = document.getElementsByTagName("PARTICLES_PER_WALL").item(0).getTextContent();
+        String LOG_ON = document.getElementsByTagName("LOG_ON").item(0).getTextContent();
 
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
@@ -96,6 +100,7 @@ public class Config {
 
         this.PRINT_TIME = Double.parseDouble(PRINT_TIME);
         this.PARTICLES_PER_WALL = Integer.parseInt(PARTICLES_PER_WALL);
+        this.LOG_ON = Boolean.parseBoolean(LOG_ON);
 
     }
 
@@ -157,5 +162,9 @@ public class Config {
     public double PARTICLE_MASS() {return PARTICLE_MASS;}
 
     public int PARTICLES_PER_WALL() {return PARTICLES_PER_WALL;}
+
+    public boolean LOG_ON() {
+        return LOG_ON;
+    }
 }
 

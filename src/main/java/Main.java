@@ -18,6 +18,7 @@ public class Main {
     private static int currentFramesOfBalance =0;
 
     public static void main(String[] args) {
+        Logger.loggerInit();
         //runOrderComparison();
         //runFlockSimulation();
         //runNeighbourOutput();

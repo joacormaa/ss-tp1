@@ -51,11 +51,12 @@ public class GasSimulatorManager {
     }
 
     private boolean hasToPrint() {
-        if(lastPrintTime+c.PRINT_TIME()<lastSystem.getTime()){
-            lastPrintTime=lastSystem.getTime();
-            return true;
-        }
-        return false;
+        return true;
+//        if(lastPrintTime+c.PRINT_TIME()<lastSystem.getTime()){
+//            lastPrintTime=lastSystem.getTime();
+//            return true;
+//        }
+//        return false;
     }
 
     private System getNextSystem(Collision collision) {
