@@ -25,10 +25,12 @@ public class GasSystemCreator {
     private static List<Particle> initializeParticles(List<StaticParticle> staticParticles, List<Wall> walls) {
         Config c = Config.getInstance();
         List<Particle> particles = new ArrayList<>();
+
+        double maxHorizontal = (c.INNER_WALL())?c.HORIZONTAL_WALL_LENGTH()/2:c.HORIZONTAL_WALL_LENGTH();
         for(int i = 0; i < c.PARTICLES_QUANTITY(); i++) {
             Particle newParticle;
             do {
-                double x = Math.random() * c.HORIZONTAL_WALL_LENGTH()/2;
+                double x = Math.random() * maxHorizontal;
                 double y = Math.random() * c.VERTICAL_WALL_LENGTH();
                 double angle = Math.random() * 2* Math.PI - Math.PI;
                 newParticle = new Particle(i, x, y, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle,c.PARTICLE_MASS());
@@ -46,18 +48,22 @@ public class GasSystemCreator {
         walls.add(new Wall(false, 0.0,c.VERTICAL_WALL_LENGTH(), c.HORIZONTAL_WALL_LENGTH(),0));
         walls.add(new Wall(false, 0.0,0.0, c.HORIZONTAL_WALL_LENGTH(),1));
         walls.add(new Wall(true, 0.0,0.0, c.VERTICAL_WALL_LENGTH(),2));
-        double midBottomWalWidth = c.VERTICAL_WALL_LENGTH()-c.HOLE_POSITION()-c.HOLE_LENGTH();
-        walls.add(new Wall(true, c.HORIZONTAL_WALL_LENGTH()/2, 0.0, midBottomWalWidth,3));
-        walls.add(new Wall(true, c.HORIZONTAL_WALL_LENGTH()/2, midBottomWalWidth+c.HOLE_LENGTH(),c.HOLE_POSITION(),4));
-        walls.add(new Wall(true, c.HORIZONTAL_WALL_LENGTH(), 0.0,c.VERTICAL_WALL_LENGTH(),5));
+        walls.add(new Wall(true, c.HORIZONTAL_WALL_LENGTH(), 0.0,c.VERTICAL_WALL_LENGTH(),3));
+        if(c.INNER_WALL()){
+            double midBottomWalWidth = c.VERTICAL_WALL_LENGTH()-c.HOLE_POSITION()-c.HOLE_LENGTH();
+            walls.add(new Wall(true, c.HORIZONTAL_WALL_LENGTH()/2, 0.0, midBottomWalWidth,4));
+            walls.add(new Wall(true, c.HORIZONTAL_WALL_LENGTH()/2, midBottomWalWidth+c.HOLE_LENGTH(),c.HOLE_POSITION(),5));
+        }
         return walls;
     }
 
     private static List<StaticParticle> initializeStaticParticles() {
         List<StaticParticle> staticParticles = new ArrayList<>();
         Config c = Config.getInstance();
-        staticParticles.add(new StaticParticle(0,c.HORIZONTAL_WALL_LENGTH()/2, c.VERTICAL_WALL_LENGTH()-c.HOLE_POSITION(), c.WALL_WIDTH()/2));
-        staticParticles.add(new StaticParticle(1,c.HORIZONTAL_WALL_LENGTH()/2, c.VERTICAL_WALL_LENGTH()-c.HOLE_POSITION()-c.HOLE_LENGTH(), c.WALL_WIDTH()/2));
+        if(c.INNER_WALL()){
+            staticParticles.add(new StaticParticle(0,c.HORIZONTAL_WALL_LENGTH()/2, c.VERTICAL_WALL_LENGTH()-c.HOLE_POSITION(), c.WALL_WIDTH()/2));
+            staticParticles.add(new StaticParticle(1,c.HORIZONTAL_WALL_LENGTH()/2, c.VERTICAL_WALL_LENGTH()-c.HOLE_POSITION()-c.HOLE_LENGTH(), c.WALL_WIDTH()/2));
+        }
         return staticParticles;
     }
 

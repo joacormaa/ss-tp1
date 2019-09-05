@@ -12,16 +12,38 @@ public class SystemMetrics {
     private double temperature;
     private double time;
     private double pressure;
-
+    private Double[] witnessParticleX;
+    private Double[] witnessParticleY;
 
     private static double BOLTZMANN_CONSTANT = 1.38066E-23;
 
-    public SystemMetrics(System system, Collision collision){
+    public SystemMetrics(System system, Collision collision, boolean[] witnessParticleCrashed){
         this.system=system;
         this.time = system.getTime();
         this.fp = calculateFP();
         this.temperature = calculateTemperature();
         this.pressure = calculatePressure(collision);
+        this.witnessParticleX = new Double[witnessParticleCrashed.length];
+        this.witnessParticleY = new Double[witnessParticleCrashed.length];
+        checkIfWitnessParticleCrashed(witnessParticleCrashed,collision);
+        calculateWitnessParticlePosition(witnessParticleCrashed);
+    }
+
+    private void checkIfWitnessParticleCrashed(boolean[] witnessParticleCrashed, Collision collision) {
+        int pid = collision.getPid();
+        if(pid<witnessParticleCrashed.length && collision.getType()== Collision.Type.ParticleWall){
+            witnessParticleCrashed[pid]=true;
+        }
+    }
+
+    private void calculateWitnessParticlePosition(boolean[] witnessParticleCrashed) {
+        for(int i=0; i<witnessParticleCrashed.length;i++){
+            if(!witnessParticleCrashed[i]){
+                Particle p = system.getParticles().get(i);
+                witnessParticleX[i]=p.getX();
+                witnessParticleY[i]=p.getY();
+            }
+        }
     }
 
     private double calculatePressure(Collision collision) {
@@ -77,4 +99,7 @@ public class SystemMetrics {
     public double getTime() {
         return time;
     }
+
+    public Double[] getWitnessParticleX(){ return witnessParticleX; }
+    public Double[] getWitnessParticleY(){ return witnessParticleY; }
 }

@@ -33,6 +33,8 @@ public class Config {
     private double VERTICAL_WALL_LENGTH;
     private double HOLE_LENGTH;
     private double HOLE_POSITION;
+    private boolean INNER_WALL;
+
     private double WALL_WIDTH;
     private double PARTICLE_MASS;
 
@@ -82,6 +84,7 @@ public class Config {
         String PRINT_TIME = document.getElementsByTagName("PRINT_TIME").item(0).getTextContent();
         String PARTICLES_PER_WALL = document.getElementsByTagName("PARTICLES_PER_WALL").item(0).getTextContent();
         String LOG_ON = document.getElementsByTagName("LOG_ON").item(0).getTextContent();
+        String INNER_WALL = document.getElementsByTagName("INNER_WALL").item(0).getTextContent();
 
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
@@ -101,7 +104,7 @@ public class Config {
         this.PRINT_TIME = Double.parseDouble(PRINT_TIME);
         this.PARTICLES_PER_WALL = Integer.parseInt(PARTICLES_PER_WALL);
         this.LOG_ON = Boolean.parseBoolean(LOG_ON);
-
+        this.INNER_WALL = Boolean.parseBoolean(INNER_WALL);
     }
 
     public double PARTICLE_SPEED(){return PARTICLE_SPEED;}
@@ -166,5 +169,7 @@ public class Config {
     public boolean LOG_ON() {
         return LOG_ON;
     }
+
+    public boolean INNER_WALL(){return INNER_WALL;}
 }
 

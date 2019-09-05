@@ -22,8 +22,11 @@ public class CollisionManager {
         this.c = Config.getInstance();
         int particleQ =c.PARTICLES_QUANTITY();
         this.system=system;
-        collisionsWithWalls = new Collision[6][particleQ]; // 6 paredes
-        collisionsWithStaticParticles = new Collision[2][particleQ]; // 2 particulas estaticas
+        int wallAmount = (c.INNER_WALL())?6:4;
+        int staticParticleAmount = (c.INNER_WALL())?2:0;
+
+        collisionsWithWalls = new Collision[wallAmount][particleQ]; // 6 paredes
+        collisionsWithStaticParticles = new Collision[staticParticleAmount][particleQ]; // 2 particulas estaticas
         collisionsWithParticles = new Collision[particleQ][particleQ];
         initializeCollisionTimes();
         this.pq = new MyBetterPriorityQueue<>((c1, c2) -> {

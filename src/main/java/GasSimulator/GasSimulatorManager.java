@@ -19,6 +19,8 @@ public class GasSimulatorManager {
     private Config c;
 
     private double lastPrintTime;
+    private boolean[] witnessParticlesCrashed;
+
 
     public GasSimulatorManager(){
         this.lastSystem = GasSystemCreator.createInitialGasSystem();
@@ -26,6 +28,9 @@ public class GasSimulatorManager {
         this.gsp = new GasSimulatorPrinter();
         this.lastPrintTime = 0;
         this.c=Config.getInstance();
+
+        int witnessParticles = Math.min(c.PARTICLES_QUANTITY()/10,10);
+        this.witnessParticlesCrashed = new boolean[witnessParticles];
     }
 
     public SystemMetrics getLastSystemMetrics(){
@@ -35,7 +40,7 @@ public class GasSimulatorManager {
     public double stepForward(){
         Collision collision = cm.getNextCollision();
         System nextSystem = getNextSystem(collision);
-        SystemMetrics nextSystemMetrics = new SystemMetrics(nextSystem,collision);
+        SystemMetrics nextSystemMetrics = new SystemMetrics(nextSystem,collision, witnessParticlesCrashed);
 
         this.lastSystem=nextSystem;
         this.lastSystemMetrics=nextSystemMetrics;
