@@ -36,6 +36,7 @@ public class GasSimulatorComparer {
             c.setHOLE_POSITION(currPosition);
             String printPath= c.OUTPUT_PATH() + "/"+currPosition + POSITION_OUTPUT_PATH;
             Helper.resetFile(printPath);
+            printHeader(simulationRuns,printPath);
 
             printGasSims(simulationRuns,printPath);
 
@@ -44,21 +45,33 @@ public class GasSimulatorComparer {
         c.setHOLE_POSITION(holePositionBK);
     }
 
-    public void compareHoleLengths(double holeLengthMin, double holeLengthMax, double step, int simulationRuns){
+    public void compareHoleLengths(double holeLengthMin, double holeLengthMax, double step, int simulationRuns) {
         double holeLengthBK = c.HOLE_LENGTH();
 
         double currLength = holeLengthMin;
 
-        while(currLength<=holeLengthMax){
+        while (currLength <= holeLengthMax) {
             c.setHOLE_LENGTH(currLength);
-            String printPath= c.OUTPUT_PATH() + "/"+currLength + HOLE_LENGTH_OUTPUT_PATH;
+            String printPath = c.OUTPUT_PATH() + "/" + currLength + HOLE_LENGTH_OUTPUT_PATH;
             Helper.resetFile(printPath);
 
-            printGasSims(simulationRuns,printPath);
+            printGasSims(simulationRuns, printPath);
 
-            currLength+=step;
+            currLength += step;
         }
         c.setHOLE_LENGTH(holeLengthBK);
+    }
+
+    private void printHeader(int simulationRuns, String printPath){
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("time");
+        for(int i=0; i<simulationRuns; i++){
+            sb.append(",fp");
+            sb.append(i);
+        }
+        sb.append('\n');
+        Helper.appendToFile(sb.toString(),printPath);
     }
 
     private void printGasSims(int simulationRuns, String printPath) {
@@ -93,9 +106,16 @@ public class GasSimulatorComparer {
 
             printSimulationsStep(avgTime, fps, printPath);
         }
+        lastPrint=0;
     }
 
+    private double lastPrint = 0;
+
     private void printSimulationsStep(double avgTime, Double[] fps, String printPath) {
+        if(avgTime<lastPrint+c.PRINT_TIME()){
+            return;
+        }
+        lastPrint=avgTime;
         StringBuilder sb = new StringBuilder();
         sb.append(avgTime);
         for(int i=0; i<fps.length; i++){
