@@ -1,4 +1,5 @@
 import Constants.Config;
+import GasSimulator.GasSimulatorComparer;
 import GasSimulator.GasSimulatorManager;
 import Log.Logger;
 import Metrics.SystemMetrics;
@@ -22,11 +23,17 @@ public class Main {
         //runOrderComparison();
         //runFlockSimulation();
         //runNeighbourOutput();
-        runGasSimulation();
+        //runGasSimulation();
+        runComparison();
+    }
+
+    private static void runComparison() {
+        GasSimulatorComparer gsc = new GasSimulatorComparer();
+        gsc.comparePositions(0,0.04,0.005,10);
     }
 
     private static void runGasSimulation() {
-        GasSimulatorManager gsm = new GasSimulatorManager();
+        GasSimulatorManager gsm = new GasSimulatorManager(true);
         Config c = Config.getInstance();
         double time;
         boolean isBalanced = false;

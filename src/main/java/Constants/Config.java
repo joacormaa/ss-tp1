@@ -171,5 +171,9 @@ public class Config {
     }
 
     public boolean INNER_WALL(){return INNER_WALL;}
+
+    public void setHOLE_POSITION(double hole_position){
+        this.HOLE_POSITION=hole_position;
+    }
 }
 

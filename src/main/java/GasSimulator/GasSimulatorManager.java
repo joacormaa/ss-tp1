@@ -21,13 +21,16 @@ public class GasSimulatorManager {
     private double lastPrintTime;
     private boolean[] witnessParticlesCrashed;
 
+    private boolean hasToPrint;
 
-    public GasSimulatorManager(){
+
+    public GasSimulatorManager(boolean hasToPrint){
         this.lastSystem = GasSystemCreator.createInitialGasSystem();
         this.cm = new CollisionManager(lastSystem);
         this.gsp = new GasSimulatorPrinter();
         this.lastPrintTime = 0;
         this.c=Config.getInstance();
+        this.hasToPrint=hasToPrint;
 
         int witnessParticles = Math.min(c.PARTICLES_QUANTITY()/10,10);
         this.witnessParticlesCrashed = new boolean[witnessParticles];
@@ -56,7 +59,7 @@ public class GasSimulatorManager {
     }
 
     private boolean hasToPrint() {
-        if(lastPrintTime+c.PRINT_TIME()<lastSystem.getTime()){
+        if(lastPrintTime+c.PRINT_TIME()<lastSystem.getTime() && hasToPrint){
             lastPrintTime=lastSystem.getTime();
             return true;
         }
