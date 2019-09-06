@@ -175,5 +175,9 @@ public class Config {
     public void setHOLE_POSITION(double hole_position){
         this.HOLE_POSITION=hole_position;
     }
+
+    public void setHOLE_LENGTH(double hole_length){
+        this.HOLE_LENGTH=hole_length;
+    }
 }
 

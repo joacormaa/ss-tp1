@@ -18,6 +18,7 @@ public class GasSimulatorComparer {
 
     private Config c;
     private static String POSITION_OUTPUT_PATH = "position.csv";
+    private static String HOLE_LENGTH_OUTPUT_PATH = "holeLength.csv";
 //    private static String NOISE_OUTPUT_PATH = "noise.csv";
 
     public GasSimulatorComparer(){
@@ -41,6 +42,23 @@ public class GasSimulatorComparer {
             currPosition+=step;
         }
         c.setHOLE_POSITION(holePositionBK);
+    }
+
+    public void compareHoleLengths(double holeLengthMin, double holeLengthMax, double step, int simulationRuns){
+        double holeLengthBK = c.HOLE_LENGTH();
+
+        double currLength = holeLengthMin;
+
+        while(currLength<=holeLengthMax){
+            c.setHOLE_LENGTH(currLength);
+            String printPath= c.OUTPUT_PATH() + "/"+currLength + HOLE_LENGTH_OUTPUT_PATH;
+            Helper.resetFile(printPath);
+
+            printGasSims(simulationRuns,printPath);
+
+            currLength+=step;
+        }
+        c.setHOLE_LENGTH(holeLengthBK);
     }
 
     private void printGasSims(int simulationRuns, String printPath) {
