@@ -54,6 +54,7 @@ public class GasSimulatorComparer {
             c.setHOLE_LENGTH(currLength);
             String printPath = c.OUTPUT_PATH() + "/" + currLength + HOLE_LENGTH_OUTPUT_PATH;
             Helper.resetFile(printPath);
+            printHeader(simulationRuns,printPath);
 
             printGasSims(simulationRuns, printPath);
 
