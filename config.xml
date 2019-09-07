@@ -5,7 +5,7 @@
 
     <PARTICLE_QUANTITY>40</PARTICLE_QUANTITY>
     <PARTICLE_RADIUS>0.0015</PARTICLE_RADIUS><!-->Metros<-->
-    <PARTICLE_SPEED>0.01</PARTICLE_SPEED><!-->Metros por Segundo<-->
+    <PARTICLE_SPEED>0.021</PARTICLE_SPEED><!-->Metros por Segundo<-->
     <OUTPUT_PATH>output</OUTPUT_PATH>
 
     <WALL_WIDTH>0.001</WALL_WIDTH><!-->Metros<-->
@@ -19,5 +19,5 @@
 
     <PRINT_TIME>0.1</PRINT_TIME><!-->Segundos<-->
     <PARTICLES_PER_WALL>1000</PARTICLES_PER_WALL>
-    <LOG_ON>TRUE</LOG_ON>
+    <LOG_ON>OFF</LOG_ON>
 </xml>

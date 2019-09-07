@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Main {
 
-    private static int framesOfBalance =100;
+    private static int framesOfBalance =20;
     private static float tolerance = 0.05f;
     private static int currentFramesOfBalance =0;
 

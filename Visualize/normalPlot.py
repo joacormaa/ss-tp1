@@ -2,22 +2,21 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-dfAA = pd.read_csv('../analisis/metricsAA.csv')
-dfAB = pd.read_csv('../analisis/metricsAB.csv')
-dfBA = pd.read_csv('../analisis/metricsBA.csv')
-dfBB = pd.read_csv('../analisis/metricsBB.csv')
+df = pd.read_csv('../output/metrics.csv')
+df.sort_values(by=['time'], inplace=True)
+
+x = df['time']
+y = df['temperature']
+
 
 fig = plt.figure()
-plt.title('Prueba 1')
-plt.xlabel('Tiempo')
-plt.ylabel('Orden')
+plt.title('Temperatura vs Tiempo')
+plt.xlabel('Tiempo (s)')
+plt.ylabel('Temperatura (K)')
 
-plt.plot(dfAA['time'], dfAA['orden'], lw=0.5, ms=0.5, marker='o', label='Ad - Ar')
-plt.plot(dfAB['time'], dfAB['orden'], lw=0.5, ms=0.5, marker='v', label='Ad - Br')
-plt.plot(dfBA['time'], dfBA['orden'], lw=0.5, ms=0.5, marker='s', label='Bd - Ar')
-plt.plot(dfBB['time'], dfBB['orden'], lw=0.5, ms=0.5, marker='p', label='Bd - Br')
-plt.legend(loc='lower right')
-plt.xticks(np.arange(0, 300, step=20))
+plt.plot(x, y, lw=0.5, ms=0.5, marker='o', label='N = 20\nV0 = 0.021\n')
+plt.legend(loc='upper center')
+plt.xticks(np.arange(0, 271, step=30))
+plt.yticks(np.arange(1e19, 1.1e19, step=1.0e17))
 plt.grid(ls='--')
-plt.savefig('output')
 plt.show()

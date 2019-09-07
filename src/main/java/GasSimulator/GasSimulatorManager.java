@@ -49,7 +49,9 @@ public class GasSimulatorManager {
         this.lastSystemMetrics=nextSystemMetrics;
         cm.updateCollisions(nextSystem,collision);
 
-        gsp.outputMetrics(lastSystemMetrics);
+        if(hasToPrint){
+            gsp.outputMetrics(lastSystemMetrics);
+        }
         if(hasToPrint()){
             Logger.print("Printing Step");
             gsp.outputStep(lastSystem);

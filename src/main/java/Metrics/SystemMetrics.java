@@ -70,7 +70,7 @@ public class SystemMetrics {
     }
 
     private double calculateTemperature(){
-        return calculateAvgKE()*3f/2*BOLTZMANN_CONSTANT;
+        return calculateAvgKE()*2f/(3f*BOLTZMANN_CONSTANT);
     }
 
     private double calculateAvgKE() {

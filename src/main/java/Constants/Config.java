@@ -179,5 +179,9 @@ public class Config {
     public void setHOLE_LENGTH(double hole_length){
         this.HOLE_LENGTH=hole_length;
     }
+
+    public void setVelocity(double velocity) {
+        this.PARTICLE_SPEED = velocity;
+    }
 }
 
