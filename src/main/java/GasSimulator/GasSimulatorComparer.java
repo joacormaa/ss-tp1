@@ -240,12 +240,22 @@ public class GasSimulatorComparer {
 
 
                 pressureSum[i]+=pressures[i];
-                if(!conditionMet[i] && checkBalance(gsm)){
-                    this.T+=gsm.getLastSystemMetrics().getTemperature();
-                    ret[i] = pressureSum[i]/times[i];
-                    conditionMet[i]=true;
-                    conditionTime[i]=gsm.getLastSystemMetrics().getTime();
+                if(!conditionMet[i]){
+                    if(checkBalance(gsm)){
+                        if(conditionTime[i]==null)
+                            conditionTime[i]=gsm.getLastSystemMetrics().getTime();
+                        if(gsm.getLastSystemMetrics().getTime()-conditionTime[i]>10){
+                            this.T+=gsm.getLastSystemMetrics().getTemperature();
+                            ret[i] = pressureSum[i]/times[i];
+                            conditionMet[i]=true;
+                            conditionTime[i]=gsm.getLastSystemMetrics().getTime();
+
+                        }
+                    }else{
+                        conditionTime[i]=null;
+                    }
                 }
+
 
             }
 
@@ -289,7 +299,7 @@ public class GasSimulatorComparer {
         return ret/times.length;
     }
 
-    private static float tolerance = 0.05f;
+    private static float tolerance = 0.20f;
 
     private static boolean checkBalance(GasSimulatorManager gasSimulatorManager) {
         SystemMetrics lastSystemMetrics = gasSimulatorManager.getLastSystemMetrics();

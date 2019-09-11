@@ -29,7 +29,7 @@ public class Main {
 
     private static void runComparison() {
         GasSimulatorComparer gsc = new GasSimulatorComparer();
-        gsc.compareHoleLengths(0.01,0.05,0.02,10);
+        gsc.compareVelocity(0.01,0.1,0.01,10);
     }
 
     private static void runGasSimulation() {

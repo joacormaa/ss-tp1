@@ -21,9 +21,9 @@ plt.title('Temperatura vs Presión')
 plt.xlabel('Temperatura (K)')
 plt.ylabel('Presión (N/m)')
 plt.errorbar(x, y, lw=0.5, ms=0.5, marker='.', yerr=yerr,
-             elinewidth=1, capsize=5, label='N = 30\n')
+             elinewidth=1, capsize=5, label='N = 30')
 plt.legend(loc='lower right')
-plt.xticks(np.arange(0, 5.1e19, step=6e18))
+plt.xticks(np.arange(0, 2.5e20, step=6e19))
 plt.grid(ls='--')
 plt.show()
 
