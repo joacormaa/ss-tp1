@@ -12,6 +12,7 @@ public class System {
     private Map<Integer,Particle> particles;
     private Map<Integer,StaticParticle> staticParticles;
     private Map<Integer,Wall> walls;
+    private Particle oscillationParticle;
 
 
     public System(double time, Collection<Particle> particles, Collection<StaticParticle> staticParticles, Collection<Wall> walls){
@@ -23,13 +24,9 @@ public class System {
     }
 
     //Oscillation Single Particle System
-    //Por ahi podemos hacer que reciba una particula sola y guardarla separado
-    public System(double time, Collection<Particle> particles){
-        if(particles.size() != 1){
-
-        }
+    public System(double time, Particle particle){
         this.time = time;
-        this.particles = initializeParticleMap(particles);
+        this.oscillationParticle = particle;
         this.c = Config.getInstance();
     }
 

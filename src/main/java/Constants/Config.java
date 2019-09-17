@@ -18,6 +18,10 @@ public class Config {
     private int PARTICLES_PER_WALL;
     private boolean LOG_ON;
 
+    private int OSCILLATOR_K;
+    private int OSCILLATOR_G;
+    private double OSCILLATOR_A;
+
     private int PARTICLE_QUANTITY;
     private double PARTICLE_RADIUS;
     private String OUTPUT_PATH;
@@ -68,6 +72,10 @@ public class Config {
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = documentBuilder.parse(file);
 
+        String OSCILLATOR_K = document.getElementsByTagName("OSCILLATOR_K").item(0).getTextContent();
+        String OSCILLATOR_G = document.getElementsByTagName("OSCILLATOR_G").item(0).getTextContent();
+        String OSCILLATOR_A = document.getElementsByTagName("OSCILLATOR_A").item(0).getTextContent();
+
         String PARTICLE_QUANTITY_STR = document.getElementsByTagName("PARTICLE_QUANTITY").item(0).getTextContent();
         String PARTICLE_RADIUS_STR = document.getElementsByTagName("PARTICLE_RADIUS").item(0).getTextContent();
         String PARTICLE_SPEED_STR = document.getElementsByTagName("PARTICLE_SPEED").item(0).getTextContent();
@@ -105,6 +113,10 @@ public class Config {
         this.PARTICLES_PER_WALL = Integer.parseInt(PARTICLES_PER_WALL);
         this.LOG_ON = Boolean.parseBoolean(LOG_ON);
         this.INNER_WALL = Boolean.parseBoolean(INNER_WALL);
+
+        this.OSCILLATOR_K = Integer.parseInt(OSCILLATOR_K);
+        this.OSCILLATOR_G = Integer.parseInt(OSCILLATOR_G);
+        this.OSCILLATOR_A = Double.parseDouble(OSCILLATOR_A);
     }
 
     public double PARTICLE_SPEED(){return PARTICLE_SPEED;}
@@ -137,6 +149,29 @@ public class Config {
         return AMOUNT_OF_FRAMES;
     }
 
+    public int OSCILLATOR_K() {
+        return OSCILLATOR_K;
+    }
+
+    public void setOSCILLATOR_K(int OSCILLATOR_K) {
+        this.OSCILLATOR_K = OSCILLATOR_K;
+    }
+
+    public int OSCILLATOR_G() {
+        return OSCILLATOR_G;
+    }
+
+    public void setOSCILLATOR_G(int OSCILLATOR_G) {
+        this.OSCILLATOR_G = OSCILLATOR_G;
+    }
+
+    public double OSCILLATOR_A() {
+        return OSCILLATOR_A;
+    }
+
+    public void setOSCILLATOR_A(double OSCILLATOR_A) {
+        this.OSCILLATOR_A = OSCILLATOR_A;
+    }
 
     public double HORIZONTAL_WALL_LENGTH(){return HORIZONTAL_WALL_LENGTH;}
 

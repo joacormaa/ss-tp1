@@ -16,11 +16,9 @@ public class OscillationCreator {
         return new System(0, initializeParticle());
     }
 
-    private static Collection<Particle> initializeParticle(){
+    private static Particle initializeParticle(){
         Config c = Config.getInstance();
-        List<Particle> particles = new ArrayList<>();
-
         //ToDo: Utilizando la configuracion inicial que le pasemos hay que darle la posicion y velocidad a la particula
-        return particles;
+        return new Particle(0,0,1,0,c.OSCILLATOR_A()*c.OSCILLATOR_G()/(2*c.PARTICLE_MASS()),-Math.PI/2,c.PARTICLE_MASS());
     }
 }
