@@ -14,26 +14,7 @@ public class OscillationManager {
     }
 
     //ToDo: avanzar el sistema un delta t
-    public boolean stepForward(){
+    public boolean stepForward() {
         return true;
-    }
-
-    public double getTime(){
-        return lastSystem.getTime();
-    }
-
-    //ToDo: pido la posicion para GPCo5
-    public double getGPCo5(){
-        return 0;
-    }
-
-    //ToDo: pido la posicion para Beeman
-    public double getBeeman(){
-        return 0;
-    }
-
-    //ToDo: pido la posicion para Verlet
-    public double getVerlet(){
-        return 0;
     }
 }

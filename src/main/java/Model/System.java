@@ -56,6 +56,8 @@ public class System {
         return time;
     }
 
+    public Particle getOscillationParticle() { return oscillationParticle; }
+
     public Map<Integer,Particle> getParticles() {
         return particles;
     }

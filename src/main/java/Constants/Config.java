@@ -22,6 +22,8 @@ public class Config {
     private int OSCILLATOR_G;
     private double OSCILLATOR_A;
 
+    private int NUMERIC_METHOD;
+
     private int PARTICLE_QUANTITY;
     private double PARTICLE_RADIUS;
     private String OUTPUT_PATH;
@@ -76,6 +78,8 @@ public class Config {
         String OSCILLATOR_G = document.getElementsByTagName("OSCILLATOR_G").item(0).getTextContent();
         String OSCILLATOR_A = document.getElementsByTagName("OSCILLATOR_A").item(0).getTextContent();
 
+        String methodString = document.getElementsByTagName("NUMERIC_METHOD").item(0).getTextContent();
+
         String PARTICLE_QUANTITY_STR = document.getElementsByTagName("PARTICLE_QUANTITY").item(0).getTextContent();
         String PARTICLE_RADIUS_STR = document.getElementsByTagName("PARTICLE_RADIUS").item(0).getTextContent();
         String PARTICLE_SPEED_STR = document.getElementsByTagName("PARTICLE_SPEED").item(0).getTextContent();
@@ -117,6 +121,8 @@ public class Config {
         this.OSCILLATOR_K = Integer.parseInt(OSCILLATOR_K);
         this.OSCILLATOR_G = Integer.parseInt(OSCILLATOR_G);
         this.OSCILLATOR_A = Double.parseDouble(OSCILLATOR_A);
+
+        this.NUMERIC_METHOD = (methodString.equals("GPCo5")?0:(methodString.equals("Beeman")?1:2));
     }
 
     public double PARTICLE_SPEED(){return PARTICLE_SPEED;}
@@ -171,6 +177,14 @@ public class Config {
 
     public void setOSCILLATOR_A(double OSCILLATOR_A) {
         this.OSCILLATOR_A = OSCILLATOR_A;
+    }
+
+    public int NUMERIC_METHOD() {
+        return NUMERIC_METHOD;
+    }
+
+    public void setNUMERIC_METHOD(int NUMERIC_METHOD) {
+        this.NUMERIC_METHOD = NUMERIC_METHOD;
     }
 
     public double HORIZONTAL_WALL_LENGTH(){return HORIZONTAL_WALL_LENGTH;}

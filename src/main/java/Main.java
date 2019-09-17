@@ -44,8 +44,7 @@ public class Main {
         while(!stopped){
             //Con solamente logear el step nos alcanza ya que cada paso representa i*deltaT (tiempo)
             Logger.print("Running Step '"+i+"'");
-            //ToDo: Me parece logico que devuelva si el sistema sigue avanzando pero como esto podria ser de una forma
-            //para una de las aproximaciones, no lo tengo muy claro todavia.
+            //ToDo: Me parece logico que devuelva si el sistema sigue avanzando
             stopped = om.stepForward();
         }
     }
