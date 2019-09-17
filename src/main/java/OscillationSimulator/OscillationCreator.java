@@ -18,7 +18,6 @@ public class OscillationCreator {
 
     private static Particle initializeParticle(){
         Config c = Config.getInstance();
-        //ToDo: Utilizando la configuracion inicial que le pasemos hay que darle la posicion y velocidad a la particula
         return new Particle(0,0,1,0,c.OSCILLATOR_A()*c.OSCILLATOR_G()/(2*c.PARTICLE_MASS()),-Math.PI/2,c.PARTICLE_MASS());
     }
 }
