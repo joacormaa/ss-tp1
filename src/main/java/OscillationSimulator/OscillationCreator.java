@@ -20,7 +20,7 @@ public class OscillationCreator {
         Config c = Config.getInstance();
         List<Particle> particles = new ArrayList<>();
 
-        //Utilizando la configuracion inicial que le pasemos hay que darle la posicion y velocidad a la particula
+        //ToDo: Utilizando la configuracion inicial que le pasemos hay que darle la posicion y velocidad a la particula
         return particles;
     }
 }
