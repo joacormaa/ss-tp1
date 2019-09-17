@@ -22,6 +22,17 @@ public class System {
         this.walls=initializeWallMap(walls);
     }
 
+    //Oscillation Single Particle System
+    //Por ahi podemos hacer que reciba una particula sola y guardarla separado
+    public System(double time, Collection<Particle> particles){
+        if(particles.size() != 1){
+
+        }
+        this.time = time;
+        this.particles = initializeParticleMap(particles);
+        this.c = Config.getInstance();
+    }
+
     private Map<Integer, Particle> initializeParticleMap(Collection<Particle> particles) {
         Map<Integer, Particle> map = new HashMap<>();
         for(Particle p : particles){
