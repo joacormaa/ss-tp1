@@ -6,6 +6,7 @@ import Metrics.SystemMetrics;
 import Model.Particle;
 import Model.System;
 import NeighbourLogic.SystemNeighbourManager;
+import OscillationSimulator.OscillationManager;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -24,12 +25,29 @@ public class Main {
         //runFlockSimulation();
         //runNeighbourOutput();
         //runGasSimulation();
-        runComparison();
+        //runComparison();
+        runOscillationSimulation();
     }
 
     private static void runComparison() {
         GasSimulatorComparer gsc = new GasSimulatorComparer();
         gsc.compareVelocity(0.01,0.1,0.01,10);
+    }
+
+    private static void runOscillationSimulation(){
+        OscillationManager om = new OscillationManager(true);
+        Config c = Config.getInstance();
+        //Esta es la condicion de corte. Cuando el desplazamiento sea menor a un error, consideramos que el sistema
+        //dejo de progresar.
+        boolean stopped = false;
+        int i=0;
+        while(!stopped){
+            //Con solamente logear el step nos alcanza ya que cada paso representa i*deltaT (tiempo)
+            Logger.print("Running Step '"+i+"'");
+            //ToDo: Me parece logico que devuelva si el sistema sigue avanzando pero como esto podria ser de una forma
+            //para una de las aproximaciones, no lo tengo muy claro todavia.
+            stopped = om.stepForward();
+        }
     }
 
     private static void runGasSimulation() {
