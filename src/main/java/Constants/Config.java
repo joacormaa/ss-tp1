@@ -14,6 +14,7 @@ import java.io.IOException;
 import static java.lang.System.exit;
 
 public class Config {
+    private double SIMULATION_DELTA_TIME;
     private double PRINT_TIME;
     private int PARTICLES_PER_WALL;
     private boolean LOG_ON;
@@ -32,9 +33,7 @@ public class Config {
     private double PARTICLE_SPEED;
     private double NOISE_COEFFICIENT;
     private int AMOUNT_OF_FRAMES;
-    
-    
-    
+
     private double HORIZONTAL_WALL_LENGTH;
     private double VERTICAL_WALL_LENGTH;
     private double HOLE_LENGTH;
@@ -93,6 +92,7 @@ public class Config {
         String WALL_WIDTH = document.getElementsByTagName("WALL_WIDTH").item(0).getTextContent();
         String PARTICLE_MASS = document.getElementsByTagName("PARTICLE_MASS").item(0).getTextContent();
 
+        String SIMULATION_DELTA_TIME = document.getElementsByTagName("SIMULATION_DELTA_TIME").item(0).getTextContent();
         String PRINT_TIME = document.getElementsByTagName("PRINT_TIME").item(0).getTextContent();
         String PARTICLES_PER_WALL = document.getElementsByTagName("PARTICLES_PER_WALL").item(0).getTextContent();
         String LOG_ON = document.getElementsByTagName("LOG_ON").item(0).getTextContent();
@@ -113,6 +113,7 @@ public class Config {
         this.WALL_WIDTH = Double.parseDouble(WALL_WIDTH);
         this.PARTICLE_MASS = Double.parseDouble(PARTICLE_MASS);
 
+        this.SIMULATION_DELTA_TIME = Double.parseDouble(SIMULATION_DELTA_TIME);
         this.PRINT_TIME = Double.parseDouble(PRINT_TIME);
         this.PARTICLES_PER_WALL = Integer.parseInt(PARTICLES_PER_WALL);
         this.LOG_ON = Boolean.parseBoolean(LOG_ON);
@@ -186,6 +187,15 @@ public class Config {
     public void setNUMERIC_METHOD(int NUMERIC_METHOD) {
         this.NUMERIC_METHOD = NUMERIC_METHOD;
     }
+
+    public double SIMULATION_DELTA_TIME() {
+        return SIMULATION_DELTA_TIME;
+    }
+
+    public void setSIMULATION_DELTA_TIME(double SIMULATION_DELTA_TIME) {
+        this.SIMULATION_DELTA_TIME = SIMULATION_DELTA_TIME;
+    }
+
 
     public double HORIZONTAL_WALL_LENGTH(){return HORIZONTAL_WALL_LENGTH;}
 
