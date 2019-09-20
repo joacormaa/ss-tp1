@@ -35,18 +35,19 @@ public class OscillationManager {
     public boolean stepForward() {
         Particle lastParticle = lastSystem.getOscillationParticle();
         PositionNVel pvel = null;
+        double currentAcceleration = force(lastParticle.getY(),lastParticle.getSpeed())/lastParticle.getMass();
         switch(nM){
             case GPCO5:
                 //GPCo5
                 break;
             case BEEMAN:
                 //Beeman
-                double currentAcceleration = force(lastParticle.getY(),lastParticle.getSpeed())/lastParticle.getMass();
                 double previousAcceleration = force(previousParticle.getY(),previousParticle.getSpeed())/previousParticle.getMass();
-                pvel = beeman(lastSystem.getTime(), deltaT,lastParticle.getMass(), currentAcceleration,previousAcceleration,lastParticle.getY(), lastParticle.getSpeed());
+                pvel = beeman(lastParticle.getMass(), currentAcceleration,previousAcceleration,lastParticle.getY(), lastParticle.getSpeed());
                 break;
             case VERLET:
                 //Verlet
+                pvel = verlet(lastParticle.getY(), previousParticle.getY(), currentAcceleration);
                 break;
         }
         Particle newParticle  = new Particle(lastParticle.getId(),lastParticle.getX(),pvel.position,lastParticle.getRadius(),pvel.vel,lastParticle.getAngle(),lastParticle.getMass());
@@ -63,7 +64,14 @@ public class OscillationManager {
 
     }
 
-    private PositionNVel beeman(double t, double deltaT, double mass, double currAcceleration, double prevAcceleration,double position, double velocity){
+    private PositionNVel verlet(double position, double prevPosition, double acceleration){
+        double newPos = 2*position - prevPosition + Math.pow(deltaT,2)*acceleration;
+        double newVel = (newPos - prevPosition)/(2*deltaT);
+
+        return new PositionNVel(newPos, newVel);
+    }
+
+    private PositionNVel beeman(double mass, double currAcceleration, double prevAcceleration,double position, double velocity){
         double newPosUnEje = position + (velocity*deltaT) + ((2f/3)*currAcceleration*Math.pow(deltaT,2)) - ((1f/6)*prevAcceleration*Math.pow(deltaT,2));
         double velPredicted = velocity+(3f/2)*currAcceleration*deltaT-(1f/2)*prevAcceleration*deltaT;
 
