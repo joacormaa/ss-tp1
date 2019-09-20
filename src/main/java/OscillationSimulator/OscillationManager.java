@@ -6,6 +6,7 @@ import Model.Particle;
 import Model.System;
 
 public class OscillationManager {
+    Config c;
     private System lastSystem;
     private Particle previousParticle;
     private OscillationPrinter op;
@@ -15,9 +16,22 @@ public class OscillationManager {
     private double gama;
     private double k;
     private Config.NuMethod nM;
+    private double predictedR;
+    private double predictedR1;
+    private double predictedR2;
+    private double predictedR3;
+    private double predictedR4;
+    private double predictedR5;
+    private Double r;
+    private Double r1;
+    private Double r2;
+    private Double r3;
+    private Double r4;
+    private Double r5;
+
 
     public OscillationManager(boolean hasToPrint){
-        Config c = Config.getInstance();
+        c = Config.getInstance();
         lastSystem = OscillationCreator.createInitialOscillationSystem();
         op = new OscillationPrinter();
         htp = hasToPrint;
@@ -39,6 +53,7 @@ public class OscillationManager {
         switch(nM){
             case GPCO5:
                 //GPCo5
+                pvel = gearPredictorCorrectorO5(lastSystem.getTime(), deltaT,lastParticle.getMass(), lastParticle.getY(), lastParticle.getSpeed());
                 break;
             case BEEMAN:
                 //Beeman
@@ -60,8 +75,39 @@ public class OscillationManager {
         return lastSystem.getTime()>100;
     }
 
-    private void gearPredictorCorrectorO5(Particle p){
+    private PositionNVel gearPredictorCorrectorO5(double t, double deltaT, double mass, double position, double velocity){
+        if(r == null) r = position;
+        if(r1 == null) r1 = velocity;
+        if(r2 == null) r2 = -k/mass * (position-c.OSCILLATOR_INITIAL_POSITION());
+        if(r3 == null) r3 = -k/mass * velocity;
+        if(r4 == null) r4 = Math.pow(k/mass, 2) * (position-c.OSCILLATOR_INITIAL_POSITION());
+        if(r5 == null) r5 = Math.pow(k/mass, 2) * velocity;
+        predictedR = r + r1*deltaT + r2*Math.pow(deltaT,2)/2 + r3*Math.pow(deltaT,3)/6 + r4*Math.pow(deltaT,4)/24 + r5*Math.pow(deltaT,5)/120;
+        predictedR1 = r1 + r2*deltaT + r3*Math.pow(deltaT,2)/2 + r4*Math.pow(deltaT,3)/6 + r5*Math.pow(deltaT,4)/24;
+        predictedR2 = r2 + r3*deltaT + r4*Math.pow(deltaT,2)/2 + r5*Math.pow(deltaT,3)/6;
+        predictedR3 = r3 + r4*deltaT + r5*Math.pow(deltaT,2)/2;
+        predictedR4 = r4 + r5*deltaT;
+        predictedR5 = r5;
 
+        double nextAcceleration = force(predictedR,predictedR1)/mass;
+        double deltaA = nextAcceleration - predictedR2;
+        double deltaR2 = deltaA * Math.pow(deltaT,2) / 2;
+
+        double correctedR = predictedR + c.ALPHA_0_OSCILLATOR() * deltaR2;
+        double correctedR1 = predictedR1 + c.ALPHA_1()  * deltaR2 / deltaT;
+        double correctedR2 = predictedR2 + c.ALPHA_2() * deltaR2 * 2 / Math.pow(deltaT,2);
+        double correctedR3 = predictedR3 + c.ALPHA_3() * deltaR2 * 6 / Math.pow(deltaT,3);
+        double correctedR4 = predictedR4 + c.ALPHA_4() * deltaR2 * 24 / Math.pow(deltaT,4);
+        double correctedR5 = predictedR5 + c.ALPHA_5() * deltaR2 * 120 / Math.pow(deltaT,5);
+
+        r = correctedR;
+        r1 = correctedR1;
+        r2 = correctedR2;
+        r3 = correctedR3;
+        r4 = correctedR4;
+        r5 = correctedR5;
+
+        return new PositionNVel(correctedR, correctedR1);
     }
 
     private PositionNVel verlet(double position, double prevPosition, double acceleration){

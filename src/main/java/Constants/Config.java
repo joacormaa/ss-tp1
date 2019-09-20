@@ -22,6 +22,16 @@ public class Config {
     private int OSCILLATOR_G;
     private double OSCILLATOR_A;
 
+    private double OSCILLATOR_INITIAL_POSITION;
+
+    private double ALPHA_0_OSCILLATOR;
+    private double ALPHA_0_GAS;
+    private double ALPHA_1;
+    private double ALPHA_2;
+    private double ALPHA_3;
+    private double ALPHA_4;
+    private double ALPHA_5;
+
     private NuMethod NUMERIC_METHOD;
 
     private int PARTICLE_QUANTITY;
@@ -75,6 +85,14 @@ public class Config {
         String OSCILLATOR_K = document.getElementsByTagName("OSCILLATOR_K").item(0).getTextContent();
         String OSCILLATOR_G = document.getElementsByTagName("OSCILLATOR_G").item(0).getTextContent();
         String OSCILLATOR_A = document.getElementsByTagName("OSCILLATOR_A").item(0).getTextContent();
+        String OSCILLATOR_INITIAL_POSITION = document.getElementsByTagName("OSCILLATOR_INITIAL_POSITION").item(0).getTextContent();
+        String ALPHA_0_OSCILLATOR = document.getElementsByTagName("ALPHA_0_OSCILLATOR").item(0).getTextContent();
+        String ALPHA_0_GAS = document.getElementsByTagName("ALPHA_0_GAS").item(0).getTextContent();
+        String ALPHA_1 = document.getElementsByTagName("ALPHA_1").item(0).getTextContent();
+        String ALPHA_2 = document.getElementsByTagName("ALPHA_2").item(0).getTextContent();
+        String ALPHA_3 = document.getElementsByTagName("ALPHA_3").item(0).getTextContent();
+        String ALPHA_4 = document.getElementsByTagName("ALPHA_4").item(0).getTextContent();
+        String ALPHA_5 = document.getElementsByTagName("ALPHA_5").item(0).getTextContent();
 
         String methodString = document.getElementsByTagName("NUMERIC_METHOD").item(0).getTextContent();
 
@@ -121,6 +139,14 @@ public class Config {
         this.OSCILLATOR_K = Integer.parseInt(OSCILLATOR_K);
         this.OSCILLATOR_G = Integer.parseInt(OSCILLATOR_G);
         this.OSCILLATOR_A = Double.parseDouble(OSCILLATOR_A);
+        this.OSCILLATOR_INITIAL_POSITION = Double.parseDouble(OSCILLATOR_INITIAL_POSITION);
+        this.ALPHA_0_OSCILLATOR = Double.parseDouble(ALPHA_0_OSCILLATOR);
+        this.ALPHA_0_GAS = Double.parseDouble(ALPHA_0_GAS);
+        this.ALPHA_1 = Double.parseDouble(ALPHA_1);
+        this.ALPHA_2 = Double.parseDouble(ALPHA_2);
+        this.ALPHA_3 = Double.parseDouble(ALPHA_3);
+        this.ALPHA_4 = Double.parseDouble(ALPHA_4);
+        this.ALPHA_5 = Double.parseDouble(ALPHA_5);
 
         this.NUMERIC_METHOD = NuMethod.valueOf(methodString);
     }
@@ -183,6 +209,70 @@ public class Config {
 
     public void setOSCILLATOR_A(double OSCILLATOR_A) {
         this.OSCILLATOR_A = OSCILLATOR_A;
+    }
+
+    public double OSCILLATOR_INITIAL_POSITION() {
+        return OSCILLATOR_INITIAL_POSITION;
+    }
+
+    public void setOSCILLATOR_INITIAL_POSITION(double OSCILLATOR_INITIAL_POSITION) {
+        this.OSCILLATOR_INITIAL_POSITION = OSCILLATOR_INITIAL_POSITION;
+    }
+
+    public double ALPHA_0_OSCILLATOR() {
+        return ALPHA_0_OSCILLATOR;
+    }
+
+    public void setALPHA_0_OSCILLATOR(double ALPHA_0_OSCILLATOR) {
+        this.ALPHA_0_OSCILLATOR = ALPHA_0_OSCILLATOR;
+    }
+
+    public double ALPHA_0_GAS() {
+        return ALPHA_0_GAS;
+    }
+
+    public void setALPHA_0_GAS(double ALPHA_0_GAS) {
+        this.ALPHA_0_GAS = ALPHA_0_GAS;
+    }
+
+    public double ALPHA_1() {
+        return ALPHA_1;
+    }
+
+    public void setALPHA_1(double ALPHA_1) {
+        this.ALPHA_1 = ALPHA_1;
+    }
+
+    public double ALPHA_2() {
+        return ALPHA_2;
+    }
+
+    public void setALPHA_2(double ALPHA_2) {
+        this.ALPHA_2 = ALPHA_2;
+    }
+
+    public double ALPHA_3() {
+        return ALPHA_3;
+    }
+
+    public void setALPHA_3(double ALPHA_3) {
+        this.ALPHA_3 = ALPHA_3;
+    }
+
+    public double ALPHA_4() {
+        return ALPHA_4;
+    }
+
+    public void setALPHA_4(double ALPHA_4) {
+        this.ALPHA_4 = ALPHA_4;
+    }
+
+    public double ALPHA_5() {
+        return ALPHA_5;
+    }
+
+    public void setALPHA_5(double ALPHA_5) {
+        this.ALPHA_5 = ALPHA_5;
     }
 
     public NuMethod NUMERIC_METHOD() {
