@@ -154,6 +154,7 @@ public class Config {
     public enum NuMethod{
         BEEMAN,
         GPCO5,
+        ANALYTICAL,
         VERLET
     }
 

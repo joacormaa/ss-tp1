@@ -64,6 +64,11 @@ public class OscillationManager {
                 //Verlet
                 pvel = verlet(lastParticle.getY(), previousParticle.getY(), currentAcceleration);
                 break;
+            case ANALYTICAL:
+                double position = position(lastSystem.getTime()+deltaT);
+                double velocity = velocity(lastSystem.getTime()+deltaT);
+                pvel = new PositionNVel(position,velocity);
+
         }
         Particle newParticle  = new Particle(lastParticle.getId(),lastParticle.getX(),pvel.position,lastParticle.getRadius(),pvel.vel,lastParticle.getAngle(),lastParticle.getMass());
         previousParticle = lastParticle;

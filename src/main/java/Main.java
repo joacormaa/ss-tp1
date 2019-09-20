@@ -6,6 +6,8 @@ import Metrics.SystemMetrics;
 import Model.Particle;
 import Model.System;
 import NeighbourLogic.SystemNeighbourManager;
+import OscillationSimulator.OscillationComparer;
+import OscillationSimulator.OscillationCreator;
 import OscillationSimulator.OscillationManager;
 
 import java.io.File;
@@ -26,7 +28,13 @@ public class Main {
         //runNeighbourOutput();
         //runGasSimulation();
         //runComparison();
-        runOscillationSimulation();
+        //runOscillationSimulation();
+        runOscillationComparison();
+    }
+
+    private static void runOscillationComparison() {
+        OscillationComparer comparer = new OscillationComparer();
+        comparer.compareAllTypes();
     }
 
     private static void runComparison() {

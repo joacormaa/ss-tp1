@@ -18,7 +18,7 @@ public class OscillationCreator {
 
     private static Particle initializeParticle(){
         Config c = Config.getInstance();
-        return new Particle(0,0,1,0,c.OSCILLATOR_A()*c.OSCILLATOR_G()/(2*c.PARTICLE_MASS()),-Math.PI/2,c.PARTICLE_MASS());
+        return new Particle(0,0,c.OSCILLATOR_A(),0,c.OSCILLATOR_A()*c.OSCILLATOR_G()/(2*c.PARTICLE_MASS()),-Math.PI/2,c.PARTICLE_MASS());
     }
 
     public static Particle getInitialPreviousParticle(double deltaT, double force) {
