@@ -53,7 +53,7 @@ public class OscillationManager {
         switch(nM){
             case GPCO5:
                 //GPCo5
-                pvel = gearPredictorCorrectorO5(lastSystem.getTime(), deltaT,lastParticle.getMass(), lastParticle.getY(), lastParticle.getSpeed());
+                pvel = gearPredictorCorrectorO5(deltaT,lastParticle.getMass(), lastParticle.getY(), lastParticle.getSpeed());
                 break;
             case BEEMAN:
                 //Beeman
@@ -75,7 +75,7 @@ public class OscillationManager {
         return lastSystem.getTime()>100;
     }
 
-    private PositionNVel gearPredictorCorrectorO5(double t, double deltaT, double mass, double position, double velocity){
+    private PositionNVel gearPredictorCorrectorO5(double deltaT, double mass, double position, double velocity){
         if(r == null) r = position;
         if(r1 == null) r1 = velocity;
         if(r2 == null) r2 = -k/mass * (position-c.OSCILLATOR_INITIAL_POSITION());
