@@ -1,7 +1,6 @@
 package Constants;
 
 import NeighbourLogic.Helper;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -23,7 +22,7 @@ public class Config {
     private int OSCILLATOR_G;
     private double OSCILLATOR_A;
 
-    private int NUMERIC_METHOD;
+    private NuMethod NUMERIC_METHOD;
 
     private int PARTICLE_QUANTITY;
     private double PARTICLE_RADIUS;
@@ -123,7 +122,13 @@ public class Config {
         this.OSCILLATOR_G = Integer.parseInt(OSCILLATOR_G);
         this.OSCILLATOR_A = Double.parseDouble(OSCILLATOR_A);
 
-        this.NUMERIC_METHOD = (methodString.equals("GPCo5")?0:(methodString.equals("Beeman")?1:2));
+        this.NUMERIC_METHOD = NuMethod.valueOf(methodString);
+    }
+
+    public enum NuMethod{
+        BEEMAN,
+        GPCO5,
+        VERLET
     }
 
     public double PARTICLE_SPEED(){return PARTICLE_SPEED;}
@@ -180,11 +185,11 @@ public class Config {
         this.OSCILLATOR_A = OSCILLATOR_A;
     }
 
-    public int NUMERIC_METHOD() {
+    public NuMethod NUMERIC_METHOD() {
         return NUMERIC_METHOD;
     }
 
-    public void setNUMERIC_METHOD(int NUMERIC_METHOD) {
+    public void setNUMERIC_METHOD(NuMethod NUMERIC_METHOD) {
         this.NUMERIC_METHOD = NUMERIC_METHOD;
     }
 

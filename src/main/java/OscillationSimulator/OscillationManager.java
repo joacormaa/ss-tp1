@@ -1,18 +1,20 @@
 package OscillationSimulator;
 
 import Constants.Config;
+import Log.Logger;
 import Model.Particle;
 import Model.System;
 
 public class OscillationManager {
     private System lastSystem;
+    private Particle previousParticle;
     private OscillationPrinter op;
     private boolean htp;
     private  double deltaT;
     private double a;
     private double gama;
     private double k;
-    private int nM;
+    private Config.NuMethod nM;
 
     public OscillationManager(boolean hasToPrint){
         Config c = Config.getInstance();
@@ -24,33 +26,50 @@ public class OscillationManager {
         gama = c.OSCILLATOR_G();
         k = c.OSCILLATOR_K();
         nM = c.NUMERIC_METHOD();
+
+        Particle oPart = lastSystem.getOscillationParticle();
+        previousParticle = OscillationCreator.getInitialPreviousParticle(deltaT,force(oPart.getY(),oPart.getSpeed()));
     }
 
     //ToDo: avanzar el sistema un delta t
     public boolean stepForward() {
         Particle lastParticle = lastSystem.getOscillationParticle();
+        PositionNVel pvel = null;
         switch(nM){
-            case 0:
+            case GPCO5:
                 //GPCo5
                 break;
-            case 1:
+            case BEEMAN:
                 //Beeman
-                beeman(lastSystem.getTime(), deltaT, lastParticle.getY(), lastParticle.getYSpeed());
+                double currentAcceleration = force(lastParticle.getY(),lastParticle.getSpeed())/lastParticle.getMass();
+                double previousAcceleration = force(previousParticle.getY(),previousParticle.getSpeed())/previousParticle.getMass();
+                pvel = beeman(lastSystem.getTime(), deltaT,lastParticle.getMass(), currentAcceleration,previousAcceleration,lastParticle.getY(), lastParticle.getSpeed());
                 break;
-            case 2:
+            case VERLET:
                 //Verlet
                 break;
         }
-        return true;
+        Particle newParticle  = new Particle(lastParticle.getId(),lastParticle.getX(),pvel.position,lastParticle.getRadius(),pvel.vel,lastParticle.getAngle(),lastParticle.getMass());
+        previousParticle = lastParticle;
+        lastSystem = new System(lastSystem.getTime()+deltaT,newParticle);
+
+
+        op.outputStep(lastSystem);
+        Logger.print(""+lastSystem.getTime());
+        return lastSystem.getTime()>100;
     }
 
     private void gearPredictorCorrectorO5(Particle p){
 
     }
 
-    private PositionNVel beeman(double t, double deltaT, double p, double v){
-        double newPosUnEje = position(t) + (velocity(t)*deltaT) + ((2/3)*acceleration(t)*Math.pow(deltaT,2)) - ((1/6)*acceleration((t-deltaT))*Math.pow(deltaT,2));
-        double newVelUnEje = velocity(t) + ((1/3)*acceleration((t + deltaT))*deltaT) + ((5/6)*acceleration(t)*deltaT) - ((1/6)*acceleration((t-deltaT))*deltaT);
+    private PositionNVel beeman(double t, double deltaT, double mass, double currAcceleration, double prevAcceleration,double position, double velocity){
+        double newPosUnEje = position + (velocity*deltaT) + ((2f/3)*currAcceleration*Math.pow(deltaT,2)) - ((1f/6)*prevAcceleration*Math.pow(deltaT,2));
+        double velPredicted = velocity+(3f/2)*currAcceleration*deltaT-(1f/2)*prevAcceleration*deltaT;
+
+        double nextAcceleration = force(newPosUnEje,velPredicted)/mass;
+
+        double newVelUnEje = velocity + ((1f/3)*nextAcceleration*deltaT) + ((5f/6)*currAcceleration*deltaT) - ((1f/6)*prevAcceleration*deltaT);
         return new PositionNVel(newPosUnEje, newVelUnEje);
     }
 
@@ -62,6 +81,10 @@ public class OscillationManager {
             position = p;
             vel = v;
         }
+    }
+
+    private double force(double r, double v){
+        return -k*r-gama*v;
     }
 
     private double position(double t){

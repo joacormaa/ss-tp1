@@ -9,10 +9,9 @@ public class OscillationPrinter {
     private Config c;
 
     OscillationPrinter(){
-        String[] method = {"GPCo5", "Beeman", "Verlet"};
         this.c = Config.getInstance();
-        Helper.resetFile(c.OUTPUT_PATH()+"/"+method[c.NUMERIC_METHOD()]+PARTICLE_OUTPUT_PATH);
-        addHeader(c.OUTPUT_PATH()+"/"+method[c.NUMERIC_METHOD()]+PARTICLE_OUTPUT_PATH);
+        Helper.resetFile(c.OUTPUT_PATH()+"/"+c.NUMERIC_METHOD()+PARTICLE_OUTPUT_PATH);
+        addHeader(c.OUTPUT_PATH()+"/"+c.NUMERIC_METHOD()+PARTICLE_OUTPUT_PATH);
     }
 
     private void addHeader(String path) {
@@ -22,7 +21,7 @@ public class OscillationPrinter {
     }
 
     void outputStep(System system){
-        Helper.appendToFile(printOscillation(system),c.OUTPUT_PATH()+"/"+PARTICLE_OUTPUT_PATH);
+        Helper.appendToFile(printOscillation(system),c.OUTPUT_PATH()+"/"+c.NUMERIC_METHOD()+PARTICLE_OUTPUT_PATH);
     }
 
     private String printOscillation(System s){
