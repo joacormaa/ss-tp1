@@ -30,6 +30,14 @@ public class System {
         this.c = Config.getInstance();
     }
 
+    public System(Collection<Particle> particles){
+        this.particles=initializeParticleMap(particles);
+    }
+
+    public System(Map<Integer, Particle> particles){
+        this.particles = particles;
+    }
+
     private Map<Integer, Particle> initializeParticleMap(Collection<Particle> particles) {
         Map<Integer, Particle> map = new HashMap<>();
         for(Particle p : particles){

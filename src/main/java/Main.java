@@ -1,4 +1,5 @@
 import Constants.Config;
+import ForceSimulator.ForceSimulatorManager;
 import GasSimulator.GasSimulatorComparer;
 import GasSimulator.GasSimulatorManager;
 import Log.Logger;
@@ -54,6 +55,18 @@ public class Main {
             Logger.print("Running Step '"+i+"'");
             //ToDo: Me parece logico que devuelva si el sistema sigue avanzando
             stopped = om.stepForward();
+        }
+    }
+
+    private static void runForceSimulation(){
+        ForceSimulatorManager fsm = new ForceSimulatorManager();
+        Config c = Config.getInstance();
+
+        boolean stopped = false;
+        int i=0;
+        while(!stopped){
+            Logger.print("Running Step '"+i+"'");
+            stopped = fsm.stepForward();
         }
     }
 
