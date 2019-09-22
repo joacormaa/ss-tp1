@@ -1,8 +1,14 @@
 package ForceSimulator;
 
+import Model.Interactable;
+import Model.Particle;
 import Model.System;
 import Metrics.SystemMetrics;
 import NeighbourLogic.SystemNeighbourManager;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ForceSimulatorManager {
     private System lastSystem;
@@ -20,7 +26,7 @@ public class ForceSimulatorManager {
 
     public boolean stepForward(){
         //ToDo: Calculo las Fuerzas para cada particula
-        snm.getNeighbours(lastSystem);
+        Map<Particle, Set<Interactable>> neighbours = snm.getNeighbours(lastSystem);
         //ToDo: Calculo la nueva posicion de cada particula
         return true;
     }

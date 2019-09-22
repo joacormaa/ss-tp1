@@ -1,7 +1,7 @@
 package NeighbourLogic;
 
 import Constants.Config;
-import Model.Particle;
+import Model.*;
 import Model.System;
 
 import java.io.FileWriter;
@@ -10,7 +10,7 @@ import java.util.*;
 
 public class SystemNeighbourManager {
     private System system;
-    private Map<Particle, Set<Particle>> neighbours;
+    private Map<Particle, Set<Interactable>> neighbours;
     private Map<Integer, Cell> cellMap;
     private Config c;
 
@@ -20,7 +20,7 @@ public class SystemNeighbourManager {
         this.c = Config.getInstance();
     }
 
-    public Map<Particle, Set<Particle>> getNeighbours(System system){
+    public Map<Particle, Set<Interactable>> getNeighbours(System system){
         this.system=system;
         initializeCells();
         initializeNeighbourMap();
@@ -45,24 +45,47 @@ public class SystemNeighbourManager {
     }
 
     private void assignCells() {
-        for(Particle p : system.getParticles().values()) {
+        Collection<Particle> allparticles = system.getParticles().values();
+        allparticles.addAll(system.getStaticParticles().values());
+        for(Particle p : allparticles) {
             int cellX = (int) (p.getX()/c.CELL_LENGTH());
             int cellY = (int) (p.getY() / c.CELL_LENGTH());
             int cellId = cellX+cellY*c.CELL_AMOUNT();
             Cell cell = cellMap.get(cellId);
             cell.addParticle(p);
         }
+        for(Wall w : system.getWalls().values()) {
+            if(w.isVertical()){
+                int cellX = (int) (w.getX()/c.CELL_LENGTH());
+                for(int cellY = 0; cellY<c.CELL_AMOUNT(); cellY++){
+                    int cellId = cellX+cellY*c.CELL_AMOUNT();
+                    Cell cell = cellMap.get(cellId);
+                    cell.addWall(w);
+                }
+            }
+            else{
+                int cellY = (int) (w.getY()/c.CELL_LENGTH());
+                for(int cellX = 0; cellX<c.CELL_AMOUNT(); cellX++){
+                    int cellId = cellX+cellY*c.CELL_AMOUNT();
+                    Cell cell = cellMap.get(cellId);
+                    cell.addWall(w);
+                }
+
+            }
+        }
     }
 
     private void assignNeighbours() {
         for(Cell c : cellMap.values()) {
-            for(Particle p : c.getParticles()) {
+            for(Interactable in : c.getInteractables()) {
+                if(in instanceof Wall) continue;
 
+                Particle p = (Particle) in;
                 List<Cell> neighbours = new ArrayList<>();
                 for(Integer i :c.getNeighbourIds()) neighbours.add(cellMap.get(i));
 
                 for(Cell neighbour : neighbours) {
-                    for(Particle q : neighbour.getParticles()) {
+                    for(Interactable q : neighbour.getInteractables()) {
                         if(!p.equals(q) && p.isAdjacentTo(q)) {
                             addNeighbour(p,q);
                         }
@@ -72,62 +95,16 @@ public class SystemNeighbourManager {
         }
     }
 
-    private void addNeighbour(Particle p, Particle q){
-        Set<Particle> pNeighbours = neighbours.get(p);
-        Set<Particle> qNeighbours = neighbours.get(q);
+    private void addNeighbour(Particle p, Interactable q){
+        Set<Interactable> pNeighbours = neighbours.get(p);
+        if(q instanceof Particle && ! (q instanceof StaticParticle)){
+            Particle qPart = (Particle) q;
+            Set<Interactable> qNeighbours = neighbours.get(qPart);
+            qNeighbours.add(p);
+            neighbours.put(qPart,qNeighbours);
 
+        }
         pNeighbours.add(q);
-        qNeighbours.add(p);
-
         neighbours.put(p,pNeighbours);
-        neighbours.put(q,qNeighbours);
-    }
-
-    public void outputNeighbours(){
-        String text = getNeighbourState();
-
-        FileWriter fileWriter;
-        try {
-            fileWriter = new FileWriter(c.OUTPUT_PATH());
-            fileWriter.write(text);
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private String getNeighbourState() {
-        StringBuilder sb = new StringBuilder();
-        for(Particle p: system.getParticles().values()){
-
-            sb.append("Id: ");
-            sb.append(p.getId());
-            sb.append(", X: ");
-            sb.append(p.getX());
-            sb.append(", Y: ");
-            sb.append(p.getY());
-            sb.append(", Neighbours: ");
-
-            sb.append('[');
-
-            appendNeigbhours(sb, p);
-            sb.append(']');
-            sb.append('\n');
-        }
-
-        return sb.toString();
-    }
-
-    private void appendNeigbhours(StringBuilder sb,Particle p) {
-        Iterator<Particle> it = neighbours.get(p).iterator();
-
-        if(it.hasNext())sb.append(it.next().getId());
-
-        while(it.hasNext()){
-            sb.append(',');
-            sb.append(it.next().getId());
-        }
-
     }
 }

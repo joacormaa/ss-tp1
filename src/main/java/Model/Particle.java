@@ -42,18 +42,21 @@ public class Particle implements Interactable{
         return radius;
     }
 
-    public boolean isAdjacentTo(Particle p) {
-        Config c = Config.getInstance();
-        double systemLength = /*c.SYSTEM_LENGTH()*/0;
-        double xDifference = Math.abs(x - p.getX());
-        if (xDifference > systemLength / 2)
-            xDifference = systemLength - xDifference;
+    public boolean isAdjacentTo(Interactable p) {
+        return true;
 
-        double yDifference = Math.abs(y - p.getY());
-        if (yDifference > systemLength / 2)
-            yDifference = systemLength - yDifference;
-
-        return false;
+        //todo
+//        Config c = Config.getInstance();
+//        double systemLength = /*c.SYSTEM_LENGTH()*/0;
+//        double xDifference = Math.abs(x - p.getX());
+//        if (xDifference > systemLength / 2)
+//            xDifference = systemLength - xDifference;
+//
+//        double yDifference = Math.abs(y - p.getY());
+//        if (yDifference > systemLength / 2)
+//            yDifference = systemLength - yDifference;
+//
+//        return false;
         //return Math.sqrt(Math.pow(xDifference,2) + Math.pow(yDifference,2)) <= c.PARTICLE_INFLUENCE_RADIUS();
     }
 
