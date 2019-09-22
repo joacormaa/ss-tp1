@@ -32,6 +32,10 @@ public class Config {
     private double ALPHA_4;
     private double ALPHA_5;
 
+    private double SIGMA;
+    private double RM;
+    private double EPSILON;
+
     private NuMethod NUMERIC_METHOD;
 
     private int PARTICLE_QUANTITY;
@@ -115,6 +119,10 @@ public class Config {
         String LOG_ON = document.getElementsByTagName("LOG_ON").item(0).getTextContent();
         String INNER_WALL = document.getElementsByTagName("INNER_WALL").item(0).getTextContent();
 
+        String RM = document.getElementsByTagName("RM").item(0).getTextContent();
+        String EPSILON = document.getElementsByTagName("EPSILON").item(0).getTextContent();
+        String SIGMA = document.getElementsByTagName("SIGMA").item(0).getTextContent();
+
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
         this.PARTICLE_QUANTITY = Integer.parseInt(PARTICLE_QUANTITY_STR);
@@ -149,6 +157,10 @@ public class Config {
         this.ALPHA_5 = Double.parseDouble(ALPHA_5);
 
         this.NUMERIC_METHOD = NuMethod.valueOf(methodString);
+
+        this.RM = Double.parseDouble(RM);
+        this.EPSILON = Double.parseDouble(EPSILON);
+        this.SIGMA = Double.parseDouble(SIGMA);
     }
 
     public enum NuMethod{
@@ -337,6 +349,16 @@ public class Config {
 
     public void setVelocity(double velocity) {
         this.PARTICLE_SPEED = velocity;
+    }
+
+    public double SIGMA(){
+        return SIGMA;
+    }
+    public double RM(){
+        return RM;
+    }
+    public double EPSILON(){
+        return EPSILON;
     }
 }
 

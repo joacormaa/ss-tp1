@@ -2,7 +2,7 @@ package Model;
 
 import Constants.Config;
 
-public class Wall {
+public class Wall implements Interactable{
     private boolean isVertical;
     private double x;
     private double y;
@@ -72,5 +72,30 @@ public class Wall {
             sb.append('\n');
         }
         return sb.toString();
+    }
+
+    @Override
+    public double getXIncidentalForce(Particle p) {
+        if(!this.isVertical) return 0;
+        return getFN(p);
+    }
+
+    @Override
+    public double getYIncidentalForce(Particle p) {
+        if(this.isVertical) return 0;
+        return getFN(p);
+    }
+
+    private double getFN(Particle p) {
+        Config c = Config.getInstance();
+        double epsilon =  c.EPSILON();
+        double rm = c.RM();
+        double sigma = c.SIGMA();
+
+        double r = (this.isVertical)?p.getX()-this.x:p.getY()-this.y;
+
+        double coef = rm/r;
+
+        return (12*sigma/rm) *(Math.pow(coef,13)-Math.pow(coef,7));
     }
 }

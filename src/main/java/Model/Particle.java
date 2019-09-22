@@ -6,7 +6,7 @@ import NeighbourLogic.Helper;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Particle {
+public class Particle implements Interactable{
     protected  int id;
     protected double x;
     protected double y;
@@ -104,5 +104,34 @@ public class Particle {
     @Override
     public int hashCode() {
         return id;
+    }
+
+
+
+    @Override
+    public double getXIncidentalForce(Particle p) {
+        double r = Math.hypot(this.x-p.getX(),this.y-p.getY());
+        double ex = (this.x-p.getX())/r;
+        return getFN(p);
+    }
+
+    @Override
+    public double getYIncidentalForce(Particle p) {
+        double r = Math.hypot(this.x-p.getX(),this.y-p.getY());
+        double ex = (this.y-p.getY())/r;
+        return getFN(p);
+    }
+
+    private double getFN(Particle p) {
+        Config c = Config.getInstance();
+        double epsilon =  c.EPSILON();
+        double rm = c.RM();
+        double sigma = c.SIGMA();
+
+        double r = Math.hypot(this.x-p.getX(),this.y-p.getY());
+
+        double coef = rm/r;
+
+        return (12*sigma/rm) *(Math.pow(coef,13)-Math.pow(coef,7));
     }
 }
