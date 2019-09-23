@@ -115,26 +115,25 @@ public class Particle implements Interactable{
     public double getXIncidentalForce(Particle p) {
         double r = Math.hypot(this.x-p.getX(),this.y-p.getY());
         double ex = (this.x-p.getX())/r;
-        return getFN(p);
+        return getFN(p)*ex;
     }
 
     @Override
     public double getYIncidentalForce(Particle p) {
         double r = Math.hypot(this.x-p.getX(),this.y-p.getY());
         double ex = (this.y-p.getY())/r;
-        return getFN(p);
+        return getFN(p)*ex;
     }
 
     private double getFN(Particle p) {
         Config c = Config.getInstance();
         double epsilon =  c.EPSILON();
         double rm = c.RM();
-        double sigma = c.SIGMA();
 
         double r = Math.hypot(this.x-p.getX(),this.y-p.getY());
 
         double coef = rm/r;
 
-        return (12*sigma/rm) *(Math.pow(coef,13)-Math.pow(coef,7));
+        return (12*epsilon/rm) *(Math.pow(coef,13)-Math.pow(coef,7));
     }
 }
