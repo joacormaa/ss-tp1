@@ -45,18 +45,19 @@ public class SystemNeighbourManager {
     }
 
     private void assignCells() {
-        Collection<Particle> allparticles = system.getParticles().values();
-        allparticles.addAll(system.getStaticParticles().values());
-        for(Particle p : allparticles) {
-            int cellX = (int) (p.getX()/c.CELL_LENGTH());
-            int cellY = (int) (p.getY() / c.CELL_LENGTH());
-            int cellId = cellX+cellY*c.CELL_AMOUNT();
-            Cell cell = cellMap.get(cellId);
-            cell.addParticle(p);
+
+        for(Particle p : system.getParticles().values()) {
+            addParticleToCell(p);
         }
+
+        for(Particle p : system.getStaticParticles().values()) {
+            addParticleToCell(p);
+        }
+
         for(Wall w : system.getWalls().values()) {
             if(w.isVertical()){
                 int cellX = (int) (w.getX()/c.CELL_LENGTH());
+                if(cellX>=c.CELL_AMOUNT()) cellX=c.CELL_AMOUNT()-1; //workaround choto
                 for(int cellY = 0; cellY<c.CELL_AMOUNT(); cellY++){
                     int cellId = cellX+cellY*c.CELL_AMOUNT();
                     Cell cell = cellMap.get(cellId);
@@ -65,6 +66,7 @@ public class SystemNeighbourManager {
             }
             else{
                 int cellY = (int) (w.getY()/c.CELL_LENGTH());
+                if(cellY>=c.CELL_AMOUNT()) cellY=c.CELL_AMOUNT()-1; //workaround choto
                 for(int cellX = 0; cellX<c.CELL_AMOUNT(); cellX++){
                     int cellId = cellX+cellY*c.CELL_AMOUNT();
                     Cell cell = cellMap.get(cellId);
@@ -73,6 +75,14 @@ public class SystemNeighbourManager {
 
             }
         }
+    }
+
+    private void addParticleToCell(Particle p) {
+        int cellX = (int) (p.getX()/c.CELL_LENGTH());
+        int cellY = (int) (p.getY() / c.CELL_LENGTH());
+        int cellId = cellX+cellY*c.CELL_AMOUNT();
+        Cell cell = cellMap.get(cellId);
+        cell.addParticle(p);
     }
 
     private void assignNeighbours() {

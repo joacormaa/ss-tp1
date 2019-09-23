@@ -76,7 +76,9 @@ public class Config {
         }
 
         if(!Helper.AngleIsRadians(this.NOISE_COEFFICIENT));
+        CELL_AMOUNT = (int)Math.floor(HORIZONTAL_WALL_LENGTH/SIGMA);
         if(CELL_AMOUNT==0)CELL_AMOUNT=1;
+        CELL_LENGTH = HORIZONTAL_WALL_LENGTH/CELL_AMOUNT;
     }
 
     private void recoverValuesFromXML() throws ParserConfigurationException, IOException, SAXException {

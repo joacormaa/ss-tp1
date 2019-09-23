@@ -30,7 +30,8 @@ public class Main {
         //runGasSimulation();
         //runComparison();
         //runOscillationSimulation();
-        runOscillationComparison();
+        //runOscillationComparison();
+        runForceSimulation();
     }
 
     private static void runOscillationComparison() {
@@ -63,10 +64,15 @@ public class Main {
         Config c = Config.getInstance();
 
         boolean stopped = false;
+        int deltasPerPrint = 1000;
+        int deltasSinceLastPrint = 1000;
         int i=0;
         while(!stopped){
-            Logger.print("Running Step '"+i+"'");
-            stopped = fsm.stepForward();
+            Logger.print("Running Step '"+i+++"'");
+            System lastSystem = fsm.stepForward(c.SIMULATION_DELTA_TIME(),deltasSinceLastPrint>=deltasPerPrint);
+            deltasSinceLastPrint=(deltasSinceLastPrint>=deltasPerPrint)?0:deltasSinceLastPrint;
+            deltasSinceLastPrint++;
+            stopped = lastSystem.getTime()>200; //todo: agregar logica de corte
         }
     }
 

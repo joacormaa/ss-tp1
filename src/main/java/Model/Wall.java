@@ -96,6 +96,6 @@ public class Wall implements Interactable{
 
         double coef = rm/r;
 
-        return (12*sigma/rm) *(Math.pow(coef,13)-Math.pow(coef,7));
+        return (12*sigma/rm) *(Math.pow(coef,13)-Math.pow(coef,7))/3;//divido por 3 como workaround, cada particula va a ser vecina de una pared 3 veces. PR
     }
 }

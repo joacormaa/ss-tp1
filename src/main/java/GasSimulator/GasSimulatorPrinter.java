@@ -11,9 +11,6 @@ public class GasSimulatorPrinter {
     private static String WITNESS_OUTPUT_PATH = "witness.csv";
     private Config c;
 
-
-
-
     GasSimulatorPrinter(){
         this.c = Config.getInstance();
         Helper.resetFile(c.OUTPUT_PATH()+"/"+PARTICLE_OUTPUT_PATH);
