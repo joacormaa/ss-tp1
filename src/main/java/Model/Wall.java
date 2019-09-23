@@ -93,6 +93,7 @@ public class Wall implements Interactable{
         double sigma = c.SIGMA();
 
         double r = (this.isVertical)?p.getX()-this.x:p.getY()-this.y;
+        r=Math.abs(r);
 
         double coef = rm/r;
 

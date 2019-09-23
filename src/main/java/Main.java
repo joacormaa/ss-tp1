@@ -64,7 +64,7 @@ public class Main {
         Config c = Config.getInstance();
 
         boolean stopped = false;
-        int deltasPerPrint = 1000;
+        int deltasPerPrint = (int)(0.1/c.SIMULATION_DELTA_TIME());
         int deltasSinceLastPrint = 1000;
         int i=0;
         while(!stopped){

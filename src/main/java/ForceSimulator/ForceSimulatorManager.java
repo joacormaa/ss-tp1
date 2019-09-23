@@ -66,7 +66,7 @@ public class ForceSimulatorManager {
         double newYSpeed = prevP.getYSpeed() + yAcc*delta;
 
         double newSpeed = Math.hypot(newXSpeed,newYSpeed);
-        double newAngle = Math.atan2(newXSpeed,newYSpeed); //todo: por ahi es al reves
+        double newAngle = Math.atan2(newYSpeed,newXSpeed);
 
         return new Particle(prevP.getId(),newX,newY,prevP.getRadius(),newSpeed,newAngle,prevP.getMass());
     }
