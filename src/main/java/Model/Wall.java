@@ -9,9 +9,11 @@ public class Wall implements Interactable{
     private double length;
     private int id;
     private double width;
+    private Config c;
 
     public Wall(boolean isVertical, double x, double y, double length, int id) {
-        this.width = Config.getInstance().WALL_WIDTH();
+        c = Config.getInstance();
+        this.width = c.WALL_WIDTH();
         this.isVertical = isVertical;
         this.x = x;
         this.y = y;
@@ -92,11 +94,18 @@ public class Wall implements Interactable{
         double rm = c.RM();
         double sigma = c.SIGMA();
 
-        double r = (this.isVertical)?p.getX()-this.x:p.getY()-this.y; //todo hacer que se calcule bien la distancia al segmento.
-        r=Math.abs(r);
+        double r = getMinimumDistance(p);
 
         double coef = rm/r;
 
         return (12*sigma/rm) *(Math.pow(coef,13)-Math.pow(coef,7))/3;//divido por 3 como workaround, cada particula va a ser vecina de una pared 3 veces. PR
+    }
+
+    private double getMinimumDistance(Particle p) {
+        if(!isVertical) return Math.abs(p.getY() - y);
+        if(length == c.VERTICAL_WALL_LENGTH() || (p.getY() >= y && p.getY() <= y + length)) return Math.abs(p.getX() - x);
+
+        double wallYMinimumDistance = p.getY() < y ? y : y + length;
+        return Math.sqrt(Math.pow(p.getX() - x, 2) + Math.pow(p.getY() - wallYMinimumDistance, 2));
     }
 }
