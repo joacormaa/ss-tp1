@@ -44,21 +44,15 @@ public class Particle implements Interactable{
     }
 
     public boolean isAdjacentTo(Interactable p) {
-        return true;
+        if(p instanceof Wall){
+            Wall w = (Wall) p;
+            return w.getMinimumDistance(this)<Config.getInstance().SIGMA();
+        }
+        Particle q = (Particle) p;
+        double xdif = q.getX()-this.x;
+        double ydif = q.getY()-this.y;
 
-        //todo
-//        Config c = Config.getInstance();
-//        double systemLength = /*c.SYSTEM_LENGTH()*/0;
-//        double xDifference = Math.abs(x - p.getX());
-//        if (xDifference > systemLength / 2)
-//            xDifference = systemLength - xDifference;
-//
-//        double yDifference = Math.abs(y - p.getY());
-//        if (yDifference > systemLength / 2)
-//            yDifference = systemLength - yDifference;
-//
-//        return false;
-        //return Math.sqrt(Math.pow(xDifference,2) + Math.pow(yDifference,2)) <= c.PARTICLE_INFLUENCE_RADIUS();
+        return Math.hypot(xdif,ydif)<Config.getInstance().SIGMA();
     }
 
     public double getSpeed() {

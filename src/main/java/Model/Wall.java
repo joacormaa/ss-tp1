@@ -111,7 +111,7 @@ public class Wall implements Interactable{
 
     }
 
-    private double getMinimumDistance(Particle p) {
+    public double getMinimumDistance(Particle p) {
         if(!isVertical) return Math.abs(p.getY() - y);
         if(length == c.VERTICAL_WALL_LENGTH() || (p.getY() >= y && p.getY() <= y + length)) return Math.abs(p.getX() - x);
 

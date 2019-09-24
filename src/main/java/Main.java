@@ -30,8 +30,8 @@ public class Main {
         //runGasSimulation();
         //runComparison();
         //runOscillationSimulation();
-        runOscillationComparison();
-        //runForceSimulation();
+        //runOscillationComparison();
+        runForceSimulation();
     }
 
     private static void runOscillationComparison() {
@@ -54,7 +54,6 @@ public class Main {
         while(!stopped){
             //Con solamente logear el step nos alcanza ya que cada paso representa i*deltaT (tiempo)
             Logger.print("Running Step '"+i+"'");
-            //ToDo: Me parece logico que devuelva si el sistema sigue avanzando
             stopped = om.stepForward();
         }
     }
@@ -69,11 +68,31 @@ public class Main {
         int i=0;
         while(!stopped){
             Logger.print("Running Step '"+i+++"'");
-            System lastSystem = fsm.stepForward(c.SIMULATION_DELTA_TIME(),deltasSinceLastPrint>=deltasPerPrint);
+            SystemMetrics lastSystemMetrics = fsm.stepForward(c.SIMULATION_DELTA_TIME(),deltasSinceLastPrint>=deltasPerPrint);
             deltasSinceLastPrint=(deltasSinceLastPrint>=deltasPerPrint)?0:deltasSinceLastPrint;
             deltasSinceLastPrint++;
-            stopped = lastSystem.getTime()>200; //todo: agregar logica de corte
+            stopped = stopCondition(lastSystemMetrics);
         }
+    }
+
+    static boolean aquiredEquilibrium = false;
+    static double equilibriumtime = 0;
+    static double lastFp = 0;
+
+    private static boolean stopCondition(SystemMetrics lastSystemMetrics) {
+        if(!aquiredEquilibrium){
+            double fp = lastSystemMetrics.getFp();
+            aquiredEquilibrium = fp >= 0.5;
+            equilibriumtime = lastSystemMetrics.getTime();
+            if(Math.abs(lastFp-fp)>0.001){
+                Logger.print("fp change from '"+lastFp+"' to '"+fp+"'");
+                lastFp=fp;
+            }
+        }
+        else{
+            return lastSystemMetrics.getTime()>=equilibriumtime*2;
+        }
+        return false;
     }
 
     private static void runGasSimulation() {

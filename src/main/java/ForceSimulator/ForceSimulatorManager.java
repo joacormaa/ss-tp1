@@ -30,7 +30,7 @@ public class ForceSimulatorManager {
 
     }
 
-    public System stepForward(double delta,boolean hasToPrint){
+    public SystemMetrics stepForward(double delta,boolean hasToPrint){
         Map<Particle, Set<Interactable>> neighbours = snm.getNeighbours(lastSystem);
         System nextSystem = getNextSystem(neighbours, delta);
         prevSystem = lastSystem;
@@ -38,7 +38,7 @@ public class ForceSimulatorManager {
         if(hasToPrint){
             fsp.outputStep(lastSystem);
         }
-        return lastSystem;
+        return new SystemMetrics(lastSystem);
     }
 
     private System getNextSystem(Map<Particle, Set<Interactable>> neighbourMap, double delta) {

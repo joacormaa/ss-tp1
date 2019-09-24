@@ -45,7 +45,6 @@ public class OscillationManager {
         previousParticle = OscillationCreator.getInitialPreviousParticle(deltaT,force(oPart.getY(),oPart.getSpeed()), oPart);
     }
 
-    //ToDo: avanzar el sistema un delta t
     public boolean stepForward() {
         Particle lastParticle = lastSystem.getOscillationParticle();
         PositionNVel pvel = null;
