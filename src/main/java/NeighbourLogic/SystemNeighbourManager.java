@@ -88,7 +88,7 @@ public class SystemNeighbourManager {
     private void assignNeighbours() {
         for(Cell c : cellMap.values()) {
             for(Interactable in : c.getInteractables()) {
-                if(in instanceof Wall) continue;
+                if(in instanceof Wall || in instanceof StaticParticle) continue;
 
                 Particle p = (Particle) in;
                 List<Cell> neighbours = new ArrayList<>();

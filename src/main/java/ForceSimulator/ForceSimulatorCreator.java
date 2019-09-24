@@ -48,7 +48,7 @@ public class ForceSimulatorCreator {
         for(int i = 0; i < c.PARTICLES_QUANTITY(); i++) {
             Particle newParticle;
             do {
-                double x = 197;
+                double x = Math.random() * c.HORIZONTAL_WALL_LENGTH()/2;
                 double y = Math.random() * c.VERTICAL_WALL_LENGTH();
                 double angle = Math.random() * 2* Math.PI - Math.PI;
                 newParticle = new Particle(i, x, y, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle,c.PARTICLE_MASS());
@@ -99,9 +99,9 @@ public class ForceSimulatorCreator {
     }
 
     private static boolean thereIsCollision(Particle p1, Particle p2) {
-        return Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2) <= Math.pow(p1.getRadius() + p2.getRadius(), 2);
+        return Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2) <= Config.getInstance().SIGMA();
     }
-    private static boolean thereIsCollision(Wall w, Particle p2) {
+    private static boolean thereIsCollision(Wall w, Particle p2) { //todo: asegurarse que este a distancia sigma de todas las paredes.
         if(w.isVertical()){
             if(p2.getX()-p2.getRadius()<w.getX()+w.getWidth() && p2.getX()+p2.getRadius()> w.getX()){
                 if(p2.getY()-p2.getRadius()<w.getY()+w.getLength() && p2.getY()+p2.getRadius()>w.getY())

@@ -1,6 +1,7 @@
 package Model;
 
 import Constants.Config;
+import Log.Logger;
 import NeighbourLogic.Helper;
 
 import java.util.LinkedList;
@@ -86,9 +87,9 @@ public class Particle implements Interactable{
         sb.append(' ');
         sb.append(y);
         sb.append(' ');
-        sb.append(speed * Math.cos(angle));
+        sb.append(getXSpeed());
         sb.append(' ');
-        sb.append(speed * Math.sin(angle));
+        sb.append(getYSpeed());
         sb.append(' ');
         sb.append(radius);
         return sb.toString();
@@ -114,14 +115,14 @@ public class Particle implements Interactable{
     @Override
     public double getXIncidentalForce(Particle p) {
         double r = Math.hypot(this.x-p.getX(),this.y-p.getY());
-        double ex = (this.x-p.getX())/r;
+        double ex = (p.getX()-this.x)/r;
         return getFN(p)*ex;
     }
 
     @Override
     public double getYIncidentalForce(Particle p) {
         double r = Math.hypot(this.x-p.getX(),this.y-p.getY());
-        double ex = (this.y-p.getY())/r;
+        double ex = (p.getY()-this.y)/r;
         return getFN(p)*ex;
     }
 

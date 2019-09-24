@@ -1,6 +1,7 @@
 package Model;
 
 import Constants.Config;
+import Log.Logger;
 
 public class Wall implements Interactable{
     private boolean isVertical;
@@ -79,13 +80,21 @@ public class Wall implements Interactable{
     @Override
     public double getXIncidentalForce(Particle p) {
         if(!this.isVertical) return 0;
-        return getFN(p);
+        double fn = getFN(p);
+        if(this.x>p.x){
+            fn = -fn;
+        }
+        return fn;
     }
 
     @Override
     public double getYIncidentalForce(Particle p) {
         if(this.isVertical) return 0;
-        return getFN(p);
+        double fn = getFN(p);
+        if(this.y>p.y){
+            fn = -fn;
+        }
+        return fn;
     }
 
     private double getFN(Particle p) {
@@ -99,6 +108,7 @@ public class Wall implements Interactable{
         double coef = rm/r;
 
         return (12*sigma/rm) *(Math.pow(coef,13)-Math.pow(coef,7))/3;//divido por 3 como workaround, cada particula va a ser vecina de una pared 3 veces. PR
+
     }
 
     private double getMinimumDistance(Particle p) {

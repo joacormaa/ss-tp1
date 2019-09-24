@@ -26,10 +26,10 @@ public class ForceSimulatorHelper {
         double newY = yPosnVel.getPosition();
 
         double newXSpeed = xPosnVel.getVel();
-        double newYSpeed = xPosnVel.getVel();
+        double newYSpeed = yPosnVel.getVel();
 
-        double newSpeed = Math.hypot(newXSpeed,newYSpeed);
-        double newAngle = Math.atan2(newYSpeed,newXSpeed);
+        double newSpeed = Particle.getSpeed(newXSpeed,newYSpeed);
+        double newAngle = Particle.getAngle(newXSpeed,newYSpeed);
 
         return new Particle(prevP.getId(),newX,newY,prevP.getRadius(),newSpeed,newAngle,prevP.getMass());
     }
