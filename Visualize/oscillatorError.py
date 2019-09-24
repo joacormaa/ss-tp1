@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error as mse
 
@@ -109,7 +108,7 @@ cute = int(time/stepe)
 for i in range(len(x)):
     expected = vals[i][0]
     for j in range(len(methods)):
-        vals[i][j].sub(expected)
+        vals[i][j] = vals[i][j].sub(expected)
 
 
 yval = [[0 for i in range(len(methods))] for j in range(len(x))]
@@ -118,8 +117,8 @@ yerr = [[0 for i in range(len(methods))] for j in range(len(x))]
 yval = np.array(yval)
 yerr = np.array(yerr)
 
-yval.dtype = 'float32'
-yerr.dtype = 'float32'
+yval.dtype = 'float64'
+yerr.dtype = 'float64'
 
 #Errores Normalizados
 
