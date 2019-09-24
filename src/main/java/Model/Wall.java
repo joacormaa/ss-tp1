@@ -92,7 +92,7 @@ public class Wall implements Interactable{
         double rm = c.RM();
         double sigma = c.SIGMA();
 
-        double r = (this.isVertical)?p.getX()-this.x:p.getY()-this.y;
+        double r = (this.isVertical)?p.getX()-this.x:p.getY()-this.y; //todo hacer que se calcule bien la distancia al segmento.
         r=Math.abs(r);
 
         double coef = rm/r;
