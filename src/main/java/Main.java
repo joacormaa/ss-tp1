@@ -1,7 +1,5 @@
 import Constants.Config;
 import ForceSimulator.ForceSimulatorManager;
-import GasSimulator.GasSimulatorComparer;
-import GasSimulator.GasSimulatorManager;
 import Log.Logger;
 import Metrics.SystemMetrics;
 import Model.Particle;
@@ -40,8 +38,8 @@ public class Main {
     }
 
     private static void runComparison() {
-        GasSimulatorComparer gsc = new GasSimulatorComparer();
-        gsc.compareVelocity(0.01,0.1,0.01,10);
+//        GasSimulatorComparer gsc = new GasSimulatorComparer();
+//        gsc.compareVelocity(0.01,0.1,0.01,10);
     }
 
     private static void runOscillationSimulation(){
@@ -96,17 +94,17 @@ public class Main {
     }
 
     private static void runGasSimulation() {
-        GasSimulatorManager gsm = new GasSimulatorManager(true);
-        Config c = Config.getInstance();
-        double time;
-        boolean isBalanced = false;
-        int i=0;
-        while(!isBalanced){
-            Logger.print("Running Step '"+i+++"'");
-            time = gsm.stepForward();
-            Logger.print("time '"+time+"'");
-            isBalanced = checkBalance(gsm.getLastSystemMetrics());
-        }
+//        GasSimulatorManager gsm = new GasSimulatorManager(true);
+//        Config c = Config.getInstance();
+//        double time;
+//        boolean isBalanced = false;
+//        int i=0;
+//        while(!isBalanced){
+//            Logger.print("Running Step '"+i+++"'");
+//            time = gsm.stepForward();
+//            Logger.print("time '"+time+"'");
+//            isBalanced = checkBalance(gsm.getLastSystemMetrics());
+//        }
     }
 
     private static boolean checkBalance(SystemMetrics lastSystemMetrics) {

@@ -30,41 +30,14 @@ public class ForceSimulatorPrinter {
 
     void outputMetrics(SystemMetrics systemMetrics){
         Helper.appendToFile(printSystemMetrics(systemMetrics),c.OUTPUT_PATH()+"/"+METRIC_OUTPUT_PATH);
-        Helper.appendToFile(printWitnessPositions(systemMetrics), c.OUTPUT_PATH() + "/" +WITNESS_OUTPUT_PATH);
     }
     void outputStep(System system){
         Helper.appendToFile(printSystem(system),c.OUTPUT_PATH()+"/"+PARTICLE_OUTPUT_PATH);
     }
 
-
-    private String printWitnessPositions(SystemMetrics systemMetrics){
-        StringBuilder sb = new StringBuilder();
-        Double[] xPos = systemMetrics.getWitnessParticleX();
-        Double[] yPos = systemMetrics.getWitnessParticleY();
-        sb.append(systemMetrics.getTime()).append(',');
-        for(int i=0; i<xPos.length;i++){
-            Double currX = xPos[i];
-            Double currY = yPos[i];
-
-            String x = (currX==null)?"":currX.toString();
-            String y = (currY==null)?"":currY.toString();
-            sb.append(x).append(',').append(y);
-
-            if(i+1<xPos.length){
-                sb.append(',');
-            }
-        }
-        sb.append('\n');
-        return sb.toString();
-    }
-
     private String printSystemMetrics(SystemMetrics m){
         StringBuilder sb = new StringBuilder();
         sb.append(m.getTime());
-        sb.append(',');
-        sb.append(m.getTemperature());
-        sb.append(',');
-        sb.append(m.getPressure());
         sb.append(',');
         sb.append(m.getFp());
         sb.append('\n');
