@@ -142,7 +142,7 @@ plt.errorbar(x, yval[:,2], yerr=yerr[:,2], lw=0.5, ms=0.5, marker='.', c='blue',
 plt.errorbar(x, yval[:,3], yerr=yerr[:,3], lw=0.5, ms=0.5, marker='.', c='purple', elinewidth=1, capsize=5, label=methods[3])
 
 #sin error
-plt.plot(x, yVerlet, lw=0.5, ms=0.5, marker='.', c='red', label='VERLET')
+#plt.plot(x, yVerlet, lw=0.5, ms=0.5, marker='.', c='red', label='VERLET')
 #plt.plot(x, yBeeman, lw=0.5, ms=0.5, marker='.', c='green', label='BEEMAN')
 #plt.plot(x, yGPCo5, lw=0.5, ms=0.5, marker='.', c='purple', label='GPCo5')
 
