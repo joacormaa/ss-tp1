@@ -49,7 +49,7 @@ public class OscillationManager {
     public boolean stepForward() {
         Particle lastParticle = lastSystem.getOscillationParticle();
         PositionNVel pvel = null;
-        double currentAcceleration = force(lastParticle.getY(),lastParticle.getSpeed())/lastParticle.getMass();
+        double currentAcceleration = force(lastParticle.getY(),lastParticle.getYSpeed())/lastParticle.getMass();
         switch(nM){
             case GPCO5:
                 //GPCo5
@@ -57,8 +57,8 @@ public class OscillationManager {
                 break;
             case BEEMAN:
                 //Beeman
-                double previousAcceleration = force(previousParticle.getY(),previousParticle.getSpeed())/previousParticle.getMass();
-                pvel = beeman(lastParticle.getMass(), currentAcceleration,previousAcceleration,lastParticle.getY(), lastParticle.getSpeed());
+                double previousAcceleration = force(previousParticle.getY(),previousParticle.getYSpeed())/previousParticle.getMass();
+                pvel = beeman(lastParticle.getMass(), currentAcceleration,previousAcceleration,lastParticle.getY(), lastParticle.getYSpeed());
                 break;
             case VERLET:
                 //Verlet
@@ -70,7 +70,7 @@ public class OscillationManager {
                 pvel = new PositionNVel(position,velocity);
 
         }
-        Particle newParticle  = new Particle(lastParticle.getId(),lastParticle.getX(),pvel.position,lastParticle.getRadius(),pvel.vel,lastParticle.getAngle(),lastParticle.getMass());
+        Particle newParticle  = new Particle(lastParticle.getId(),lastParticle.getX(),pvel.position,lastParticle.getRadius(),Math.abs(pvel.vel),Particle.getAngle(0,pvel.vel),lastParticle.getMass());
         previousParticle = lastParticle;
         lastSystem = new System(lastSystem.getTime()+deltaT,newParticle);
 
