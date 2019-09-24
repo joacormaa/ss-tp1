@@ -42,7 +42,7 @@ public class OscillationManager {
         nM = c.NUMERIC_METHOD();
 
         Particle oPart = lastSystem.getOscillationParticle();
-        previousParticle = OscillationCreator.getInitialPreviousParticle(deltaT,force(oPart.getY(),oPart.getSpeed()));
+        previousParticle = OscillationCreator.getInitialPreviousParticle(deltaT,force(oPart.getY(),oPart.getSpeed()), oPart);
     }
 
     //ToDo: avanzar el sistema un delta t
@@ -53,7 +53,7 @@ public class OscillationManager {
         switch(nM){
             case GPCO5:
                 //GPCo5
-                pvel = gearPredictorCorrectorO5(deltaT,lastParticle.getMass(), lastParticle.getY(), lastParticle.getSpeed());
+                pvel = gearPredictorCorrectorO5(deltaT,lastParticle.getMass(), lastParticle.getY(), lastParticle.getYSpeed());
                 break;
             case BEEMAN:
                 //Beeman
@@ -77,7 +77,7 @@ public class OscillationManager {
 
         op.outputStep(lastSystem);
         Logger.print(""+lastSystem.getTime());
-        return lastSystem.getTime()>100;
+        return lastSystem.getTime()>10;
     }
 
     private PositionNVel gearPredictorCorrectorO5(double deltaT, double mass, double position, double velocity){

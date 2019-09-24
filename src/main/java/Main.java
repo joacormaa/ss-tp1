@@ -30,8 +30,8 @@ public class Main {
         //runGasSimulation();
         //runComparison();
         //runOscillationSimulation();
-        //runOscillationComparison();
-        runForceSimulation();
+        runOscillationComparison();
+        //runForceSimulation();
     }
 
     private static void runOscillationComparison() {

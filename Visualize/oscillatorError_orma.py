@@ -105,6 +105,11 @@ cutd = int(time/stepd)
 cute = int(time/stepe)
 '''
 
+<<<<<<< Updated upstream
+=======
+x = [0.00005, 0.0001, 0.0006, 0.001, 0.01, 0.1]
+#x = [0.01, 0.001, 0.0006, 0.0001, 0.00005]
+>>>>>>> Stashed changes
 
 for i in range(len(x)):
     expected = vals[i][0]
@@ -121,7 +126,62 @@ yerr = np.array(yerr)
 yval.dtype = 'float32'
 yerr.dtype = 'float32'
 
+'''
 #Errores Normalizados
+<<<<<<< Updated upstream
+=======
+yVerlet.append(np.mean(y1e_e))
+yVerletErr.append(y1e_e.std())
+yVerlet.append(np.mean(y1a_e))
+yVerletErr.append(y1a_e.std())
+yVerlet.append(np.mean(y1b_e))
+yVerletErr.append(y1b_e.std())
+yVerlet.append(np.mean(y1c_e))
+yVerletErr.append(y1c_e.std())
+yVerlet.append(np.mean(y1d_e))
+yVerletErr.append(y1d_e.std())
+
+yBeeman.append(np.mean(y2e_e))
+yBeemanErr.append(y2e_e.std())
+yBeeman.append(np.mean(y2a_e))
+yBeemanErr.append(y2a_e.std())
+yBeeman.append(np.mean(y2b_e))
+yBeemanErr.append(y2b_e.std())
+yBeeman.append(np.mean(y2c_e))
+yBeemanErr.append(y2c_e.std())
+yBeeman.append(np.mean(y2d_e))
+yBeemanErr.append(y2d_e.std())
+
+yGPCo5.append(np.mean(y3e_e))
+yGPCo5Err.append(y3e_e.std())
+yGPCo5.append(np.mean(y3a_e))
+yGPCo5Err.append(y3a_e.std())
+yGPCo5.append(np.mean(y3b_e))
+yGPCo5Err.append(y3b_e.std())
+yGPCo5.append(np.mean(y3c_e))
+yGPCo5Err.append(y3c_e.std())
+yGPCo5.append(np.mean(y3d_e))
+yGPCo5Err.append(y3d_e.std())
+'''
+yVerlet.append(mse(yd, y1d))
+yVerlet.append(mse(yc, y1c))
+yVerlet.append(mse(yb, y1b))
+yVerlet.append(mse(ya, y1a))
+yVerlet.append(mse(ye, y1e))
+yVerlet.append(1)
+
+yBeeman.append(mse(ye, y2e))
+yBeeman.append(mse(ya, y2a))
+yBeeman.append(mse(yb, y2b))
+yBeeman.append(mse(yc, y2c))
+yBeeman.append(mse(yd, y2d))
+
+yGPCo5.append(mse(ye, y3e))
+yGPCo5.append(mse(ya, y3a))
+yGPCo5.append(mse(yb, y3b))
+yGPCo5.append(mse(yc, y3c))
+yGPCo5.append(mse(yd, y3d))
+>>>>>>> Stashed changes
 
 for i in range(len(x)):
     for j in range(len(methods)):
@@ -147,10 +207,19 @@ plt.plot(x, yVerlet, lw=0.5, ms=0.5, marker='.', c='red', label='VERLET')
 #plt.plot(x, yBeeman, lw=0.5, ms=0.5, marker='.', c='green', label='BEEMAN')
 #plt.plot(x, yGPCo5, lw=0.5, ms=0.5, marker='.', c='purple', label='GPCo5')
 
+
+<<<<<<< Updated upstream
 plt.legend(loc='upper right')
 plt.yscale("log")
 plt.xscale("log")
 plt.xticks(x)
+=======
+#plt.plot(df2c['time'], y2c_e, label='BEEMAN')
+
+plt.legend(loc='upper right')
+plt.yscale("log")
+plt.xscale("log")
+>>>>>>> Stashed changes
 plt.grid(ls='--')
 
 plt.show()
