@@ -2,16 +2,12 @@ package ForceSimulator;
 
 import Constants.Config;
 import Log.Logger;
-import Model.Particle;
-import Model.StaticParticle;
+import Model.*;
 import Model.System;
-import Model.Wall;
+import NeighbourLogic.SystemNeighbourManager;
 import sun.nio.cs.ext.IBM037;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("ALL")
 public class ForceSimulatorCreator {
@@ -25,16 +21,23 @@ public class ForceSimulatorCreator {
         return new System(0,particleList,staticParticleList,wallList);
     }
 
-    public static System createInitialPreviousForceSystem(Map<Integer, Particle> particles){
+    public static System createInitialPreviousForceSystem(System initialSystem, SystemNeighbourManager snm){
         Logger.print("Creating Initial Previous System");
-        Map<Integer, Particle> particleList = initializePreviousParticles(particles);
+        Map<Integer, Particle> particleList = initializePreviousParticles(initialSystem, snm);
         Logger.print("Finished Creating Initial System");
         return new System(particleList);
     }
 
-    private static Map<Integer, Particle> initializePreviousParticles(Map<Integer,Particle> p){
-        //ToDo: inicializar las particulas en una posicion anterior a la original. Esto se usara para los calculos.
-        return null;
+    private static Map<Integer, Particle> initializePreviousParticles(System initialSystem, SystemNeighbourManager snm){
+        Map<Particle, Set<Interactable>> neighbourMap = snm.getNeighbours(initialSystem);
+        ForceSimulatorHelper fsh = new ForceSimulatorHelper();
+
+        Map<Integer,Particle> ret = new HashMap<>();
+        for(Map.Entry<Particle, Set<Interactable>> entry : neighbourMap.entrySet()){
+            Particle p = fsh.getInitialPreviousParticle(entry.getKey(),entry.getValue(),Config.getInstance().SIMULATION_DELTA_TIME());
+            ret.put(p.getId(),p);
+        }
+        return ret;
     }
 
     private static List<Particle> initializeParticles(List<StaticParticle> staticParticles, List<Wall> walls) {
@@ -45,7 +48,7 @@ public class ForceSimulatorCreator {
         for(int i = 0; i < c.PARTICLES_QUANTITY(); i++) {
             Particle newParticle;
             do {
-                double x = Math.random() * maxHorizontal;
+                double x = 197;
                 double y = Math.random() * c.VERTICAL_WALL_LENGTH();
                 double angle = Math.random() * 2* Math.PI - Math.PI;
                 newParticle = new Particle(i, x, y, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle,c.PARTICLE_MASS());

@@ -62,7 +62,7 @@ public class OscillationManager {
                 break;
             case VERLET:
                 //Verlet
-                pvel = verlet(lastParticle.getY(), previousParticle.getY(), currentAcceleration);
+                pvel = verlet(lastParticle.getY(), previousParticle.getY(), currentAcceleration, c.SIMULATION_DELTA_TIME());
                 break;
             case ANALYTICAL:
                 double position = position(lastSystem.getTime()+deltaT);
@@ -115,9 +115,9 @@ public class OscillationManager {
         return new PositionNVel(correctedR, correctedR1);
     }
 
-    private PositionNVel verlet(double position, double prevPosition, double acceleration){
-        double newPos = 2*position - prevPosition + Math.pow(deltaT,2)*acceleration;
-        double newVel = (newPos - prevPosition)/(2*deltaT);
+    public PositionNVel verlet(double position, double prevPosition, double acceleration, double delta){
+        double newPos = 2*position - prevPosition + Math.pow(delta,2)*acceleration;
+        double newVel = (newPos - prevPosition)/(2*delta);
 
         return new PositionNVel(newPos, newVel);
     }
@@ -132,14 +132,23 @@ public class OscillationManager {
         return new PositionNVel(newPosUnEje, newVelUnEje);
     }
 
-    private class PositionNVel{
-        double position;
-        double vel;
+    public class PositionNVel{
+        private double position;
+        private double vel;
 
         public PositionNVel(double p, double v){
             position = p;
             vel = v;
         }
+
+        public double getPosition() {
+            return position;
+        }
+
+        public double getVel() {
+            return vel;
+        }
+
     }
 
     private double force(double r, double v){
