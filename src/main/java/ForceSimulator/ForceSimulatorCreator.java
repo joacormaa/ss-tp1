@@ -55,7 +55,7 @@ public class ForceSimulatorCreator {
 
             } while (thereIsCollision(newParticle, particles,staticParticles,walls));
             particles.add(newParticle);
-            Logger.print("Added Particle #"+i);
+            //Logger.print("Added Particle #"+i);
         }
         return particles;
     }

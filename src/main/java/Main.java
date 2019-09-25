@@ -1,4 +1,5 @@
 import Constants.Config;
+import ForceSimulator.ForceSimulatorComparer;
 import ForceSimulator.ForceSimulatorManager;
 import Log.Logger;
 import Metrics.SystemMetrics;
@@ -29,7 +30,14 @@ public class Main {
         //runComparison();
         //runOscillationSimulation();
         //runOscillationComparison();
-        runForceSimulation();
+        //runForceSimulation();
+        runForceComparison();
+    }
+
+    private static void runForceComparison() {
+        ForceSimulatorComparer fsc = new ForceSimulatorComparer();
+        fsc.compareForces(50,200,5,5);
+        fsc.outputComparisons(5);
     }
 
     private static void runOscillationComparison() {
