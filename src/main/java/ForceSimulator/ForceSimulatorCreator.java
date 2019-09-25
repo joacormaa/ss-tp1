@@ -101,20 +101,7 @@ public class ForceSimulatorCreator {
     private static boolean thereIsCollision(Particle p1, Particle p2) {
         return Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2) <= Config.getInstance().SIGMA();
     }
-    private static boolean thereIsCollision(Wall w, Particle p2) { //todo: asegurarse que este a distancia sigma de todas las paredes.
-        if(w.isVertical()){
-            if(p2.getX()-p2.getRadius()<w.getX()+w.getWidth() && p2.getX()+p2.getRadius()> w.getX()){
-                if(p2.getY()-p2.getRadius()<w.getY()+w.getLength() && p2.getY()+p2.getRadius()>w.getY())
-                    return true;
-            }
-        }
-        else{
-            if(p2.getY()-p2.getRadius()<w.getY()+w.getWidth() && p2.getY()+p2.getRadius()> w.getY()){
-                if(p2.getX()-p2.getRadius()<w.getX()+w.getLength() && p2.getX()+p2.getRadius()>w.getX())
-                    return true;
-            }
-
-        }
-        return false;
+    private static boolean thereIsCollision(Wall w, Particle p2) {
+        return w.getMinimumDistance(p2)<Config.getInstance().SIGMA();
     }
 }
