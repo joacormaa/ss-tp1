@@ -3,6 +3,8 @@ package Model;
 import Constants.Config;
 
 public class Wall implements Interactable{
+    private double x;
+    private double y;
     private Vector vector;
     private int id;
     private double width;
@@ -10,21 +12,24 @@ public class Wall implements Interactable{
 
     public Wall(boolean isVertical, double x, double y, double length, int id) {
         c = Config.getInstance();
-
+        this.x=x;
+        this.y=y;
         Vector vec;
         if(isVertical){
-            vec = new Vector(x,y,x+length,y);
+            vec = new Vector(length,0);
         }else{
-            vec = new Vector(x,y,x,y+length);
+            vec = new Vector(0,length);
         }
         this.width = c.WALL_WIDTH();
         this.vector=vec;
         this.id=id;
     }
 
-    public Wall(Vector vector, int id){
+    public Wall(double x, double y,Vector vector, int id){
         c = Config.getInstance();
         this.width = c.WALL_WIDTH();
+        this.x=x;
+        this.y=y;
         this.vector=vector;
         this.id=id;
 
@@ -43,11 +48,11 @@ public class Wall implements Interactable{
     }
 
     public double getX() {
-        return vector.getX1();
+        return x;
     }
 
     public double getY() {
-        return vector.getY1();
+        return y;
     }
 
     public double getLength() {
@@ -61,15 +66,15 @@ public class Wall implements Interactable{
     public String stringify(int idBase) {
         StringBuilder sb = new StringBuilder();
         int pPerWall = Config.getInstance().PARTICLES_PER_WALL();
-        double xInc = vector.getXLength()/pPerWall;
-        double yInc = vector.getYLength()/pPerWall;
+        double xInc = vector.x/pPerWall;
+        double yInc = vector.y/pPerWall;
         for(int i=0; i<pPerWall; i++){
 
             sb.append(idBase+i);
             sb.append(' ');
 
-            double x = vector.getX1() + i *xInc;
-            double y = vector.getY1() + i *yInc;
+            double x = this.x + i *xInc;
+            double y = this.y + i *yInc;
 
 
             sb.append(x);
@@ -109,14 +114,14 @@ public class Wall implements Interactable{
     //https://math.stackexchange.com/questions/2248617/shortest-distance-between-a-point-and-a-line-segment
     public double getMinimumDistance(Particle p) {
         Vector v = vector;
-        double t = ((v.x1-p.x)*(v.x2-v.x1)+(v.y1-p.y)*(v.y2-v.y1))/((v.getXLength()*v.getXLength())+(v.getYLength()*v.getYLength()));
+        double t = ((x-p.x)*(v.x-v.x)+(y-p.y)*(v.y-y))/(v.getLength()*v.getLength());
 
         if(0<=t && t<=1){
-            return Math.abs(v.getXLength()*(v.y1-p.y)-v.getYLength()*(v.x1-p.x))/ v.getLength();
+            return Math.abs(v.x*(y-p.y)-v.y*(x-p.x))/ v.getLength();
         }
 
-        double distance1 = Math.hypot(v.x1-p.x,v.y1-p.y);
-        double distance2 = Math.hypot(v.x2-p.x,v.y2-p.y);
+        double distance1 = Math.hypot(x-p.x,y-p.y);
+        double distance2 = Math.hypot(x-p.x,y-p.y);
 
         return Math.min(distance1,distance2);
 
