@@ -1,25 +1,33 @@
 package Model;
 
 import Constants.Config;
-import Log.Logger;
 
 public class Wall implements Interactable{
-    private boolean isVertical;
-    private double x;
-    private double y;
-    private double length;
+    private Vector vector;
     private int id;
     private double width;
     private Config c;
 
     public Wall(boolean isVertical, double x, double y, double length, int id) {
         c = Config.getInstance();
+
+        Vector vec;
+        if(isVertical){
+            vec = new Vector(x,y,x+length,y);
+        }else{
+            vec = new Vector(x,y,x,y+length);
+        }
         this.width = c.WALL_WIDTH();
-        this.isVertical = isVertical;
-        this.x = x;
-        this.y = y;
-        this.length = length;
+        this.vector=vec;
         this.id=id;
+    }
+
+    public Wall(Vector vector, int id){
+        c = Config.getInstance();
+        this.width = c.WALL_WIDTH();
+        this.vector=vector;
+        this.id=id;
+
     }
 
     public int getId(){
@@ -27,19 +35,23 @@ public class Wall implements Interactable{
     }
 
     public boolean isVertical() {
-        return isVertical;
+        return Math.abs(vector.getAngle())==Math.PI/2;
+    }
+
+    public boolean isHorizontal() {
+        return vector.getAngle()==0 || vector.getAngle()==Math.PI;
     }
 
     public double getX() {
-        return x;
+        return vector.getX1();
     }
 
     public double getY() {
-        return y;
+        return vector.getY1();
     }
 
     public double getLength() {
-        return length;
+        return vector.getLength();
     }
 
     public double getWidth() {
@@ -49,20 +61,17 @@ public class Wall implements Interactable{
     public String stringify(int idBase) {
         StringBuilder sb = new StringBuilder();
         int pPerWall = Config.getInstance().PARTICLES_PER_WALL();
-        double amount=length/pPerWall;
+        double xInc = vector.getXLength()/pPerWall;
+        double yInc = vector.getYLength()/pPerWall;
         for(int i=0; i<pPerWall; i++){
 
             sb.append(idBase+i);
             sb.append(' ');
-            double x,y;
-            if(isVertical){
-                y=this.y+i*amount;
-                x=this.x;
-            }
-            else{
-                x=this.x+i*amount;
-                y=this.y;
-            }
+
+            double x = vector.getX1() + i *xInc;
+            double y = vector.getY1() + i *yInc;
+
+
             sb.append(x);
             sb.append(' ');
             sb.append(y);
@@ -97,25 +106,19 @@ public class Wall implements Interactable{
         return fn;
     }
 
-    private double getFN(Particle p) {
-        Config c = Config.getInstance();
-        double epsilon =  c.EPSILON();
-        double rm = c.RM();
-        double sigma = c.SIGMA();
-
-        double r = getMinimumDistance(p);
-
-        double coef = rm/r;
-
-        return (12*sigma/rm) *(Math.pow(coef,13)-Math.pow(coef,7))/3;//divido por 3 como workaround, cada particula va a ser vecina de una pared 3 veces. PR
-
-    }
-
+    //https://math.stackexchange.com/questions/2248617/shortest-distance-between-a-point-and-a-line-segment
     public double getMinimumDistance(Particle p) {
-        if(!isVertical) return Math.abs(p.getY() - y);
-        if(length == c.VERTICAL_WALL_LENGTH() || (p.getY() >= y && p.getY() <= y + length)) return Math.abs(p.getX() - x);
+        Vector v = vector;
+        double t = ((v.x1-p.x)*(v.x2-v.x1)+(v.y1-p.y)*(v.y2-v.y1))/((v.getXLength()*v.getXLength())+(v.getYLength()*v.getYLength()));
 
-        double wallYMinimumDistance = p.getY() < y ? y : y + length;
-        return Math.sqrt(Math.pow(p.getX() - x, 2) + Math.pow(p.getY() - wallYMinimumDistance, 2));
+        if(0<=t && t<=1){
+            return Math.abs(v.getXLength()*(v.y1-p.y)-v.getYLength()*(v.x1-p.x))/ v.getLength();
+        }
+
+        double distance1 = Math.hypot(v.x1-p.x,v.y1-p.y);
+        double distance2 = Math.hypot(v.x2-p.x,v.y2-p.y);
+
+        return Math.min(distance1,distance2);
+
     }
 }
