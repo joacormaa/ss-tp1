@@ -133,4 +133,16 @@ public class Particle implements Interactable{
 
         return (12*epsilon/rm) *(Math.pow(coef,13)-Math.pow(coef,7));
     }
+
+    public double getInteractionRadius() {
+        return interactionRadius;
+    }
+
+    public void setInteractionRadius(double interactionRadius) {
+        this.interactionRadius = interactionRadius;
+    }
+
+    public double getDistanceTo(Particle p) {
+        return Math.sqrt(Math.pow(x - p.getX(), 2) + Math.pow(y - p.getY(), 2));
+    }
 }
