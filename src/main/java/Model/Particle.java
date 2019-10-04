@@ -1,6 +1,7 @@
 package Model;
 
 import Constants.Config;
+import GrainSimulator.GrainSimulatorHelper;
 import Log.Logger;
 import NeighbourLogic.Helper;
 
@@ -110,16 +111,12 @@ public class Particle implements Interactable{
 
     @Override
     public double getXIncidentalForce(Particle p) {
-        double r = Math.hypot(this.x-p.getX(),this.y-p.getY());
-        double ex = (p.getX()-this.x)/r;
-        return getFN(p)*ex; //todo: reimplementar
+        return GrainSimulatorHelper.getXForce(this,p);
     }
 
     @Override
     public double getYIncidentalForce(Particle p) {
-        double r = Math.hypot(this.x-p.getX(),this.y-p.getY());
-        double ex = (p.getY()-this.y)/r;
-        return getFN(p)*ex;//todo: reimplementar
+        return GrainSimulatorHelper.getYForce(this,p);
     }
 
     private double getFN(Particle p) {
