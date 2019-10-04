@@ -12,11 +12,12 @@ public class Particle implements Interactable{
     protected double x;
     protected double y;
     protected double radius;
+    private double interactionRadius;
     private double mass;
     private transient double speed;
     private double angle;
 
-    public Particle(int id, double x, double y, double radius, double speed, double angle, double mass) {
+    public Particle(int id, double x, double y, double radius, double speed, double angle, double mass, double interactionRadius) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -24,6 +25,7 @@ public class Particle implements Interactable{
         this.mass = mass;
         this.speed=speed;
         this.angle=angle;
+        this.interactionRadius = interactionRadius;
     }
 
 

@@ -56,6 +56,11 @@ public class Config {
     private double WALL_WIDTH;
     private double PARTICLE_MASS;
 
+    private double HORIZONTAL_WALL_HOLE_LENGTH;
+    private double KN;
+    private double KT;
+    private double GAMMA;
+
     private static Config instance;
 
     public static Config getInstance(){
@@ -125,6 +130,10 @@ public class Config {
         String EPSILON = document.getElementsByTagName("EPSILON").item(0).getTextContent();
         String SIGMA = document.getElementsByTagName("SIGMA").item(0).getTextContent();
 
+        String HORIZONTAL_WALL_HOLE_LENGTH = document.getElementsByTagName("HORIZONTAL_WALL_HOLE_LENGTH").item(0).getTextContent();
+        String KN = document.getElementsByTagName("KN").item(0).getTextContent();
+        String KT = document.getElementsByTagName("KT").item(0).getTextContent();
+        String GAMMA = document.getElementsByTagName("GAMMA").item(0).getTextContent();
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
         this.PARTICLE_QUANTITY = Integer.parseInt(PARTICLE_QUANTITY_STR);
@@ -163,6 +172,11 @@ public class Config {
         this.RM = Double.parseDouble(RM);
         this.EPSILON = Double.parseDouble(EPSILON);
         this.SIGMA = Double.parseDouble(SIGMA);
+
+        this.HORIZONTAL_WALL_HOLE_LENGTH = Double.parseDouble(HORIZONTAL_WALL_HOLE_LENGTH);
+        this.KN = Double.parseDouble(KN);
+        this.KT = Double.parseDouble(KT);
+        this.GAMMA = Double.parseDouble(GAMMA);
     }
 
     public enum NuMethod{
@@ -362,5 +376,13 @@ public class Config {
     public double EPSILON(){
         return EPSILON;
     }
+
+    public double HORIZONTAL_WALL_HOLE_LENGTH(){return HORIZONTAL_WALL_HOLE_LENGTH;}
+
+    public double KN(){return KN;}
+
+    public double KT(){return KT;}
+
+    public double GAMMA(){return GAMMA;}
 }
 
