@@ -1,6 +1,7 @@
 import Constants.Config;
 import ForceSimulator.ForceSimulatorComparer;
 import ForceSimulator.ForceSimulatorManager;
+import GrainSimulator.GrainSimulatorManager;
 import Log.Logger;
 import Metrics.SystemMetrics;
 import Model.Particle;
@@ -15,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+@SuppressWarnings("Duplicates")
 public class Main {
 
     private static int framesOfBalance =20;
@@ -31,7 +33,30 @@ public class Main {
         //runOscillationSimulation();
         //runOscillationComparison();
         //runForceSimulation();
-        runForceComparison();
+        //runForceComparison();
+        runGrainSimultaion();
+    }
+
+    private static void runGrainSimultaion(){
+        GrainSimulatorManager gsm = new GrainSimulatorManager();
+
+        Config c = Config.getInstance();
+
+        boolean stopped = false;
+        int deltasPerPrint = (int)(0.01/c.SIMULATION_DELTA_TIME());
+        int deltasSinceLastPrint = 100000;
+        int i=0;
+        while(!stopped){
+            Logger.print("Running Step '"+i+++"'");
+            SystemMetrics lastSystemMetrics = gsm.stepForward(c.SIMULATION_DELTA_TIME(),deltasSinceLastPrint>=deltasPerPrint);
+            deltasSinceLastPrint=(deltasSinceLastPrint>=deltasPerPrint)?0:deltasSinceLastPrint;
+            deltasSinceLastPrint++;
+            stopped = stopCondition(lastSystemMetrics);
+        }
+    }
+
+    private static boolean stopCondition(SystemMetrics systemMetrics){
+        return false;
     }
 
     private static void runForceComparison() {
@@ -85,21 +110,21 @@ public class Main {
     static double equilibriumtime = 0;
     static double lastFp = 0;
 
-    private static boolean stopCondition(SystemMetrics lastSystemMetrics) {
-        if(!aquiredEquilibrium){
-            double fp = lastSystemMetrics.getFp();
-            aquiredEquilibrium = fp >= 0.5;
-            equilibriumtime = lastSystemMetrics.getTime();
-            if(Math.abs(lastFp-fp)>0.001){
-                Logger.print("fp change from '"+lastFp+"' to '"+fp+"'");
-                lastFp=fp;
-            }
-        }
-        else{
-            return lastSystemMetrics.getTime()>=equilibriumtime*2;
-        }
-        return false;
-    }
+//    private static boolean stopCondition(SystemMetrics lastSystemMetrics) {
+//        if(!aquiredEquilibrium){
+//            double fp = lastSystemMetrics.getFp();
+//            aquiredEquilibrium = fp >= 0.5;
+//            equilibriumtime = lastSystemMetrics.getTime();
+//            if(Math.abs(lastFp-fp)>0.001){
+//                Logger.print("fp change from '"+lastFp+"' to '"+fp+"'");
+//                lastFp=fp;
+//            }
+//        }
+//        else{
+//            return lastSystemMetrics.getTime()>=equilibriumtime*2;
+//        }
+//        return false;
+//    }
 
     private static void runGasSimulation() {
 //        GasSimulatorManager gsm = new GasSimulatorManager(true);

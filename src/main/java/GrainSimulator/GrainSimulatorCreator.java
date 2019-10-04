@@ -27,7 +27,10 @@ public class GrainSimulatorCreator {
         Config c = Config.getInstance();
         List<Particle> particles = new ArrayList<>();
 
-        for(int i = 0; i < c.PARTICLES_QUANTITY(); i++) {
+//        int pq = c.PARTICLES_QUANTITY();
+        int pq = 0;
+
+        for(int i = 0; i < 0; i++) {
             Particle newParticle;
             do {
                 double x = Math.random() * c.HORIZONTAL_WALL_LENGTH();
@@ -51,10 +54,10 @@ public class GrainSimulatorCreator {
 
         double wall2Length = c.HOLE_POSITION();
         double wall2Position = c.HORIZONTAL_WALL_LENGTH() - c.HOLE_POSITION();
-        double wall1Length = c.HORIZONTAL_WALL_LENGTH() - wall2Position - c.HOLE_LENGTH();
+        double wall1Length = c.HORIZONTAL_WALL_LENGTH() - wall2Length - c.HOLE_LENGTH();
 
-        walls.add(new Wall(true, 0, 0.0, wall1Length,3));
-        walls.add(new Wall(true, wall2Position, 0,wall2Length,4));
+        walls.add(new Wall(false, 0, 0.0, wall1Length,3));
+        walls.add(new Wall(false, wall2Position, 0,wall2Length,4));
 
         return walls;
     }
