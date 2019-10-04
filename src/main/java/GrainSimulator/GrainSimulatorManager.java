@@ -24,10 +24,12 @@ public class GrainSimulatorManager {
 
 
     public GrainSimulatorManager(){
-        this.lastSystem = GrainSimulatorCreator.createInitialGrainSystem();
         this.gsp = new GrainSimulatorPrinter();
         this.snm = new SystemNeighbourManager();
         this.fsh = new ForceSimulatorHelper();
+
+        this.lastSystem = GrainSimulatorCreator.createInitialGrainSystem();
+        this.prevSystem = GrainSimulatorCreator.createPreviousGrainSystem(lastSystem,snm);
     }
 
     public SystemMetrics stepForward(double deltaT, boolean hasToPrint){

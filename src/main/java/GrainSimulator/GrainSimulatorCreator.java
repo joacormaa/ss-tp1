@@ -1,18 +1,37 @@
 package GrainSimulator;
 
 import Constants.Config;
-import Model.Particle;
-import Model.StaticParticle;
+import ForceSimulator.ForceSimulatorHelper;
+import Log.Logger;
+import Model.*;
 import Model.System;
-import Model.Wall;
+import NeighbourLogic.SystemNeighbourManager;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 
 @SuppressWarnings("ALL")
 public class GrainSimulatorCreator {
+
+    public static System createPreviousGrainSystem(System initialSystem, SystemNeighbourManager snm){
+        Logger.print("Creating Initial Previous System");
+        Map<Integer, Particle> particleList = initializePreviousParticles(initialSystem, snm);
+        Logger.print("Finished Creating Initial System");
+        return new System(particleList);
+    }
+
+    private static Map<Integer, Particle> initializePreviousParticles(System initialSystem, SystemNeighbourManager snm){
+        Map<Particle, Set<Interactable>> neighbourMap = snm.getNeighbours(initialSystem);
+        ForceSimulatorHelper fsh = new ForceSimulatorHelper();
+
+        Map<Integer,Particle> ret = new HashMap<>();
+        for(Map.Entry<Particle, Set<Interactable>> entry : neighbourMap.entrySet()){
+            Particle p = fsh.getInitialPreviousParticle(entry.getKey(),entry.getValue(),Config.getInstance().SIMULATION_DELTA_TIME());
+            ret.put(p.getId(),p);
+        }
+        return ret;
+    }
+
 
     public static System createInitialGrainSystem(){
 
