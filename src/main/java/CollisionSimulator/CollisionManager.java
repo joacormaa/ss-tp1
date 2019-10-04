@@ -210,12 +210,12 @@ public class CollisionManager {
 
     public Particle getCollisionResult(Particle p, Wall w){
         if(w.isVertical()){
-            Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), (Math.PI-p.getAngle())%(2*Math.PI), p.getMass());
+            Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), (Math.PI-p.getAngle())%(2*Math.PI), p.getMass(), Particle.getRandomInteractionRatio());
             Logger.print("Collision with V-Wall");
             Logger.printPolar(p, newP);
             return newP;
         } else {
-            Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), -p.getAngle(), p.getMass());
+            Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), p.getSpeed(), -p.getAngle(), p.getMass(), Particle.getRandomInteractionRatio());
             Logger.print("Collision with H-Wall");
             Logger.printPolar(p, newP);
             return newP;
@@ -247,8 +247,8 @@ public class CollisionManager {
         double vx2 = p2.getXSpeed() - jx/p2.getMass();
         double vy2 = p2.getYSpeed() - jy/p2.getMass();
 
-        Particle p1new = new Particle(p1.getId(), p1.getX(), p1.getY(), p1.getRadius(), Particle.getSpeed(vx1, vy1), Particle.getAngle(vx1, vy1), p1.getMass());
-        Particle p2new = new Particle(p2.getId(), p2.getX(), p2.getY(), p2.getRadius(), Particle.getSpeed(vx2, vy2), Particle.getAngle(vx2, vy2), p2.getMass());
+        Particle p1new = new Particle(p1.getId(), p1.getX(), p1.getY(), p1.getRadius(), Particle.getSpeed(vx1, vy1), Particle.getAngle(vx1, vy1), p1.getMass(), Particle.getRandomInteractionRatio());
+        Particle p2new = new Particle(p2.getId(), p2.getX(), p2.getY(), p2.getRadius(), Particle.getSpeed(vx2, vy2), Particle.getAngle(vx2, vy2), p2.getMass(), Particle.getRandomInteractionRatio());
         Collection<Particle> ret = new LinkedList<>();
         ret.add(p1new);
         ret.add(p2new);
@@ -281,7 +281,7 @@ public class CollisionManager {
         double lastVY = p.getYSpeed();
         double newVX = operator[0][0] * lastVX + operator[0][1] * lastVY;
         double newVY = operator[1][0] * lastVX + operator[1][1] * lastVY;
-        Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), Particle.getSpeed(newVX, newVY), Particle.getAngle(newVX, newVY), p.getMass());
+        Particle newP = new Particle(p.getId(), p.getX(), p.getY(), p.getRadius(), Particle.getSpeed(newVX, newVY), Particle.getAngle(newVX, newVY), p.getMass(), Particle.getRandomInteractionRatio());
 
         Logger.print("Collision with static");
         Logger.printPolar(p, newP);

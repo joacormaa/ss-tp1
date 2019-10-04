@@ -69,7 +69,7 @@ public class OscillationManager {
                 pvel = new PositionNVel(position,velocity);
 
         }
-        Particle newParticle  = new Particle(lastParticle.getId(),lastParticle.getX(),pvel.position,lastParticle.getRadius(),Math.abs(pvel.vel),Particle.getAngle(0,pvel.vel),lastParticle.getMass());
+        Particle newParticle  = new Particle(lastParticle.getId(),lastParticle.getX(),pvel.position,lastParticle.getRadius(),Math.abs(pvel.vel),Particle.getAngle(0,pvel.vel),lastParticle.getMass(), Particle.getRandomInteractionRatio());
         previousParticle = lastParticle;
         lastSystem = new System(lastSystem.getTime()+deltaT,newParticle);
 

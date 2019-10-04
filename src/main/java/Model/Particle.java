@@ -142,4 +142,8 @@ public class Particle implements Interactable{
     public double getDistanceTo(Particle p) {
         return Math.sqrt(Math.pow(x - p.getX(), 2) + Math.pow(y - p.getY(), 2));
     }
+
+    public static double getRandomInteractionRatio() {
+        return (Math.random()/100)+0.02; //returns random number between 0.02 and 0.03
+    }
 }

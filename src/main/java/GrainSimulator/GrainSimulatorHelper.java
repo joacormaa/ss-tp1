@@ -4,13 +4,9 @@ import Constants.Config;
 import Model.Particle;
 
 public class GrainSimulatorHelper {
-    static Config c;
+    Config c = Config.getInstance();
     static double normalVersor[];
     static double tangencialVersor[];
-
-    public GrainSimulatorHelper() {
-        c = Config.getInstance();
-    }
 
     public static double getXForce(Particle p1, Particle p2) {
         double[] x = new double[]{1,0};
@@ -46,7 +42,7 @@ public class GrainSimulatorHelper {
 
     private static double[] getTangencialForce(Particle p1, Particle p2) {
         tangencialVersor = getTangencialVersor(p1, p2);
-        double kt = c.KT();
+        double kt = Config.getInstance().KT();
         double xi = calculateXi(p1, p2);
         double[] relativeVelocity = calculateRelativeVelocity(p1, p2);
         return getProduct(-kt * xi * getProduct(relativeVelocity, tangencialVersor), tangencialVersor);
@@ -74,7 +70,7 @@ public class GrainSimulatorHelper {
 
     private static double[] getNormalForce(Particle p1, Particle p2) {
         normalVersor = getNormalVersor(p1, p2);
-        double kn = c.KN();
+        double kn = Config.getInstance().KN();
         double xi = calculateXi(p1, p2);
         return getProduct(-kn*xi,normalVersor);
     }

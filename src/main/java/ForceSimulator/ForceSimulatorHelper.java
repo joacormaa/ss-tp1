@@ -31,7 +31,7 @@ public class ForceSimulatorHelper {
         double newSpeed = Particle.getSpeed(newXSpeed,newYSpeed);
         double newAngle = Particle.getAngle(newXSpeed,newYSpeed);
 
-        return new Particle(prevP.getId(),newX,newY,prevP.getRadius(),newSpeed,newAngle,prevP.getMass());
+        return new Particle(prevP.getId(),newX,newY,prevP.getRadius(),newSpeed,newAngle,prevP.getMass(), Particle.getRandomInteractionRatio());
     }
 
     private Acceleration getAcceleration(Particle lastP, Collection<Interactable> neighbours){
@@ -68,6 +68,6 @@ public class ForceSimulatorHelper {
         double prevSpeed = Math.hypot(prevXspeed,prevYSpeed);
         double prevAngle = Math.atan2(prevYSpeed,prevXspeed);
 
-        return new Particle(lastP.getId(),prevX,prevY,lastP.getRadius(),prevSpeed,prevAngle,lastP.getMass());
+        return new Particle(lastP.getId(),prevX,prevY,lastP.getRadius(),prevSpeed,prevAngle,lastP.getMass(), Particle.getRandomInteractionRatio());
     }
 }

@@ -5,7 +5,7 @@ import Constants.Config;
 public class StaticParticle extends Particle {
     Config c = Config.getInstance();
     public StaticParticle(int id, double x, double y, double radius) {
-        super(id, x, y, radius, 0, 0,Double.MAX_VALUE);
+        super(id, x, y, radius, 0, 0,Double.MAX_VALUE, Particle.getRandomInteractionRatio());
     }
 
     @Override
