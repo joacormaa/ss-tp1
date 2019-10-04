@@ -48,7 +48,7 @@ public class Main {
         int i=0;
         while(!stopped){
             Logger.print("Running Step '"+i+++"'");
-            SystemMetrics lastSystemMetrics = gsm.stepForward(c.SIMULATION_DELTA_TIME(),deltasSinceLastPrint>=deltasPerPrint);
+            SystemMetrics lastSystemMetrics = gsm.stepForward(c.SIMULATION_DELTA_TIME(),true /*deltasSinceLastPrint>=deltasPerPrint*/);
             deltasSinceLastPrint=(deltasSinceLastPrint>=deltasPerPrint)?0:deltasSinceLastPrint;
             deltasSinceLastPrint++;
             stopped = stopCondition(lastSystemMetrics);

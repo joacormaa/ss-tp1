@@ -13,20 +13,20 @@ import java.util.*;
 @SuppressWarnings("ALL")
 public class GrainSimulatorCreator {
 
-    public static System createPreviousGrainSystem(System initialSystem, SystemNeighbourManager snm){
+    public static System createPreviousGrainSystem(System initialSystem, SystemNeighbourManager snm, double deltaT){
         Logger.print("Creating Initial Previous System");
-        Map<Integer, Particle> particleList = initializePreviousParticles(initialSystem, snm);
+        Map<Integer, Particle> particleList = initializePreviousParticles(initialSystem, snm, deltaT);
         Logger.print("Finished Creating Initial System");
-        return new System(particleList);
+        return new System(initialSystem.getTime()-deltaT,particleList.values(),initialSystem.getStaticParticles().values(),initialSystem.getWalls().values());
     }
 
-    private static Map<Integer, Particle> initializePreviousParticles(System initialSystem, SystemNeighbourManager snm){
+    private static Map<Integer, Particle> initializePreviousParticles(System initialSystem, SystemNeighbourManager snm, double delta){
         Map<Particle, Set<Interactable>> neighbourMap = snm.getNeighbours(initialSystem);
         ForceSimulatorHelper fsh = new ForceSimulatorHelper();
 
         Map<Integer,Particle> ret = new HashMap<>();
         for(Map.Entry<Particle, Set<Interactable>> entry : neighbourMap.entrySet()){
-            Particle p = fsh.getInitialPreviousParticle(entry.getKey(),entry.getValue(),Config.getInstance().SIMULATION_DELTA_TIME());
+            Particle p = fsh.getInitialPreviousParticle(entry.getKey(),entry.getValue(),delta);
             ret.put(p.getId(),p);
         }
         return ret;
@@ -46,19 +46,20 @@ public class GrainSimulatorCreator {
         Config c = Config.getInstance();
         List<Particle> particles = new ArrayList<>();
 
-//        int pq = c.PARTICLES_QUANTITY();
-        int pq = 0;
+        int pq = 140;
 
-        for(int i = 0; i < 0; i++) {
+        for(int i = 0; i < pq; i++) {
             Particle newParticle;
             do {
                 double x = Math.random() * c.HORIZONTAL_WALL_LENGTH();
                 double y = Math.random() * c.VERTICAL_WALL_LENGTH();
-                newParticle = new Particle(i, x, y, c.PARTICLE_RADIUS(), 0,0,c.PARTICLE_MASS());
+
+                double radius = Math.random() * 0.01 + 0.02; //deshardcodear
+                newParticle = new Particle(i, x, y, radius, 0,0,c.PARTICLE_MASS());
 
             } while (thereIsCollision(newParticle, particles,walls));
             particles.add(newParticle);
-            //Logger.print("Added Particle #"+i);
+            Logger.print("Added Particle #"+i);
         }
         return particles;
     }

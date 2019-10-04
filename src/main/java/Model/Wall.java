@@ -94,7 +94,7 @@ public class Wall implements Interactable{
         if(this.y>p.y){
             fn = -fn;
         }
-        return fn;
+        return fn;//todo: reimplementar
     }
 
     private double getFN(Particle p) {
@@ -105,7 +105,7 @@ public class Wall implements Interactable{
 
         double r = getMinimumDistance(p);
 
-        double coef = rm/r;
+        double coef = rm/r;//todo: reimplementar
 
         return (12*sigma/rm) *(Math.pow(coef,13)-Math.pow(coef,7))/3;//divido por 3 como workaround, cada particula va a ser vecina de una pared 3 veces. PR
 

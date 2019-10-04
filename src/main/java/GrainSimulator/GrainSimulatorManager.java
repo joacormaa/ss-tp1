@@ -1,5 +1,6 @@
 package GrainSimulator;
 
+import Constants.Config;
 import ForceSimulator.ForceSimulatorHelper;
 import Metrics.SystemMetrics;
 import Model.*;
@@ -29,7 +30,10 @@ public class GrainSimulatorManager {
         this.fsh = new ForceSimulatorHelper();
 
         this.lastSystem = GrainSimulatorCreator.createInitialGrainSystem();
-        this.prevSystem = GrainSimulatorCreator.createPreviousGrainSystem(lastSystem,snm);
+        this.prevSystem = GrainSimulatorCreator.createPreviousGrainSystem(lastSystem,snm, Config.getInstance().SIMULATION_DELTA_TIME());
+
+        this.gsp.outputStep(prevSystem);
+        this.gsp.outputStep(lastSystem);
     }
 
     public SystemMetrics stepForward(double deltaT, boolean hasToPrint){
