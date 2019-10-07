@@ -43,6 +43,9 @@ public class ForceSimulatorHelper {
         double xAcc = sumFx/lastP.getMass();
         double yAcc = sumFy/lastP.getMass();
 
+        //Agrego gravedad
+        yAcc -= 9.8;
+
         return new Acceleration(xAcc,yAcc);
     }
 
@@ -57,7 +60,8 @@ public class ForceSimulatorHelper {
     }
 
     public Particle getInitialPreviousParticle(Particle lastP, Collection<Interactable> neighbours, double delta){
-        Acceleration acc = getAcceleration(lastP,neighbours);
+        //Acceleration acc = getAcceleration(lastP,neighbours);
+        Acceleration acc = new Acceleration(0,0);
 
         double prevY = lastP.getY() - delta*lastP.getYSpeed() - delta*delta*acc.yacc/2;
         double prevYSpeed = lastP.getYSpeed() - delta*acc.yacc;

@@ -44,6 +44,8 @@ public class GrainSimulatorHelper {
         tangencialVersor = getTangencialVersor(p1, p2);
         double kt = Config.getInstance().KT();
         double xi = calculateXi(p1, p2);
+        if(xi < 0)
+            return new double[]{0,0};
         double[] relativeVelocity = calculateRelativeVelocity(p1, p2);
         return getProduct(-kt * xi * getProduct(relativeVelocity, tangencialVersor), tangencialVersor);
     }
@@ -72,6 +74,8 @@ public class GrainSimulatorHelper {
         normalVersor = getNormalVersor(p1, p2);
         double kn = Config.getInstance().KN();
         double xi = calculateXi(p1, p2);
+        if(xi < 0)
+            return new double[]{0, 0};
         return getProduct(-kn*xi,normalVersor);
     }
 
