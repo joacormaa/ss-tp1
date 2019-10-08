@@ -46,7 +46,7 @@ public class GrainSimulatorCreator {
         Config c = Config.getInstance();
         List<Particle> particles = new ArrayList<>();
 
-        int pq = 140;
+        int pq = Config.getInstance().PARTICLES_QUANTITY();
 
         for(int i = 0; i < pq; i++) {
             Particle newParticle;
