@@ -1,6 +1,7 @@
 package Model;
 
 import Constants.Config;
+import GrainSimulator.GrainSimulatorHelper;
 import Log.Logger;
 
 public class Wall implements Interactable{
@@ -80,21 +81,26 @@ public class Wall implements Interactable{
     @Override
     public double getXIncidentalForce(Particle p) {
         if(!this.isVertical) return 0;
+        /*
         double fn = getFN(p);
         if(this.x>p.x){
             fn = -fn;
         }
         return fn;
+        */
+        return GrainSimulatorHelper.getWallXForce(this, p);
     }
 
     @Override
     public double getYIncidentalForce(Particle p) {
         if(this.isVertical) return 0;
-        double fn = getFN(p);
+        /*double fn = getFN(p);
         if(this.y>p.y){
             fn = -fn;
         }
         return fn;//todo: reimplementar
+        */
+        return GrainSimulatorHelper.getWallYForce(this, p);
     }
 
     private double getFN(Particle p) {

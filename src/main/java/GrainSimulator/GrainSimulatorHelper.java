@@ -2,6 +2,7 @@ package GrainSimulator;
 
 import Constants.Config;
 import Model.Particle;
+import Model.Wall;
 
 public final class GrainSimulatorHelper {
     Config c = Config.getInstance();
@@ -10,6 +11,16 @@ public final class GrainSimulatorHelper {
 
     private GrainSimulatorHelper() {
         throw new AssertionError();
+    }
+
+    public static double getWallXForce(Wall w, Particle p2) {
+        double[] x = new double[]{1,0};
+        return getProduct(getForce(w,p2), x);
+    }
+
+    public static double getWallYForce(Wall w, Particle p2) {
+        double[] y = new double[]{0,1};
+        return getProduct(getForce(w,p2), y);
     }
 
     public static double getXForce(Particle p1, Particle p2) {
@@ -25,6 +36,12 @@ public final class GrainSimulatorHelper {
     private static double[] getForce(Particle p1, Particle p2) {
         double[] tangencialForce = getTangencialForce(p1,p2);
         double[] normalForce = getNormalForce(p1,p2);
+        return arraySum(tangencialForce, normalForce);
+    }
+
+    private static double[] getForce(Wall w, Particle p2) {
+        double[] tangencialForce = getTangencialForce(w,p2);
+        double[] normalForce = getNormalForce(w,p2);
         return arraySum(tangencialForce, normalForce);
     }
 
@@ -54,14 +71,34 @@ public final class GrainSimulatorHelper {
         return getProduct(-kt * xi * getProduct(relativeVelocity, tangencialVersor), tangencialVersor);
     }
 
+    private static double[] getTangencialForce(Wall w, Particle p2) {
+        tangencialVersor = getTangencialVersor(w, p2);
+        double kt = Config.getInstance().KT();
+        double xi = calculateXi(w, p2);
+        if(xi < 0)
+            return new double[]{0,0};
+        double[] relativeVelocity = calculateRelativeVelocity(w, p2);
+        return getProduct(-kt * xi * getProduct(relativeVelocity, tangencialVersor), tangencialVersor);
+    }
+
     private static double[] calculateRelativeVelocity(Particle p1, Particle p2) {
         double[] p1Vel = new double[]{ p1.getXSpeed(), p1.getYSpeed() };
         double[] p2Vel = new double[]{ p2.getXSpeed(), p2.getYSpeed() };
         return calculateDifference(p1Vel, p2Vel);
     }
+    private static double[] calculateRelativeVelocity(Wall w, Particle p2) {
+        double[] p2Vel = new double[]{ p2.getXSpeed(), p2.getYSpeed() };
+        return p2Vel;
+    }
 
     private static double[] calculatePositionDifference(Particle p1, Particle p2) {
         double[] p1Pos = new double[]{ p1.getX(), p1.getY() };
+        double[] p2Pos = new double[]{ p2.getX(), p2.getY() };
+        return calculateDifference(p1Pos, p2Pos);
+    }
+
+    private static double[] calculatePositionDifference(Wall w, Particle p2) {
+        double[] p1Pos = new double[]{ w.getX(), w.getY() };
         double[] p2Pos = new double[]{ p2.getX(), p2.getY() };
         return calculateDifference(p1Pos, p2Pos);
     }
@@ -83,13 +120,32 @@ public final class GrainSimulatorHelper {
         return getProduct(-kn*xi,normalVersor);
     }
 
+    private static double[] getNormalForce(Wall w, Particle p2) {
+        normalVersor = getNormalVersor(w, p2);
+        double kn = Config.getInstance().KN();
+        double xi = calculateXi(w, p2);
+        if(xi < 0)
+            return new double[]{0, 0};
+        return getProduct(-kn*xi,normalVersor);
+    }
+
     private static double[] getNormalVersor(Particle p1, Particle p2) {
         double[] positionDifference = calculatePositionDifference(p1,p2);
         return getVersorFromVector(positionDifference);
     }
 
+    private static double[] getNormalVersor(Wall w, Particle p2) {
+        double[] positionDifference = calculatePositionDifference(w,p2);
+        return getVersorFromVector(positionDifference);
+    }
+
     private static double[] getTangencialVersor(Particle p1, Particle p2) {
         double[] positionDifference = calculatePositionDifference(p1,p2);
+        return getPerpendicularVector(getVersorFromVector(positionDifference));
+    }
+
+    private static double[] getTangencialVersor(Wall w, Particle p2) {
+        double[] positionDifference = calculatePositionDifference(w,p2);
         return getPerpendicularVector(getVersorFromVector(positionDifference));
     }
 
@@ -127,6 +183,10 @@ public final class GrainSimulatorHelper {
 
     private static double calculateXi(Particle p1, Particle p2) {
         return p1.getRadius() + p2.getRadius() - getPositionDifference(p1, p2);
+    }
+
+    private static double calculateXi(Wall w, Particle p2) {
+        return p2.getRadius() - w.getMinimumDistance(p2);
     }
 
     private static double getPositionDifference(Particle p1, Particle p2) {
