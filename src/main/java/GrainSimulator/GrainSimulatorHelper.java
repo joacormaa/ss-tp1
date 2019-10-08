@@ -3,10 +3,14 @@ package GrainSimulator;
 import Constants.Config;
 import Model.Particle;
 
-public class GrainSimulatorHelper {
+public final class GrainSimulatorHelper {
     Config c = Config.getInstance();
     static double normalVersor[];
     static double tangencialVersor[];
+
+    private GrainSimulatorHelper() {
+        throw new AssertionError();
+    }
 
     public static double getXForce(Particle p1, Particle p2) {
         double[] x = new double[]{1,0};
