@@ -79,49 +79,36 @@ public class Wall implements Interactable{
     }
 
     @Override
-    public double getXIncidentalForce(Particle p) {
-        if(!this.isVertical) return 0;
-        /*
-        double fn = getFN(p);
-        if(this.x>p.x){
-            fn = -fn;
-        }
-        return fn;
-        */
-        return GrainSimulatorHelper.getWallXForce(this, p);
-    }
-
-    @Override
-    public double getYIncidentalForce(Particle p) {
-        if(this.isVertical) return 0;
-        /*double fn = getFN(p);
-        if(this.y>p.y){
-            fn = -fn;
-        }
-        return fn;//todo: reimplementar
-        */
-        return GrainSimulatorHelper.getWallYForce(this, p);
-    }
-
-    private double getFN(Particle p) {
-        Config c = Config.getInstance();
-        double epsilon =  c.EPSILON();
-        double rm = c.RM();
-        double sigma = c.SIGMA();
-
-        double r = getMinimumDistance(p);
-
-        double coef = rm/r;//todo: reimplementar
-
-        return (12*sigma/rm) *(Math.pow(coef,13)-Math.pow(coef,7))/3;//divido por 3 como workaround, cada particula va a ser vecina de una pared 3 veces. PR
-
+    public double[] getXYIncidentalForce(Particle p) {
+        return GrainSimulatorHelper.getForceWallExertsOnP(this, p);
     }
 
     public double getMinimumDistance(Particle p) {
-        if(!isVertical) return Math.abs(p.getY() - y);
-        if(length == c.VERTICAL_WALL_LENGTH() || (p.getY() >= y && p.getY() <= y + length)) return Math.abs(p.getX() - x);
+        if(isVertical){
+            double minY = this.y;
+            double maxY = this.y + this.length;
 
-        double wallYMinimumDistance = p.getY() < y ? y : y + length;
-        return Math.sqrt(Math.pow(p.getX() - x, 2) + Math.pow(p.getY() - wallYMinimumDistance, 2));
+            if(p.getY()<=maxY && p.getY()>=minY){
+                return Math.abs(p.getX()-this.getX());
+            }
+
+            double dist1 = Math.hypot(p.getX()-this.getX(),p.getY()-this.getY());
+            double dist2 = Math.hypot(p.getX()-this.getX(),p.getY()-this.getY() + this.length);
+
+            return Math.min(dist1,dist2);
+        }
+        else{
+            double minX = this.x;
+            double maxX = this.x + this.length;
+
+            if(p.getX()<=maxX && p.getX()>=minX){
+                return Math.abs(p.getY()-this.getY());
+            }
+
+            double dist1 = Math.hypot(p.getY()-this.getY(),p.getX()-this.getX());
+            double dist2 = Math.hypot(p.getY()-this.getY(),p.getX()-this.getX() + this.length);
+
+            return Math.min(dist1,dist2);
+        }
     }
 }

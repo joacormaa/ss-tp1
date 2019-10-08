@@ -1,12 +1,11 @@
 package ForceSimulator;
 
+import Constants.Config;
 import Model.Interactable;
 import Model.Particle;
-import Model.Wall;
 import OscillationSimulator.OscillationManager;
 
 import java.util.Collection;
-import java.util.Set;
 
 public class ForceSimulatorHelper {
 
@@ -16,7 +15,12 @@ public class ForceSimulatorHelper {
         om =  new OscillationManager(false);
     }
 
-    public Particle getNextParticle(Particle lastP, Particle prevP, Collection<Interactable> neighbours, double delta) {
+    public Particle getNextParticle(Particle lastP, Particle prevP, Collection<Interactable> neighbours, double delta, Collection<Particle> particles) {
+
+        if(lastP.getY()<0.005){
+            Particle newP = getRandomParticleFromTop(lastP, particles);
+            return newP;
+        }
 
         Acceleration acc = getAcceleration(lastP, neighbours);
 
@@ -32,14 +36,34 @@ public class ForceSimulatorHelper {
         double newSpeed = Particle.getSpeed(newXSpeed,newYSpeed);
         double newAngle = Particle.getAngle(newXSpeed,newYSpeed);
 
+
         return new Particle(lastP.getId(),newX,newY,lastP.getRadius(),newSpeed,newAngle,lastP.getMass(), 0);
+    }
+
+    private Particle getRandomParticleFromTop(Particle lastP, Collection<Particle> particles) {
+        Particle newP;
+        do {
+            double x = Math.random() * Config.getInstance().HORIZONTAL_WALL_LENGTH(); //todo check collision
+            newP =  new Particle(lastP.getId(),x,Config.getInstance().VERTICAL_WALL_LENGTH() * 0.95,lastP.getRadius(),0,0,
+                    lastP.getMass(),0);
+
+        } while (thereIsCollision(newP, particles));
+        return newP;
+    }
+
+    private boolean thereIsCollision(Particle p1, Collection<Particle> particles){
+        for(Particle p2 : particles) {
+            if(Math.hypot(p1.getX() - p2.getX(), p1.getY() - p2.getY()) <= p1.getRadius() + p2.getRadius()) return true;
+        }
+        return false;
     }
 
     private Acceleration getAcceleration(Particle lastP, Collection<Interactable> neighbours){
         double sumFx=0, sumFy=0;
         for(Interactable neighbour : neighbours){
-            sumFx += neighbour.getXIncidentalForce(lastP);
-            sumFy += neighbour.getYIncidentalForce(lastP);
+            double[] xyforce = neighbour.getXYIncidentalForce(lastP);
+            sumFx  += xyforce[0];
+            sumFy += xyforce[1];
         }
         double xAcc = sumFx/lastP.getMass();
         double yAcc = sumFy/lastP.getMass();

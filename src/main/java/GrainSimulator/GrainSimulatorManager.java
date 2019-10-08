@@ -70,7 +70,7 @@ public class GrainSimulatorManager {
         for(Particle p : lastSystem.getParticles().values()){
             Collection<Interactable> neighbours = neighbourMap.get(p);
             Particle prevP = prevSystem.getParticles().get(p.getId());
-            Particle nextP = fsh.getNextParticle(p,prevP, neighbours, deltaT);
+            Particle nextP = fsh.getNextParticle(p,prevP, neighbours, deltaT,lastSystem.getParticles().values());
             nextParticles.add(nextP);
         }
         return nextParticles;

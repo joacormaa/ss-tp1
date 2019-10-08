@@ -110,13 +110,8 @@ public class Particle implements Interactable{
 
 
     @Override
-    public double getXIncidentalForce(Particle p) {
-        return GrainSimulatorHelper.getXForce(this,p);
-    }
-
-    @Override
-    public double getYIncidentalForce(Particle p) {
-        return GrainSimulatorHelper.getYForce(this,p);
+    public double[] getXYIncidentalForce(Particle p) {
+        return GrainSimulatorHelper.getForceP1ExertsOnP2(this,p);
     }
 
     private double getFN(Particle p) {

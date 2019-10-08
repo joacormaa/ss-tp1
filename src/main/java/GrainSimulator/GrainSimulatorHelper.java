@@ -13,26 +13,26 @@ public final class GrainSimulatorHelper {
         throw new AssertionError();
     }
 
-    public static double getWallXForce(Wall w, Particle p2) {
-        double[] x = new double[]{1,0};
-        return getProduct(getForce(w,p2), x);
-    }
-
-    public static double getWallYForce(Wall w, Particle p2) {
-        double[] y = new double[]{0,1};
-        return getProduct(getForce(w,p2), y);
-    }
-
-    public static double getXForce(Particle p1, Particle p2) {
-        double[] x = new double[]{1,0};
-        return getProduct(getForce(p1,p2), x);
-    }
-
-    public static double getYForce(Particle p1, Particle p2) {
-        double[] y = new double[]{0,1};
-        return getProduct(getForce(p1,p2), y);
-    }
-
+//    public static double getWallXForce(Wall w, Particle p2) {
+//        double[] x = new double[]{1,0};
+//        return getProduct(getForce(w,p2), x);
+//    }
+//
+//    public static double getWallYForce(Wall w, Particle p2) {
+//        double[] y = new double[]{0,1};
+//        return getProduct(getForce(w,p2), y);
+//    }
+//
+//    public static double getXForce(Particle p1, Particle p2) {
+//        double[] x = new double[]{1,0};
+//        return getProduct(getForce(p1,p2), x);
+//    }
+//
+//    public static double getYForce(Particle p1, Particle p2) {
+//        double[] y = new double[]{0,1};
+//        return getProduct(getForce(p1,p2), y);
+//    }
+//
     private static double[] getForce(Particle p1, Particle p2) {
         double[] tangencialForce = getTangencialForce(p1,p2);
         double[] normalForce = getNormalForce(p1,p2);
@@ -68,7 +68,8 @@ public final class GrainSimulatorHelper {
         if(xi < 0)
             return new double[]{0,0};
         double[] relativeVelocity = calculateRelativeVelocity(p1, p2);
-        return getProduct(-kt * xi * getProduct(relativeVelocity, tangencialVersor), tangencialVersor);
+        double tangencialForceMod = -kt * xi * getProduct(relativeVelocity, tangencialVersor);
+        return new double[]{tangencialVersor[0]*tangencialForceMod, tangencialVersor[1]*tangencialForceMod};
     }
 
     private static double[] getTangencialForce(Wall w, Particle p2) {
@@ -78,13 +79,14 @@ public final class GrainSimulatorHelper {
         if(xi < 0)
             return new double[]{0,0};
         double[] relativeVelocity = calculateRelativeVelocity(w, p2);
-        return getProduct(-kt * xi * getProduct(relativeVelocity, tangencialVersor), tangencialVersor);
+        double tangencialForceMod = -kt * xi * getProduct(relativeVelocity, tangencialVersor);
+        return new double[]{tangencialVersor[0]*tangencialForceMod, tangencialVersor[1]*tangencialForceMod};
     }
 
     private static double[] calculateRelativeVelocity(Particle p1, Particle p2) {
         double[] p1Vel = new double[]{ p1.getXSpeed(), p1.getYSpeed() };
-        double[] p2Vel = new double[]{ p2.getXSpeed(), p2.getYSpeed() };
-        return calculateDifference(p1Vel, p2Vel);
+        double[] p2Vel = new double[]{ p2 .getXSpeed(), p2.getYSpeed() };
+        return calculateDifference(p2Vel, p1Vel);
     }
     private static double[] calculateRelativeVelocity(Wall w, Particle p2) {
         double[] p2Vel = new double[]{ p2.getXSpeed(), p2.getYSpeed() };
@@ -93,12 +95,6 @@ public final class GrainSimulatorHelper {
 
     private static double[] calculatePositionDifference(Particle p1, Particle p2) {
         double[] p1Pos = new double[]{ p1.getX(), p1.getY() };
-        double[] p2Pos = new double[]{ p2.getX(), p2.getY() };
-        return calculateDifference(p1Pos, p2Pos);
-    }
-
-    private static double[] calculatePositionDifference(Wall w, Particle p2) {
-        double[] p1Pos = new double[]{ w.getX(), w.getY() };
         double[] p2Pos = new double[]{ p2.getX(), p2.getY() };
         return calculateDifference(p1Pos, p2Pos);
     }
@@ -126,27 +122,39 @@ public final class GrainSimulatorHelper {
         double xi = calculateXi(w, p2);
         if(xi < 0)
             return new double[]{0, 0};
-        return getProduct(-kn*xi,normalVersor);
+        return getProduct(kn*xi,normalVersor);
     }
 
-    private static double[] getNormalVersor(Particle p1, Particle p2) {
+    public static double[] getNormalVersor(Particle p1, Particle p2) {
         double[] positionDifference = calculatePositionDifference(p1,p2);
         return getVersorFromVector(positionDifference);
     }
 
-    private static double[] getNormalVersor(Wall w, Particle p2) {
-        double[] positionDifference = calculatePositionDifference(w,p2);
-        return getVersorFromVector(positionDifference);
+    public static double[] getNormalVersor(Wall w, Particle p2) {
+        if(w.isVertical()){
+            if(p2.getX()<w.getX()){
+                return new double[]{-1,0};
+            }
+            else{
+                return new double[]{1,0};
+            }
+        }
+        else{
+            if(p2.getY()<w.getY()){
+                return new double[]{0,-1};
+            }
+            else{
+                return new double[]{0,1};
+            }
+        }
     }
 
-    private static double[] getTangencialVersor(Particle p1, Particle p2) {
-        double[] positionDifference = calculatePositionDifference(p1,p2);
-        return getPerpendicularVector(getVersorFromVector(positionDifference));
+    public static double[] getTangencialVersor(Particle p1, Particle p2) {
+        return getPerpendicularVector(getNormalVersor(p1,p2));
     }
 
-    private static double[] getTangencialVersor(Wall w, Particle p2) {
-        double[] positionDifference = calculatePositionDifference(w,p2);
-        return getPerpendicularVector(getVersorFromVector(positionDifference));
+    public static double[] getTangencialVersor(Wall w, Particle p2) {
+        return getPerpendicularVector(getNormalVersor(w,p2));
     }
 
     private static double[] getPerpendicularVector(double[] v) {
@@ -193,13 +201,12 @@ public final class GrainSimulatorHelper {
         return p1.getDistanceTo(p2);
     }
 
-    private double getNormalForce(double xi) {
-        return -c.KN()*xi;
+    public static double[] getForceWallExertsOnP(Wall wall, Particle p) {
+        return getForce(wall, p);
     }
 
-
-    private double getTangentialForce(double xi, double velRelTang) {
-        return -c.KT()*xi*velRelTang;
+    public static double[] getForceP1ExertsOnP2(Particle p1, Particle p2) {
+        return getForce(p1,p2);
     }
 
 }

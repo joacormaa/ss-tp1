@@ -52,7 +52,7 @@ public class GrainSimulatorCreator {
             Particle newParticle;
             do {
                 double x = Math.random() * c.HORIZONTAL_WALL_LENGTH();
-                double y = Math.random() * c.VERTICAL_WALL_LENGTH();
+                double y = Math.random() * c.VERTICAL_WALL_LENGTH()*0.9;
 
                 double radius = Math.random() * 0.01 + 0.02; //deshardcodear
                 newParticle = new Particle(i, x, y, radius, 0,0,c.PARTICLE_MASS(), 0);
