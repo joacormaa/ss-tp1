@@ -122,7 +122,7 @@ public class GrainSimulatorHelper {
     }
 
     private static double calculateXi(Particle p1, Particle p2) {
-        return p1.getInteractionRadius() + p2.getInteractionRadius() - getPositionDifference(p1, p2);
+        return p1.getRadius() + p2.getRadius() - getPositionDifference(p1, p2);
     }
 
     private static double getPositionDifference(Particle p1, Particle p2) {
