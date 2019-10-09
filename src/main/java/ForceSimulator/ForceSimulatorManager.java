@@ -47,7 +47,7 @@ public class ForceSimulatorManager {
         for(Particle p : particles){
             Collection<Interactable> neighbours = neighbourMap.get(p);
             Particle prevP = prevSystem.getParticles().get(p.getId());
-            Particle nextP = fsh.getNextParticle(p,prevP, neighbours, delta,lastSystem.getParticles().values());
+            Particle nextP = fsh.getNextParticle(p,prevP, neighbours, delta);
             nextParticles.add(nextP);
         }
 

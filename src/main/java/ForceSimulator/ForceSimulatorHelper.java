@@ -15,11 +15,12 @@ public class ForceSimulatorHelper {
         om =  new OscillationManager(false);
     }
 
-    public Particle getNextParticle(Particle lastP, Particle prevP, Collection<Interactable> neighbours, double delta, Collection<Particle> particles) {
+    public Particle getNextParticle(Particle lastP, Particle prevP, Collection<Interactable> neighbours, double delta) {
 
-        if(lastP.getY()<0.005){
-            Particle newP = getRandomParticleFromTop(lastP, particles);
-            return newP;
+        Config c = Config.getInstance();
+
+        if(lastP.getY()< c.OFFSET()){
+            return null; //salio del sistema.
         }
 
         Acceleration acc = getAcceleration(lastP, neighbours);
@@ -38,24 +39,6 @@ public class ForceSimulatorHelper {
 
 
         return new Particle(lastP.getId(),newX,newY,lastP.getRadius(),newSpeed,newAngle,lastP.getMass(), 0);
-    }
-
-    private Particle getRandomParticleFromTop(Particle lastP, Collection<Particle> particles) {
-        Particle newP;
-        do {
-            double x = Math.random() * Config.getInstance().HORIZONTAL_WALL_LENGTH(); //todo check collision
-            newP =  new Particle(lastP.getId(),x,Config.getInstance().VERTICAL_WALL_LENGTH() * 0.95,lastP.getRadius(),0,0,
-                    lastP.getMass(),0);
-
-        } while (thereIsCollision(newP, particles));
-        return newP;
-    }
-
-    private boolean thereIsCollision(Particle p1, Collection<Particle> particles){
-        for(Particle p2 : particles) {
-            if(Math.hypot(p1.getX() - p2.getX(), p1.getY() - p2.getY()) <= p1.getRadius() + p2.getRadius()) return true;
-        }
-        return false;
     }
 
     private Acceleration getAcceleration(Particle lastP, Collection<Interactable> neighbours){

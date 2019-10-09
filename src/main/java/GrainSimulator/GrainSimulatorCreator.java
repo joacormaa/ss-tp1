@@ -50,9 +50,10 @@ public class GrainSimulatorCreator {
 
         for(int i = 0; i < pq; i++) {
             Particle newParticle;
+            double offset = c.OFFSET();
             do {
                 double x = Math.random() * c.HORIZONTAL_WALL_LENGTH();
-                double y = Math.random() * c.VERTICAL_WALL_LENGTH()*0.9;
+                double y = Math.random() * (c.VERTICAL_WALL_LENGTH()- 10*offset) + offset;
 
                 double radius = Math.random() * 0.01 + 0.02; //deshardcodear
                 newParticle = new Particle(i, x, y, radius, 0,0,c.PARTICLE_MASS(), 0);
@@ -67,6 +68,7 @@ public class GrainSimulatorCreator {
     private static Collection<Wall> initializeWalls() {
 
         Config c = Config.getInstance();
+        double offset = c.OFFSET();
         List<Wall> walls = new ArrayList<>();
         walls.add(new Wall(false, 0.0,c.VERTICAL_WALL_LENGTH(), c.HORIZONTAL_WALL_LENGTH(),0));
         walls.add(new Wall(true, 0.0,0.0, c.VERTICAL_WALL_LENGTH(),1));
@@ -76,8 +78,8 @@ public class GrainSimulatorCreator {
         double wall2Position = c.HORIZONTAL_WALL_LENGTH() - c.HOLE_POSITION();
         double wall1Length = c.HORIZONTAL_WALL_LENGTH() - wall2Length - c.HOLE_LENGTH();
 
-        walls.add(new Wall(false, 0, 0.0, wall1Length,3));
-        walls.add(new Wall(false, wall2Position, 0,wall2Length,4));
+        walls.add(new Wall(false, 0, offset, wall1Length,3));
+        walls.add(new Wall(false, wall2Position, offset,wall2Length,4));
 
         return walls;
     }

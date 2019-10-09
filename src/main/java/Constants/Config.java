@@ -61,6 +61,8 @@ public class Config {
     private double KT;
     private double GAMMA;
 
+    private double OFFSET;
+
     private static Config instance;
 
     public static Config getInstance(){
@@ -134,6 +136,7 @@ public class Config {
         String KN = document.getElementsByTagName("KN").item(0).getTextContent();
         String KT = document.getElementsByTagName("KT").item(0).getTextContent();
         String GAMMA = document.getElementsByTagName("GAMMA").item(0).getTextContent();
+        String OFFSET = document.getElementsByTagName("OFFSET").item(0).getTextContent();
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
         this.PARTICLE_QUANTITY = Integer.parseInt(PARTICLE_QUANTITY_STR);
@@ -177,6 +180,7 @@ public class Config {
         this.KN = Double.parseDouble(KN);
         this.KT = Double.parseDouble(KT);
         this.GAMMA = Double.parseDouble(GAMMA);
+        this.OFFSET = Double.parseDouble(OFFSET);
     }
 
     public enum NuMethod{
@@ -384,5 +388,7 @@ public class Config {
     public double KT(){return KT;}
 
     public double GAMMA(){return GAMMA;}
+
+    public double OFFSET(){return OFFSET;}
 }
 
