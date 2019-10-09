@@ -204,4 +204,14 @@ public class GrainSimulatorHelperTest {
         Vector tangencialForce = GrainSimulatorHelper.getTangencialForce(p1,p2);
         Assert.assertFalse(tangencialForce.isAcute(new Vector(p2.getXSpeed(),p2.getYSpeed())));
     }
+
+    @Test
+    public void inverseHeadacheTest(){
+        p2 = new Particle(0,0.35803729379571025,0.10891005789500094,0.02282671001766542,1.019277569466499,-2.9470793769704664,0.01,0);
+        p1 = new Particle(2,0.31472973419663275,0.12792321214382832,0.02447230357007887,1.1888472135703987,-0.5713883219216436,0.01,0);
+
+        Vector tangencialForce = GrainSimulatorHelper.getTangencialForce(p1,p2);
+        Assert.assertFalse(tangencialForce.isAcute(new Vector(p2.getXSpeed(),p2.getYSpeed())));
+
+    }
 }

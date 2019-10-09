@@ -45,7 +45,8 @@ public final class GrainSimulatorHelper {
         Vector relativeVelocity = calculateRelativeVelocity(p1, p2);
 //        Vector projection = t.getProyection(relativeVelocity);
 //        return projection.multiplyBy(-kt * xi);
-        double tangencialForceMod = -kt * xi * relativeVelocity.dot(t);
+
+        double tangencialForceMod = - kt * xi * relativeVelocity.dot(t);
         return new Vector (t.getX()*tangencialForceMod, t.getY()*tangencialForceMod);
     }
 
