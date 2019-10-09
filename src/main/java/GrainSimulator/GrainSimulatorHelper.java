@@ -2,8 +2,10 @@ package GrainSimulator;
 
 import Constants.Config;
 import Model.Particle;
+import Model.Vector;
 import Model.Wall;
 
+@SuppressWarnings("Duplicates")
 public final class GrainSimulatorHelper {
     Config c = Config.getInstance();
     static double normalVersor[];
@@ -13,200 +15,123 @@ public final class GrainSimulatorHelper {
         throw new AssertionError();
     }
 
-//    public static double getWallXForce(Wall w, Particle p2) {
-//        double[] x = new double[]{1,0};
-//        return getProduct(getForce(w,p2), x);
-//    }
-//
-//    public static double getWallYForce(Wall w, Particle p2) {
-//        double[] y = new double[]{0,1};
-//        return getProduct(getForce(w,p2), y);
-//    }
-//
-//    public static double getXForce(Particle p1, Particle p2) {
-//        double[] x = new double[]{1,0};
-//        return getProduct(getForce(p1,p2), x);
-//    }
-//
-//    public static double getYForce(Particle p1, Particle p2) {
-//        double[] y = new double[]{0,1};
-//        return getProduct(getForce(p1,p2), y);
-//    }
-//
-    private static double[] getForce(Particle p1, Particle p2) {
-        double[] tangencialForce = getTangencialForce(p1,p2);
-        double[] normalForce = getNormalForce(p1,p2);
-        return arraySum(tangencialForce, normalForce);
+    private static Vector getForce(Particle p1, Particle p2) {
+        Vector tangencialForce = getTangencialForce(p1,p2);
+        Vector normalForce = getNormalForce(p1,p2);
+        return tangencialForce.sum(normalForce);
     }
 
-    private static double[] getForce(Wall w, Particle p2) {
-        double[] tangencialForce = getTangencialForce(w,p2);
-        double[] normalForce = getNormalForce(w,p2);
-        return arraySum(tangencialForce, normalForce);
+    private static Vector getForce(Wall w, Particle p2) {
+        Vector tangencialForce = getTangencialForce(w,p2);
+        Vector normalForce = getNormalForce(w,p2);
+
+        double multiplier = getNormalForceWallMultiplier(w,p2);
+
+        return tangencialForce.sum(normalForce.multiplyBy(multiplier));
     }
 
-    private static double[] arraySum(double[] v1, double[] v2) {
-        double[] ret = new double[v1.length];
-        for(int i = 0; i < v1.length; i++) {
-            ret[i] = v1[i] + v2[i];
-        }
-        return ret;
-    }
-
-    private static double getVectorAbs(double[] v) {
-        double ret = 0;
-        for(double num : v) {
-            ret += Math.pow(num, 2);
-        }
-        return Math.sqrt(ret);
-    }
-
-    private static double[] getTangencialForce(Particle p1, Particle p2) {
-        tangencialVersor = getTangencialVersor(p1, p2);
+    public static Vector getTangencialForce(Particle p1, Particle p2) {
+        Vector t = getTangencialVersor(p1, p2);
         double kt = Config.getInstance().KT();
         double xi = calculateXi(p1, p2);
         if(xi < 0)
-            return new double[]{0,0};
-        double[] relativeVelocity = calculateRelativeVelocity(p1, p2);
-        double tangencialForceMod = -kt * xi * getProduct(relativeVelocity, tangencialVersor);
-        return new double[]{tangencialVersor[0]*tangencialForceMod, tangencialVersor[1]*tangencialForceMod};
+            return Vector.NULL_VECTOR;
+        Vector relativeVelocity = calculateRelativeVelocity(p1, p2);
+        Vector projection = t.getProyection(relativeVelocity);
+        return projection.multiplyBy(-kt * xi);
+//        double tangencialForceMod = -kt * xi * relativeVelocity.dot(t);
+//        return new Vector (t.getX()*tangencialForceMod, t.getY()*tangencialForceMod);
     }
 
-    private static double[] getTangencialForce(Wall w, Particle p2) {
-        tangencialVersor = getTangencialVersor(w, p2);
+    private static Vector getTangencialForce(Wall w, Particle p2) {
+        Vector t = w.getTangencialVersor();
         double kt = Config.getInstance().KT();
         double xi = calculateXi(w, p2);
         if(xi < 0)
-            return new double[]{0,0};
-        double[] relativeVelocity = calculateRelativeVelocity(w, p2);
-        double tangencialForceMod = -kt * xi * getProduct(relativeVelocity, tangencialVersor);
-        return new double[]{tangencialVersor[0]*tangencialForceMod, tangencialVersor[1]*tangencialForceMod};
+            return Vector.NULL_VECTOR;
+        Vector relativeVelocity = calculateRelativeVelocity(w, p2);
+        Vector projection = t.getProyection(relativeVelocity);
+        return projection.multiplyBy(-kt * xi);
+//        double tangencialForceMod = -kt * xi * relativeVelocity.dot(t);
+//        return new Vector(t.getX()*tangencialForceMod, t.getY()*tangencialForceMod);
     }
 
-    private static double[] calculateRelativeVelocity(Particle p1, Particle p2) {
-        double[] p1Vel = new double[]{ p1.getXSpeed(), p1.getYSpeed() };
-        double[] p2Vel = new double[]{ p2 .getXSpeed(), p2.getYSpeed() };
-        return calculateDifference(p2Vel, p1Vel);
+    private static Vector calculateRelativeVelocity(Particle p1, Particle p2) {
+        Vector v1 = new Vector(p1.getXSpeed(),p1.getYSpeed());
+        Vector v2 = new Vector(p2.getXSpeed(),p2.getYSpeed());
+
+        return v2.minus(v1);
     }
-    private static double[] calculateRelativeVelocity(Wall w, Particle p2) {
-        double[] p2Vel = new double[]{ p2.getXSpeed(), p2.getYSpeed() };
-        return p2Vel;
+    private static Vector calculateRelativeVelocity(Wall w, Particle p2) {
+        return new Vector(p2.getXSpeed(),p2.getYSpeed());
     }
 
-    private static double[] calculatePositionDifference(Particle p1, Particle p2) {
-        double[] p1Pos = new double[]{ p1.getX(), p1.getY() };
-        double[] p2Pos = new double[]{ p2.getX(), p2.getY() };
-        return calculateDifference(p1Pos, p2Pos);
-    }
-
-    private static double[] calculateDifference(double[] v1, double[] v2) {
-        double[] ret = new double[v1.length];
-        for(int i = 0; i < v1.length; i++) {
-            ret[i] = v1[i] - v2[i];
-        }
-        return ret;
-    }
-
-    private static double[] getNormalForce(Particle p1, Particle p2) {
-        normalVersor = getNormalVersor(p1, p2);
+    private static Vector getNormalForce(Particle p1, Particle p2) {
+        Vector n = getNormalVersor(p1, p2);
         double kn = Config.getInstance().KN();
         double xi = calculateXi(p1, p2);
         if(xi < 0)
-            return new double[]{0, 0};
-        return getProduct(-kn*xi,normalVersor);
+            return Vector.NULL_VECTOR;
+        return n.multiplyBy(-kn*xi);
     }
 
-    private static double[] getNormalForce(Wall w, Particle p2) {
-        normalVersor = getNormalVersor(w, p2);
+    private static Vector getNormalForce(Wall w, Particle p2) {
+        Vector n = w.getNormalVersor();
         double kn = Config.getInstance().KN();
         double xi = calculateXi(w, p2);
         if(xi < 0)
-            return new double[]{0, 0};
-        return getProduct(kn*xi,normalVersor);
+            return Vector.NULL_VECTOR;
+        return n.multiplyBy(-kn*xi);
     }
 
-    public static double[] getNormalVersor(Particle p1, Particle p2) {
-        double[] positionDifference = calculatePositionDifference(p1,p2);
-        return getVersorFromVector(positionDifference);
+    public static Vector getNormalVersor(Particle p1, Particle p2) {
+        double ex = (p1.getX()-p2.getX())/Math.hypot(p1.getX()-p2.getX(),p1.getY()-p2.getY());
+        double ey = (p1.getY()-p2.getY())/Math.hypot(p1.getX()-p2.getX(),p1.getY()-p2.getY());
+
+        return new Vector(ex,ey);
     }
 
-    public static double[] getNormalVersor(Wall w, Particle p2) {
-        if(w.isVertical()){
-            if(p2.getX()<w.getX()){
-                return new double[]{-1,0};
-            }
-            else{
-                return new double[]{1,0};
-            }
-        }
-        else{
-            if(p2.getY()<w.getY()){
-                return new double[]{0,-1};
-            }
-            else{
-                return new double[]{0,1};
-            }
-        }
-    }
+    public static Vector getTangencialVersor(Particle p1, Particle p2) {
+        double ex = (p1.getX()-p2.getX())/Math.hypot(p1.getX()-p2.getX(),p1.getY()-p2.getY());
+        double ey = (p1.getY()-p2.getY())/Math.hypot(p1.getX()-p2.getX(),p1.getY()-p2.getY());
 
-    public static double[] getTangencialVersor(Particle p1, Particle p2) {
-        return getPerpendicularVector(getNormalVersor(p1,p2));
-    }
-
-    public static double[] getTangencialVersor(Wall w, Particle p2) {
-        return getPerpendicularVector(getNormalVersor(w,p2));
-    }
-
-    private static double[] getPerpendicularVector(double[] v) {
-        return new double[]{-v[1], v[0]};
-    }
-
-    private static double[] getVersorFromVector(double[] v) {
-        return getDivision(v, getVectorAbs(v));
-    }
-
-    private static double[] getProduct(double number, double[] vector) {
-        double ret[] = new double[vector.length];
-        for(int i = 0; i < vector.length; i++) {
-            ret[i] = number * vector[i];
-        }
-        return ret;
-    }
-
-    private static double[] getDivision(double[] vector, double number) {
-        double ret[] = new double[vector.length];
-        for(int i = 0; i < vector.length; i++) {
-            ret[i] = vector[i] / number;
-        }
-        return ret;
-    }
-
-    private static double getProduct(double[] v1, double[] v2) {
-        double ret = 0;
-        for(int i = 0; i < v1.length; i++) {
-            ret += v1[i] * v2[i];
-        }
-        return ret;
+        return new Vector(-ey,ex);
     }
 
     private static double calculateXi(Particle p1, Particle p2) {
-        return p1.getRadius() + p2.getRadius() - getPositionDifference(p1, p2);
+        double distance = Math.hypot(p1.getX()-p2.getX(),p1.getY()-p2.getY());
+        return p1.getRadius() + p2.getRadius() - distance;
     }
 
     private static double calculateXi(Wall w, Particle p2) {
         return p2.getRadius() - w.getMinimumDistance(p2);
     }
 
-    private static double getPositionDifference(Particle p1, Particle p2) {
-        return p1.getDistanceTo(p2);
-    }
-
-    public static double[] getForceWallExertsOnP(Wall wall, Particle p) {
+    public static Vector getForceWallExertsOnP(Wall wall, Particle p) {
         return getForce(wall, p);
     }
 
-    public static double[] getForceP1ExertsOnP2(Particle p1, Particle p2) {
-        return getForce(p1,p2);
+    private static double getNormalForceWallMultiplier(Wall wall, Particle p) {
+        if(wall.isVertical()){
+            if(p.getX()<wall.getX()){
+                return 1;
+            }
+            else{
+                return -1;
+            }
+        }
+        else{
+            if(p.getY()<wall.getY()){
+                return 1;
+            }
+            else{
+                return-1;
+            }
+        }
+    }
+
+    public static Vector getForceP1ExertsOnP2(Particle p1, Particle p2) {
+        return getForce(p1, p2);
     }
 
 }

@@ -60,7 +60,7 @@
 //    private void appendAveragePressure(Double[] avgPressure, String balancePath) {
 //        StringBuilder sb = new StringBuilder();
 //        sb.append(T);
-//        for(int i=0; i<avgPressure.length; i++){
+//        for(int i=0; i<avgPressure.norm; i++){
 //            sb.append(",");
 //            sb.append(avgPressure[i]);
 //        }
@@ -136,7 +136,7 @@
 //    private void appendBalanceData(double currPosition,Double[] conditionTimes, String printPath) {
 //        StringBuilder sb = new StringBuilder();
 //        sb.append(currPosition);
-//        for(int i=0; i<conditionTimes.length; i++){
+//        for(int i=0; i<conditionTimes.norm; i++){
 //            sb.append(",");
 //            sb.append(conditionTimes[i]);
 //        }
@@ -176,14 +176,14 @@
 //
 //        Boolean[] conditionMet = new Boolean[simulationRuns];
 //        Double[] conditionTime = new Double[simulationRuns];
-//        for(int i=0; i<conditionMet.length; i++){
+//        for(int i=0; i<conditionMet.norm; i++){
 //            conditionMet[i]=false;
 //        }
 //        boolean condition=false;
 //        while(!condition){
 //            Double[] fps = new Double[simulationRuns];
 //            Double[] times = new Double[simulationRuns];
-//            for(int i=0; i<gasSimulatorManagers.length; i++){
+//            for(int i=0; i<gasSimulatorManagers.norm; i++){
 //                GasSimulatorManager gsm = gasSimulatorManagers[i];
 //                gsm.stepForward();
 //
@@ -197,7 +197,7 @@
 //            }
 //
 //            condition = conditionMet[0];
-//            for(int i=1; i<gasSimulatorManagers.length; i++){
+//            for(int i=1; i<gasSimulatorManagers.norm; i++){
 //                condition &= conditionMet[i];
 //            }
 //
@@ -224,14 +224,14 @@
 //
 //        Boolean[] conditionMet = new Boolean[simulationRuns];
 //        Double[] conditionTime = new Double[simulationRuns];
-//        for(int i=0; i<conditionMet.length; i++){
+//        for(int i=0; i<conditionMet.norm; i++){
 //            conditionMet[i]=false;
 //        }
 //        boolean condition=false;
 //        while(!condition){
 //            Double[] pressures = new Double[simulationRuns];
 //            Double[] times = new Double[simulationRuns];
-//            for(int i=0; i<gasSimulatorManagers.length; i++){
+//            for(int i=0; i<gasSimulatorManagers.norm; i++){
 //                GasSimulatorManager gsm = gasSimulatorManagers[i];
 //                gsm.stepForward();
 //
@@ -260,7 +260,7 @@
 //            }
 //
 //            condition = conditionMet[0];
-//            for(int i=1; i<gasSimulatorManagers.length; i++){
+//            for(int i=1; i<gasSimulatorManagers.norm; i++){
 //                condition &= conditionMet[i];
 //            }
 //
@@ -283,7 +283,7 @@
 //        lastPrint=avgTime;
 //        StringBuilder sb = new StringBuilder();
 //        sb.append(avgTime);
-//        for(int i=0; i<fps.length; i++){
+//        for(int i=0; i<fps.norm; i++){
 //            sb.append(',');
 //            sb.append(fps[i]);
 //        }
@@ -296,7 +296,7 @@
 //        for (Double time : times) {
 //            ret += time;
 //        }
-//        return ret/times.length;
+//        return ret/times.norm;
 //    }
 //
 //    private static float tolerance = 0.20f;

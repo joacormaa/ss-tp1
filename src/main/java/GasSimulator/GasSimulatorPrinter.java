@@ -40,7 +40,7 @@
 //        Double[] xPos = systemMetrics.getWitnessParticleX();
 //        Double[] yPos = systemMetrics.getWitnessParticleY();
 //        sb.append(systemMetrics.getTime()).append(',');
-//        for(int i=0; i<xPos.length;i++){
+//        for(int i=0; i<xPos.norm;i++){
 //            Double currX = xPos[i];
 //            Double currY = yPos[i];
 //
@@ -48,7 +48,7 @@
 //            String y = (currY==null)?"":currY.toString();
 //            sb.append(x).append(',').append(y);
 //
-//            if(i+1<xPos.length){
+//            if(i+1<xPos.norm){
 //                sb.append(',');
 //            }
 //        }

@@ -11,6 +11,8 @@ public class Wall implements Interactable{
     private double length;
     private int id;
     private double width;
+    private Vector normalVersor;
+    private Vector tangencialVersor;
     private Config c;
 
     public Wall(boolean isVertical, double x, double y, double length, int id) {
@@ -21,6 +23,22 @@ public class Wall implements Interactable{
         this.y = y;
         this.length = length;
         this.id=id;
+
+        calculateVersors();
+    }
+
+    private void calculateVersors() {
+        this.normalVersor = calculateNormalVersor();
+        this.tangencialVersor = normalVersor.ortho();
+    }
+
+    private Vector calculateNormalVersor() {
+        if(this.isVertical()){
+            return new Vector(1,0);
+        }
+        else{
+            return new Vector(0,1);
+        }
     }
 
     public int getId(){
@@ -45,6 +63,14 @@ public class Wall implements Interactable{
 
     public double getWidth() {
         return width;
+    }
+
+    public Vector getTangencialVersor(){
+        return tangencialVersor;
+    }
+
+    public Vector getNormalVersor(){
+        return normalVersor;
     }
 
     public String stringify(int idBase) {
@@ -80,7 +106,8 @@ public class Wall implements Interactable{
 
     @Override
     public double[] getXYIncidentalForce(Particle p) {
-        return GrainSimulatorHelper.getForceWallExertsOnP(this, p);
+        Vector v = GrainSimulatorHelper.getForceWallExertsOnP(this, p);
+        return new double[]{v.getX(),v.getY()};
     }
 
     public double getMinimumDistance(Particle p) {
