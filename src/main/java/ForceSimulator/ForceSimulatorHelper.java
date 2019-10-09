@@ -68,7 +68,6 @@ public class ForceSimulatorHelper {
     }
 
     public Particle getInitialPreviousParticle(Particle lastP, Collection<Interactable> neighbours, double delta){
-        //Acceleration acc = getAcceleration(lastP,neighbours);
         Acceleration acc = new Acceleration(0,0);
 
         double prevY = lastP.getY() - delta*lastP.getYSpeed() - delta*delta*acc.yacc/2;

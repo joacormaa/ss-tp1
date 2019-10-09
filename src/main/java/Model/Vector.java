@@ -70,4 +70,8 @@ public class Vector {
         return new Vector(x/norm,y/norm);
     }
 
+    public boolean isAcute(Vector vector){
+        return this.dot(vector)>0;
+    }
+
 }

@@ -77,6 +77,15 @@ public class VectorTest {
         double res = testVector.getAngle();
 
         Assert.assertEquals(1.2490,res, 0.0001);
-
+    }
+    @Test
+    public void testIsAcute(){
+        otherVector = new Vector(2,3);
+        Assert.assertTrue(testVector.isAcute(otherVector));
+    }
+    @Test
+    public void testIsAcute_NonAcute(){
+        otherVector = new Vector(-1,-3);
+        Assert.assertFalse(testVector.isAcute(otherVector));
     }
 }
