@@ -41,7 +41,7 @@ public final class GrainSimulatorHelper {
 //        Vector projection = t.getProyection(relativeVelocity);
 //        return projection.multiplyBy(-kt * xi);
 
-        int multiplier = (new Vector(p2.getXSpeed(),p2.getYSpeed()).dot(t)>0)? -1:1;
+        int multiplier = (new Vector(p2.getXSpeed(),p2.getYSpeed()).isAcute(t))? -1:1;
 
         double tangencialForceMod = multiplier * kt * xi * Math.abs(relativeVelocity.dot(t));
         return new Vector (t.getX()*tangencialForceMod, t.getY()*tangencialForceMod);
