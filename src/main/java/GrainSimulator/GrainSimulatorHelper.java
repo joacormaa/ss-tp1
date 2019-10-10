@@ -17,18 +17,13 @@ public final class GrainSimulatorHelper {
 
     private static Vector getForce(Particle p1, Particle p2) {
         Vector tangencialForce = getTangencialForce(p1,p2);
-        if(tangencialForce.isAcute(new Vector(p2.getXSpeed(),p2.getYSpeed()))){
-            throw new AssertionError("cant happen");
-        }
         Vector normalForce = getNormalForce(p1,p2);
+
         return tangencialForce.sum(normalForce);
     }
 
     private static Vector getForce(Wall w, Particle p2) {
         Vector tangencialForce = getTangencialForce(w,p2);
-        if(tangencialForce.isAcute(new Vector(p2.getXSpeed(),p2.getYSpeed()))){
-            throw new AssertionError("cant happen");
-        }
         Vector normalForce = getNormalForce(w,p2);
 
         double multiplier = getNormalForceWallMultiplier(w,p2);
@@ -46,7 +41,9 @@ public final class GrainSimulatorHelper {
 //        Vector projection = t.getProyection(relativeVelocity);
 //        return projection.multiplyBy(-kt * xi);
 
-        double tangencialForceMod = - kt * xi * relativeVelocity.dot(t);
+        int multiplier = (new Vector(p2.getXSpeed(),p2.getYSpeed()).dot(t)>0)? -1:1;
+
+        double tangencialForceMod = multiplier * kt * xi * Math.abs(relativeVelocity.dot(t));
         return new Vector (t.getX()*tangencialForceMod, t.getY()*tangencialForceMod);
     }
 
