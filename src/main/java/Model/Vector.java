@@ -33,6 +33,12 @@ public class Vector {
         return new Vector(x*multiplier,y*multiplier);
     }
 
+    public void reduce(double num){
+        Vector versor = this.versor();
+        this.x = versor.getX() * num;
+        this.y = versor.getY() * num;
+    }
+
     public double getX() {
         return x;
     }

@@ -39,7 +39,6 @@ public final class GrainSimulatorHelper {
         double xi = calculateXi(w, p2);
         double ga = Config.getInstance().GAMMA();
         Vector relativeVelocity = calculateRelativeVelocity(w, p2);
-        double rareValue =
         if(xi < 0)
             return Vector.NULL_VECTOR;
         return n.multiplyBy(-kn*xi-ga*relativeVelocity.dot(n));
@@ -49,6 +48,13 @@ public final class GrainSimulatorHelper {
         Vector tangencialForce = getTangencialForce(p1,p2);
         Vector normalForce = getNormalForce(p1,p2);
 
+        if(normalForce.norm() > 1.5){
+            normalForce.reduce(1.5);
+        }
+        if(tangencialForce.norm() > 2){
+            tangencialForce.reduce(2);
+        }
+
         return tangencialForce.sum(normalForce);
     }
 
@@ -57,6 +63,12 @@ public final class GrainSimulatorHelper {
         Vector normalForce = getNormalForce(w,p2);
 
         double multiplier = getNormalForceWallMultiplier(w,p2);
+        if(normalForce.norm() > 1.5){
+            normalForce.reduce(1.5);
+        }
+        if(tangencialForce.norm() > 2){
+            tangencialForce.reduce(2);
+        }
 
         return tangencialForce.sum(normalForce.multiplyBy(multiplier));
     }
@@ -67,13 +79,13 @@ public final class GrainSimulatorHelper {
         double xi = calculateXi(p1, p2);
         if(xi < 0)
             return Vector.NULL_VECTOR;
-        Vector relativeVelocity = calculateRelativeVelocity(p1, p2);
+//        Vector relativeVelocity = calculateRelativeVelocity(p1, p2);
 //        Vector projection = t.getProyection(relativeVelocity);
 //        return projection.multiplyBy(-kt * xi);
 
-        int multiplier = (new Vector(p2.getXSpeed(),p2.getYSpeed()).isAcute(t))? -1:1;
+//        int multiplier = (new Vector(p2.getXSpeed(),p2.getYSpeed()).isAcute(t))? -1:1;
 
-        double tangencialForceMod = multiplier * kt * xi * Math.abs(relativeVelocity.dot(t));
+        double tangencialForceMod = - kt * xi * calculateSpecialRelativeVelocity(p1,p2,t);
         return new Vector (t.getX()*tangencialForceMod, t.getY()*tangencialForceMod);
     }
 
@@ -83,10 +95,10 @@ public final class GrainSimulatorHelper {
         double xi = calculateXi(w, p2);
         if(xi < 0)
             return Vector.NULL_VECTOR;
-        Vector relativeVelocity = calculateRelativeVelocity(w, p2);
+//        Vector relativeVelocity = calculateRelativeVelocity(w, p2);
 //        Vector projection = t.getProyection(relativeVelocity);
 //        return projection.multiplyBy(-kt * xi);
-        double tangencialForceMod = -kt * xi * relativeVelocity.dot(t);
+        double tangencialForceMod = -kt * xi * calculateSpecialRelativeVelocity(w,p2,t);
         return new Vector(t.getX()*tangencialForceMod, t.getY()*tangencialForceMod);
     }
 
@@ -96,8 +108,22 @@ public final class GrainSimulatorHelper {
 
         return v2.minus(v1);
     }
+
     private static Vector calculateRelativeVelocity(Wall w, Particle p2) {
         return new Vector(p2.getXSpeed(),p2.getYSpeed());
+    }
+
+    private static double calculateSpecialRelativeVelocity(Particle p1, Particle p2, Vector t) {
+        Vector v1 = new Vector(p1.getXSpeed(),p1.getYSpeed());
+        Vector v2 = new Vector(p2.getXSpeed(),p2.getYSpeed());
+
+        return v2.dot(t) - v1.dot(t);
+    }
+
+    private static double calculateSpecialRelativeVelocity(Wall w, Particle p2, Vector t) {
+        Vector v2 = new Vector(p2.getXSpeed(),p2.getYSpeed());
+
+        return v2.dot(t);
     }
 
     private static Vector getNormalForce(Particle p1, Particle p2) {

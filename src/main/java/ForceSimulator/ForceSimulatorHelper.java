@@ -35,6 +35,9 @@ public class ForceSimulatorHelper {
         double newYSpeed = yPosnVel.getVel();
 
         double newSpeed = Particle.getSpeed(newXSpeed,newYSpeed);
+        if(newSpeed > 1){
+            newSpeed = 1;
+        }
         double newAngle = Particle.getAngle(newXSpeed,newYSpeed);
 
 
@@ -52,7 +55,9 @@ public class ForceSimulatorHelper {
         double yAcc = sumFy/lastP.getMass();
 
         //Agrego gravedad
-        yAcc -= 9.8;
+        if(lastP.getYSpeed()>-0.5){
+            yAcc -= 9.8;
+        }
 
         return new Acceleration(xAcc,yAcc);
     }
@@ -62,8 +67,16 @@ public class ForceSimulatorHelper {
         double yacc;
 
         Acceleration(double xacc, double yacc){
-            this.xacc=xacc;
-            this.yacc=yacc;
+            double norm = Math.hypot(xacc, yacc);
+            if(norm > 30){
+                this.xacc = xacc/norm * 30;
+                this.yacc = yacc/norm * 30;
+            } else {
+                this.xacc=xacc;
+                this.yacc=yacc;
+            }
+//            this.xacc=xacc;
+//            this.yacc=yacc;
         }
     }
 
