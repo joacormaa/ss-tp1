@@ -15,6 +15,36 @@ public final class GrainSimulatorHelper {
         throw new AssertionError();
     }
 
+    private static Vector getFixForce(Particle p1, Particle p2){
+        return getNormalFixForce(p1,p2);
+    }
+    private static Vector getFixForce(Wall w, Particle p2){
+        return getNormalFixForce(w,p2);
+    }
+
+    public static Vector getNormalFixForce(Particle p1, Particle p2){
+        Vector n = getNormalVersor(p1, p2);
+        double kn = Config.getInstance().KN();
+        double ga = Config.getInstance().GAMMA();
+        double xi = calculateXi(p1, p2);
+        Vector relativeVelocity = calculateRelativeVelocity(p1, p2);
+        if(xi < 0)
+            return Vector.NULL_VECTOR;
+        return n.multiplyBy(-kn*xi-ga*relativeVelocity.dot(n));
+    }
+
+    public static Vector getNormalFixForce(Wall w, Particle p2){
+        Vector n = w.getNormalVersor();
+        double kn = Config.getInstance().KN();
+        double xi = calculateXi(w, p2);
+        double ga = Config.getInstance().GAMMA();
+        Vector relativeVelocity = calculateRelativeVelocity(w, p2);
+        double rareValue =
+        if(xi < 0)
+            return Vector.NULL_VECTOR;
+        return n.multiplyBy(-kn*xi-ga*relativeVelocity.dot(n));
+    }
+
     private static Vector getForce(Particle p1, Particle p2) {
         Vector tangencialForce = getTangencialForce(p1,p2);
         Vector normalForce = getNormalForce(p1,p2);

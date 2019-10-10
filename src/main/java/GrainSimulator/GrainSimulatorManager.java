@@ -60,7 +60,7 @@ public class GrainSimulatorManager {
 
         double nextTime = lastSystem.getTime()+deltaT;
 
-        return new System(nextTime,nextParticles,staticParticles,nextWalls); //todo:
+        return new System(nextTime,nextParticles,staticParticles,nextWalls); //todo: (nadie se hace cargo de haberlo escrito)
     }
 
     private Collection<Particle> getNextParticles(double deltaT) {
