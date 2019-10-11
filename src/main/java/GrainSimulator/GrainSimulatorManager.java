@@ -114,7 +114,9 @@ public class GrainSimulatorManager {
             double min_x = c.OFFSET();
             double x = (max_x-min_x)*Math.random() + min_x;
             double y = (max_y-min_y)*Math.random() + min_y;
-            newP =  new Particle(lastP.getId(),x,y,lastP.getRadius(),0,0, lastP.getMass(),0);
+            //ToDo: HotFix accel
+            ForceSimulatorHelper.Acceleration accel = new ForceSimulatorHelper.Acceleration(0,0);
+            newP =  new Particle(lastP.getId(),x,y,lastP.getRadius(),0,0, lastP.getMass(),0,accel);
 
         } while (thereIsCollision(newP, particles));
         return newP;

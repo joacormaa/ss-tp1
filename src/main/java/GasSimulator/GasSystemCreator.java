@@ -1,6 +1,7 @@
 package GasSimulator;
 
 import Constants.Config;
+import ForceSimulator.ForceSimulatorHelper;
 import Log.Logger;
 import Model.Particle;
 import Model.StaticParticle;
@@ -33,7 +34,9 @@ public class GasSystemCreator {
                 double x = Math.random() * maxHorizontal;
                 double y = Math.random() * c.VERTICAL_WALL_LENGTH();
                 double angle = Math.random() * 2* Math.PI - Math.PI;
-                newParticle = new Particle(i, x, y, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle,c.PARTICLE_MASS(), Particle.getRandomInteractionRatio());
+                //ToDo: HotFix accel
+                ForceSimulatorHelper.Acceleration accel = new ForceSimulatorHelper.Acceleration(0,0);
+                newParticle = new Particle(i, x, y, c.PARTICLE_RADIUS(), c.PARTICLE_SPEED(),angle,c.PARTICLE_MASS(), Particle.getRandomInteractionRatio(),accel);
 
             } while (thereIsCollision(newParticle, particles,staticParticles,walls));
             particles.add(newParticle);

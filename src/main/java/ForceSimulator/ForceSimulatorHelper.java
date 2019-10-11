@@ -28,17 +28,29 @@ public class ForceSimulatorHelper {
         OscillationManager.PositionNVel xPosnVel = om.verlet(lastP.getX(),prevP.getX(),acc.xacc, delta);
         OscillationManager.PositionNVel yPosnVel = om.verlet(lastP.getY(),prevP.getY(),acc.yacc, delta);
 
-        double newX = xPosnVel.getPosition();
-        double newY = yPosnVel.getPosition();
+        OscillationManager.PositionNVel xBeemanPnV = om.beeman(lastP.getMass(), acc.xacc, lastP.getAcceleration().xacc, prevP.getAcceleration().xacc, lastP.getX(), lastP.getXSpeed(), delta);
+        OscillationManager.PositionNVel yBeemanPnV = om.beeman(lastP.getMass(), acc.yacc, lastP.getAcceleration().yacc, prevP.getAcceleration().xacc, lastP.getY(), lastP.getYSpeed(), delta);
+        //hacer lo mismo para y
 
-        double newXSpeed = xPosnVel.getVel();
-        double newYSpeed = yPosnVel.getVel();
+//        double newX = xPosnVel.getPosition();
+//        double newY = yPosnVel.getPosition();
+//
+//        double newXSpeed = xPosnVel.getVel();
+//        double newYSpeed = yPosnVel.getVel();
+
+        double newX = xBeemanPnV.getPosition();
+        double newY = yBeemanPnV.getPosition();
+
+        double newXSpeed = xBeemanPnV.getVel();
+        double newYSpeed = yBeemanPnV.getVel();
 
         double newSpeed = Particle.getSpeed(newXSpeed,newYSpeed);
         double newAngle = Particle.getAngle(newXSpeed,newYSpeed);
 
+        if(newSpeed > 1)
+            newSpeed = 1;
 
-        return new Particle(lastP.getId(),newX,newY,lastP.getRadius(),newSpeed,newAngle,lastP.getMass(), 0);
+        return new Particle(lastP.getId(),newX,newY,lastP.getRadius(),newSpeed,newAngle,lastP.getMass(), 0, acc);
     }
 
     private Acceleration getAcceleration(Particle lastP, Collection<Interactable> neighbours){
@@ -57,18 +69,18 @@ public class ForceSimulatorHelper {
         return new Acceleration(xAcc,yAcc);
     }
 
-    private class Acceleration{
+    public static class Acceleration{
         double xacc;
         double yacc;
 
-        Acceleration(double xacc, double yacc){
+        public Acceleration(double xacc, double yacc){
             this.xacc=xacc;
             this.yacc=yacc;
         }
     }
 
     public Particle getInitialPreviousParticle(Particle lastP, Collection<Interactable> neighbours, double delta){
-        Acceleration acc = new Acceleration(0,0);
+        Acceleration acc = new Acceleration(0,-9.8);
 
         double prevY = lastP.getY() - delta*lastP.getYSpeed() - delta*delta*acc.yacc/2;
         double prevYSpeed = lastP.getYSpeed() - delta*acc.yacc;
@@ -79,6 +91,6 @@ public class ForceSimulatorHelper {
         double prevSpeed = Math.hypot(prevXspeed,prevYSpeed);
         double prevAngle = Math.atan2(prevYSpeed,prevXspeed);
 
-        return new Particle(lastP.getId(),prevX,prevY,lastP.getRadius(),prevSpeed,prevAngle,lastP.getMass(), 0);
+        return new Particle(lastP.getId(),prevX,prevY,lastP.getRadius(),prevSpeed,prevAngle,lastP.getMass(), 0, acc);
     }
 }

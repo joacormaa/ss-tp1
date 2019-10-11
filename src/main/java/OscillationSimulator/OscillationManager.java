@@ -1,6 +1,7 @@
 package OscillationSimulator;
 
 import Constants.Config;
+import ForceSimulator.ForceSimulatorHelper;
 import Log.Logger;
 import Model.Particle;
 import Model.System;
@@ -57,7 +58,7 @@ public class OscillationManager {
             case BEEMAN:
                 //Beeman
                 double previousAcceleration = force(previousParticle.getY(),previousParticle.getYSpeed())/previousParticle.getMass();
-                pvel = beeman(lastParticle.getMass(), currentAcceleration,previousAcceleration,lastParticle.getY(), lastParticle.getYSpeed());
+//                pvel = beeman(lastParticle.getMass(), currentAcceleration,previousAcceleration,lastParticle.getY(), lastParticle.getYSpeed(),deltaT);
                 break;
             case VERLET:
                 //Verlet
@@ -69,7 +70,9 @@ public class OscillationManager {
                 pvel = new PositionNVel(position,velocity);
 
         }
-        Particle newParticle  = new Particle(lastParticle.getId(),lastParticle.getX(),pvel.position,lastParticle.getRadius(),Math.abs(pvel.vel),Particle.getAngle(0,pvel.vel),lastParticle.getMass(), Particle.getRandomInteractionRatio());
+        ForceSimulatorHelper.Acceleration accel = new ForceSimulatorHelper.Acceleration(0, currentAcceleration);
+        Particle newParticle  = new Particle(lastParticle.getId(),lastParticle.getX(),pvel.position,lastParticle.getRadius(),
+                Math.abs(pvel.vel),Particle.getAngle(0,pvel.vel),lastParticle.getMass(), Particle.getRandomInteractionRatio(), accel);
         previousParticle = lastParticle;
         lastSystem = new System(lastSystem.getTime()+deltaT,newParticle);
 
@@ -121,13 +124,13 @@ public class OscillationManager {
         return new PositionNVel(newPos, newVel);
     }
 
-    private PositionNVel beeman(double mass, double currAcceleration, double prevAcceleration,double position, double velocity){
-        double newPosUnEje = position + (velocity*deltaT) + ((2f/3)*currAcceleration*Math.pow(deltaT,2)) - ((1f/6)*prevAcceleration*Math.pow(deltaT,2));
-        double velPredicted = velocity+(3f/2)*currAcceleration*deltaT-(1f/2)*prevAcceleration*deltaT;
+    public PositionNVel beeman(double mass, double nextAcceleration, double currAcceleration, double prevAcceleration,double position, double velocity, double delta){
+        double newPosUnEje = position + (velocity*delta) + ((2f/3)*currAcceleration*Math.pow(delta,2)) - ((1f/6)*prevAcceleration*Math.pow(delta,2));
+        double velPredicted = velocity+(3f/2)*currAcceleration*delta-(1f/2)*prevAcceleration*delta;
 
-        double nextAcceleration = force(newPosUnEje,velPredicted)/mass;
+//        double nextAcceleration = force(newPosUnEje,velPredicted)/mass;
 
-        double newVelUnEje = velocity + ((1f/3)*nextAcceleration*deltaT) + ((5f/6)*currAcceleration*deltaT) - ((1f/6)*prevAcceleration*deltaT);
+        double newVelUnEje = velocity + ((1f/3)*nextAcceleration*delta) + ((5f/6)*currAcceleration*delta) - ((1f/6)*prevAcceleration*delta);
         return new PositionNVel(newPosUnEje, newVelUnEje);
     }
 

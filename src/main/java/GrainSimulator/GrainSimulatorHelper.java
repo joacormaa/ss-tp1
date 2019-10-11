@@ -27,10 +27,12 @@ public final class GrainSimulatorHelper {
         double kn = Config.getInstance().KN();
         double ga = Config.getInstance().GAMMA();
         double xi = calculateXi(p1, p2);
+        double relativePirincho = calculateRelativePirincho(p1, p2);
+
         Vector relativeVelocity = calculateRelativeVelocity(p1, p2);
         if(xi < 0)
             return Vector.NULL_VECTOR;
-        return n.multiplyBy(-kn*xi-ga*relativeVelocity.dot(n));
+        return n.multiplyBy(-kn*xi-ga*relativePirincho);
     }
 
     public static Vector getNormalFixForce(Wall w, Particle p2){
@@ -38,11 +40,32 @@ public final class GrainSimulatorHelper {
         double kn = Config.getInstance().KN();
         double xi = calculateXi(w, p2);
         double ga = Config.getInstance().GAMMA();
-        Vector relativeVelocity = calculateRelativeVelocity(w, p2);
-        double rareValue =
+
         if(xi < 0)
             return Vector.NULL_VECTOR;
-        return n.multiplyBy(-kn*xi-ga*relativeVelocity.dot(n));
+        double relativePirincho = calculateRelativePirincho(w, p2);
+
+        return n.multiplyBy(-(kn*xi)-(ga*relativePirincho));
+    }
+
+    public static double calculateRelativePirincho(Particle nei, Particle p2){
+        //overlap
+        double dirX = nei.getX() - p2.getX();
+        double dirY = nei.getY() - p2.getY();
+        Vector dir = new Vector(dirX, dirY);
+
+        Vector p2Speed = new Vector(p2.getXSpeed(), p2.getYSpeed());
+        Vector neiSpeed = new Vector(nei.getXSpeed(), nei.getYSpeed());
+        double result = p2Speed.dot(dir) -  neiSpeed.dot(dir);
+        return result;
+    }
+    public static double calculateRelativePirincho(Wall w, Particle p2){
+        //overlap
+        Vector dir = w.getNormalVersor();
+
+        Vector p2Speed = new Vector(p2.getXSpeed(), p2.getYSpeed());
+        double result = p2Speed.dot(dir);
+        return result;
     }
 
     private static Vector getForce(Particle p1, Particle p2) {
@@ -143,6 +166,7 @@ public final class GrainSimulatorHelper {
 
     public static Vector getForceWallExertsOnP(Wall wall, Particle p) {
         return getForce(wall, p);
+//        return getFixForce(wall, p);
     }
 
     private static double getNormalForceWallMultiplier(Wall wall, Particle p) {
@@ -166,6 +190,7 @@ public final class GrainSimulatorHelper {
 
     public static Vector getForceP1ExertsOnP2(Particle p1, Particle p2) {
         return getForce(p1, p2);
+//        return getFixForce(p1,p2);
     }
 
 }

@@ -56,7 +56,9 @@ public class GrainSimulatorCreator {
                 double y = Math.random() * (c.VERTICAL_WALL_LENGTH()- 10*offset) + offset;
 
                 double radius = Math.random() * 0.01 + 0.02; //deshardcodear
-                newParticle = new Particle(i, x, y, radius, 0,0,c.PARTICLE_MASS(), 0);
+
+                ForceSimulatorHelper.Acceleration accel = new ForceSimulatorHelper.Acceleration(0,-9.8);
+                newParticle = new Particle(i, x, y, radius, 0,0,c.PARTICLE_MASS(), 0, accel);
 
             } while (thereIsCollision(newParticle, particles,walls));
             particles.add(newParticle);

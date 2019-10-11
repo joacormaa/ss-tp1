@@ -1,6 +1,7 @@
 package Model;
 
 import Constants.Config;
+import ForceSimulator.ForceSimulatorHelper;
 import GrainSimulator.GrainSimulatorHelper;
 import Log.Logger;
 import NeighbourLogic.Helper;
@@ -17,8 +18,9 @@ public class Particle implements Interactable{
     private double mass;
     private transient double speed;
     private double angle;
+    private ForceSimulatorHelper.Acceleration acceleration;
 
-    public Particle(int id, double x, double y, double radius, double speed, double angle, double mass, double interactionRadius) {
+    public Particle(int id, double x, double y, double radius, double speed, double angle, double mass, double interactionRadius, ForceSimulatorHelper.Acceleration accel) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -27,8 +29,12 @@ public class Particle implements Interactable{
         this.speed=speed;
         this.angle=angle;
         this.interactionRadius = interactionRadius;
+        this.acceleration = accel;
     }
 
+    public ForceSimulatorHelper.Acceleration getAcceleration(){
+        return acceleration;
+    }
 
     public int getId() {
         return id;
