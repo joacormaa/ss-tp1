@@ -12,7 +12,7 @@ public class Simulation {
     private static final double G = -10;                        // Gravity on 'y' axis
     private static final double WIDTH = 0.4;
     private static final double HEIGHT = 1.5;
-    private static final double SLIT_SIZE = 0;
+    private static final double SLIT_SIZE = 0.1;
     private static final double k = 10e5;
     private static final double gamma = 140;
     private static final double MIN_PARTICLE_R = 0.01;          // Min particle radius
