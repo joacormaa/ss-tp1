@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -8,31 +9,38 @@ public class Simulation {
     private static final int    BASE = 1;                       // DT base
     private static final int    EXP = 5;                        // DT exp
     private static final double DT = BASE * Math.pow(10, -EXP); // Step delta time
-    private static final int    N = 600;                        // Number of particles
+    private static final int    N = 140;                        // Number of particles
     private static final double G = -10;                        // Gravity on 'y' axis
     private static final double WIDTH = 0.4;
     private static final double HEIGHT = 1.5;
-    private static final double SLIT_SIZE = 0.1;
+    private static double SLIT_SIZE = 0.15;
     private static final double k = 10e5;
-    private static final double gamma = 140;
-    private static final double MIN_PARTICLE_R = 0.01;          // Min particle radius
-    private static final double MAX_PARTICLE_R = 0.015;         // Max particle radius
+    private static final double gamma = 70;
+    private static final double MIN_PARTICLE_R = 0.02;          // Min particle radius
+    private static final double MAX_PARTICLE_R = 0.03;         // Max particle radius
     private static final double STEP_PRINT_DT = 0.1;
     private static final double ANIMATION_DT = 1.0 / 60;          // DT to save a simulation state
     private static final double MEASURE_DT = 1.0 / 10;                // DT to save a simulation state
     private static final double MAX_SIM_TIME = 10;             // Max simulation time in seconds
+    private static int nonce =0;
+
 
     private static double              simTime = 0; //Simulation time in seconds
     private static List<Particle> particles = new ArrayList<>(N);
     private static ArrayList<Wall>     walls = new ArrayList<>(4);
 
     private static List<List<Particle>> savedStates = new ArrayList<>();
-    private static List<Double> kineticEnergy = new LinkedList<>();
-    private static List<Double> times = new LinkedList<>();
+    private static Map<Double,Double> kineticEnergy = new HashMap<>();
 
-    public static void main(String[] args) throws Exception{
+
+    public static void main(String[] args) throws FileNotFoundException{
+        runSimulation();
+    }
+
+
+    public static void runSimulation() throws FileNotFoundException {
         System.out.println(String.format("N: %d", N));
-        PrintWriter writer = new PrintWriter("data/" + SLIT_SIZE + "_" + gamma + "_" + BASE + "e-" + EXP + "_simulation.xyz");
+        PrintWriter writer = new PrintWriter("data/" + SLIT_SIZE + "_" + nonce + "_simulation.xyz");
 
         initWalls(WIDTH, HEIGHT, SLIT_SIZE);
         initParticles(N, WIDTH, HEIGHT, MIN_PARTICLE_R, MAX_PARTICLE_R);
@@ -110,10 +118,8 @@ public class Simulation {
         System.out.println("Printing measures");
         System.out.println(String.format("Reinserted particles: %d", exitTimes.size()));
 
-        printList(kineticEnergy, "data/" + SLIT_SIZE + "_" + gamma + "_" + BASE + "e-" + EXP + "_kineticEnergy.csv");
-        printList(times, "data/" + SLIT_SIZE + "_" + gamma + "_" + BASE + "e-" + EXP + "_times.csv");
-        printList(exitTimes, "data/" + SLIT_SIZE + "_" + gamma + "_" + BASE + "e-" + EXP + "_exitTimes.csv");
-
+        printKE(kineticEnergy, "data/" + SLIT_SIZE + "_" + nonce + "_kineticEnergy.csv");
+        printList(exitTimes, "data/" + SLIT_SIZE + "_" + nonce + "_exitTimes.csv");
     }
 
     private static void reinsert(Particle p) {
@@ -212,10 +218,29 @@ public class Simulation {
             e.printStackTrace();
         }
     }
+    private static void printKE(Map<Double,Double> ke, String filename){
+        try {
+            PrintWriter writer = new PrintWriter(filename);
+            String keOverTime = getKeOverTime(ke);
+            writer.print(keOverTime);
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static String getKeOverTime(Map<Double,Double> ke) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("times,ke\n");
+        for(Map.Entry<Double,Double> entry : ke.entrySet()){
+            sb.append(entry.getKey()).append(',').append(entry.getValue()).append('\n');
+        }
+        return sb.toString();
+    }
 
     private static void saveMeasures() {
-        times.add(simTime);
-        kineticEnergy.add(particles.parallelStream().map(Particle::kineticEnergy).reduce(0.0, (d1, d2) -> d1 + d2));
+        kineticEnergy.put(simTime,particles.parallelStream().map(Particle::kineticEnergy).reduce(0.0, (d1, d2) -> d1 + d2));
     }
 
     private static void writeState(PrintWriter writer) {
@@ -224,5 +249,13 @@ public class Simulation {
         writer.println("-2 0.0 0.0 0.00000001 0.0 0.0");
         writer.println(String.format(Locale.ENGLISH, "-1 %f %f 0.00000001 0.0 0.0", WIDTH, HEIGHT));
         particles.stream().parallel().forEach(writer::println);
+    }
+
+    public static void setSlitSize(double slitSize){
+        SLIT_SIZE = slitSize;
+    }
+
+    public static void setNonce(int n){
+        nonce=n;
     }
 }
