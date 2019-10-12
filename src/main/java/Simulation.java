@@ -34,19 +34,25 @@ public class Simulation {
 
 
     public static void main(String[] args) throws FileNotFoundException{
-        runSimulation();
+        runSimulation(true);
     }
 
 
-    public static void runSimulation() throws FileNotFoundException {
+    public static void runSimulation(boolean printState) throws FileNotFoundException {
+        resetValues();
         System.out.println(String.format("N: %d", N));
-        PrintWriter writer = new PrintWriter("data/" + SLIT_SIZE + "_" + nonce + "_simulation.xyz");
+        PrintWriter writer = null;
+
+        if(printState)
+            writer = new PrintWriter("data/" + SLIT_SIZE + "_" + nonce + "_simulation.xyz");
 
         initWalls(WIDTH, HEIGHT, SLIT_SIZE);
         initParticles(N, WIDTH, HEIGHT, MIN_PARTICLE_R, MAX_PARTICLE_R);
 
         saveMeasures();
-        writeState(writer);
+
+        if(printState)
+            writeState(writer);
 
         int lastFrame = 1, lastMeasure = 1, lastStepPrint = 0;
         System.out.println("Starting simulation");
@@ -101,7 +107,7 @@ public class Simulation {
                 lastStepPrint++;
             }
 
-            if (simTime / ANIMATION_DT > lastFrame) {
+            if (printState && simTime / ANIMATION_DT > lastFrame) {
                 writeState(writer);
                 lastFrame++;
             }
@@ -113,13 +119,24 @@ public class Simulation {
         }
         saveMeasures();
         System.out.println("Finished simulation");
-        writer.close();
+
+        if(printState)
+            writer.close();
 
         System.out.println("Printing measures");
         System.out.println(String.format("Reinserted particles: %d", exitTimes.size()));
 
         printKE(kineticEnergy, "data/" + SLIT_SIZE + "_" + nonce + "_kineticEnergy.csv");
         printList(exitTimes, "data/" + SLIT_SIZE + "_" + nonce + "_exitTimes.csv");
+    }
+
+    private static void resetValues() {
+        simTime = 0; //Simulation time in seconds
+        particles = new ArrayList<>(N);
+        walls = new ArrayList<>(4);
+        savedStates = new ArrayList<>();
+        kineticEnergy = new HashMap<>();
+
     }
 
     private static void reinsert(Particle p) {

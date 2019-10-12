@@ -4,20 +4,22 @@ import matplotlib.pyplot as plt
 import scipy.stats as stats
 
 PATHS = [
-    '../data/0.15_70.0_1e-5_exitTimes.csv',
-    '../data/0.183_70.0_1e-5_exitTimes.csv',
-    '../data/0.216_70.0_1e-5_exitTimes.csv',
-    '../data/0.25_70.0_1e-5_exitTimes.csv'
+    '../data/0.15_0_exitTimes.csv',
+    '../data/0.175_0_exitTimes.csv',
+    '../data/0.2_0_exitTimes.csv',
+    '../data/0.225_0_exitTimes.csv',
+    '../data/0.25_0_exitTimes.csv'
 ]
 LABELS = [
-    'D = 15cm',
-    'D = 18cm',
-    'D = 22cm',
-    'D = 25cm'
+    'D = 150cm',
+    'D = 175cm',
+    'D = 200cm',
+    'D = 225cm',
+    'D = 250cm'
 ]
 
 NUMBER_OF_WINDOWS = 50
-WINDOW_SIZE = 200
+WINDOW_SIZE =200
 
 def get_sliding_window_measures(path):
     times = np.genfromtxt(path)
@@ -42,14 +44,14 @@ def get_sliding_window_measures(path):
 total_measures = []
 for i in range(len(PATHS)):
     times, means, stds = get_sliding_window_measures(PATHS[i])
-    m, b, r, _, _ = stats.linregress(times, means)
+    #m, b, r, _, _ = stats.linregress(times, means)
     plt.plot(times, means, 'o', markersize=1, label=LABELS[i])
-    plt.plot([times[0], times[-1]], [m*times[0] + b, m*times[-1] + b])
-    print('m: {:.2E} - b: {:.2E} - r {:.2E}'.format(m, b, r))
+    #plt.plot([times[0], times[-1]], [m*times[0] + b, m*times[-1] + b])
+    #print('m: {:.2E} - b: {:.2E} - r {:.2E}'.format(m, b, r))
     print('mean: {:.2E} - std: {:.2E}'.format(np.mean(means), np.std(means)))
 
-plt.ylabel('Caudal en partículas por segundo')
+plt.ylabel('Q [p/s]')
 plt.xlabel('Tiempo [s]')
-plt.ylim(300, 1200)
-plt.legend(loc='upper right')
+plt.ylim(40, 200)
+plt.legend(loc='lower left')
 plt.show()
