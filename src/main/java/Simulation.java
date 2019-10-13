@@ -15,7 +15,7 @@ public class Simulation {
     private static final double HEIGHT = 1.5;
     private static double SLIT_SIZE = 0.15;
     private static final double k = 10e5;
-    private static final double gamma = 70;
+    private static double gamma = 70;
     private static final double MIN_PARTICLE_R = 0.02;          // Min particle radius
     private static final double MAX_PARTICLE_R = 0.03;         // Max particle radius
     private static final double STEP_PRINT_DT = 0.1;
@@ -44,7 +44,7 @@ public class Simulation {
         PrintWriter writer = null;
 
         if(printState)
-            writer = new PrintWriter("data/" + SLIT_SIZE + "_" + nonce + "_simulation.xyz");
+            writer = new PrintWriter("data/" + SLIT_SIZE + "_"+ gamma + "_" + nonce + "_simulation.xyz");
 
         initWalls(WIDTH, HEIGHT, SLIT_SIZE);
         initParticles(N, WIDTH, HEIGHT, MIN_PARTICLE_R, MAX_PARTICLE_R);
@@ -126,8 +126,8 @@ public class Simulation {
         System.out.println("Printing measures");
         System.out.println(String.format("Reinserted particles: %d", exitTimes.size()));
 
-        printKE(kineticEnergy, "data/" + SLIT_SIZE + "_" + nonce + "_kineticEnergy.csv");
-        printList(exitTimes, "data/" + SLIT_SIZE + "_" + nonce + "_exitTimes.csv");
+        printKE(kineticEnergy, "data/" + SLIT_SIZE + "_"+ gamma + "_"  + nonce + "_kineticEnergy.csv");
+        printList(exitTimes, "data/" + SLIT_SIZE + "_"+ gamma + "_"  + nonce + "_exitTimes.csv");
     }
 
     private static void resetValues() {
@@ -274,5 +274,9 @@ public class Simulation {
 
     public static void setNonce(int n){
         nonce=n;
+    }
+
+    public static void setGamma(double curr_gamma) {
+        gamma=curr_gamma;
     }
 }

@@ -48,10 +48,11 @@ for i in range(len(PATHS)):
     plt.plot(times, means, 'o', markersize=1, label=LABELS[i])
     #plt.plot([times[0], times[-1]], [m*times[0] + b, m*times[-1] + b])
     #print('m: {:.2E} - b: {:.2E} - r {:.2E}'.format(m, b, r))
+    print(PATHS[i])
     print('mean: {:.2E} - std: {:.2E}'.format(np.mean(means), np.std(means)))
 
 plt.ylabel('Q [p/s]')
 plt.xlabel('Tiempo [s]')
-plt.ylim(40, 200)
+plt.ylim(40, 170)
 plt.legend(loc='lower left')
 plt.show()
