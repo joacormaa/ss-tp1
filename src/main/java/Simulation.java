@@ -13,7 +13,7 @@ public class Simulation {
     private static final double G = -10;                        // Gravity on 'y' axis
     private static final double WIDTH = 0.4;
     private static final double HEIGHT = 1.5;
-    private static double SLIT_SIZE = 0.15;
+    private static double SLIT_SIZE = 0;
     private static final double k = 10e5;
     private static double gamma = 70;
     private static final double MIN_PARTICLE_R = 0.02;          // Min particle radius
@@ -260,12 +260,30 @@ public class Simulation {
         kineticEnergy.put(simTime,particles.parallelStream().map(Particle::kineticEnergy).reduce(0.0, (d1, d2) -> d1 + d2));
     }
 
+    static int ppw =1000;
+
     private static void writeState(PrintWriter writer) {
-        writer.println(particles.size() + 2);
+        writer.println(particles.size() + ppw*walls.size());
         writer.println();
-        writer.println("-2 0.0 0.0 0.00000001 0.0 0.0");
-        writer.println(String.format(Locale.ENGLISH, "-1 %f %f 0.00000001 0.0 0.0", WIDTH, HEIGHT));
+        printWalls(writer);
         particles.stream().parallel().forEach(writer::println);
+    }
+
+    private static void printWalls(PrintWriter writer) {
+        int i=0;
+        for(Wall w : walls){
+            StringBuilder sb = new StringBuilder();
+            double stepx = (w.finalX-w.initialX)/ppw;
+            double stepy = (w.finalY-w.initialY)/ppw;
+            for(int j=0; j<ppw; j++){
+                sb.append(-(i*ppw+j)).append(' ');
+                sb.append(w.initialX+j*stepx).append(' ');
+                sb.append(w.initialY+j*stepy).append(' ');
+                sb.append(0).append(' ');
+                sb.append(0).append(" \n");
+            }
+            writer.print(sb.toString());
+        }
     }
 
     public static void setSlitSize(double slitSize){

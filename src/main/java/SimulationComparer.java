@@ -7,9 +7,9 @@ public class SimulationComparer {
 
     public static void compareGamma() throws FileNotFoundException {
         int amount_of_runs = 1;
-        int gamma_vals = 4;
-        double min_gamma = 10, max_gamma=270;
-        double step = (max_gamma-min_gamma)/gamma_vals;
+        int gamma_vals = 0;
+        double min_gamma = 500, max_gamma=500;
+        double step = (max_gamma-min_gamma)/(gamma_vals+1);
 
         Simulation.setSlitSize(0);
 

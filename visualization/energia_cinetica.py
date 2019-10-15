@@ -14,6 +14,14 @@ LABELS = [
     '0.25'
 ]
 
+COLORS = [
+    'blue',
+    'red',
+    'green',
+    'purple',
+    'teal',
+]
+
 simulation_runs = 5
 
 for i in range(len(LABELS)):
@@ -44,13 +52,14 @@ for i in range(len(paths)):
 
     n=3
 
-    plt.errorbar(x[::n], y[::n], yerr=y_err[::n], lw=0.5, ms=0.5, marker='.', c='blue', elinewidth=1, capsize=5, label=LABELS[i]+'m')
-    plt.ylabel('Energía [J]')
-    plt.xlabel('Tiempo [s]')
-    plt.ylim(0, 5)
-    plt.xlim(0, 8)
-    plt.legend(loc='upper right', bbox_to_anchor=(1, 1))
-    plt.show()
+    plt.errorbar(x[::n], y[::n], yerr=y_err[::n], lw=0.5, ms=0.5, marker='.', c=COLORS[i], elinewidth=1, capsize=5, label='Hw = '+LABELS[i]+'m')
+
+plt.ylabel('KE [J]')
+plt.xlabel('Tiempo [s]')
+plt.ylim(0, 5)
+plt.xlim(0, 8)
+plt.legend(loc='upper right', bbox_to_anchor=(1, 1))
+plt.show()
 
 
 
@@ -73,7 +82,7 @@ y_err = std_vals
 
 
 plt.errorbar(x, y, yerr=y_err, lw=0.5, ms=0.5, marker='.', c='blue', elinewidth=1, capsize=5)
-plt.ylabel('EK (equilibrio) [J]')
-plt.xlabel('Ancho de abertura [m]')
+plt.ylabel('KE (equilibrio) [J]')
+plt.xlabel('Hw [m]')
 plt.ylim(0, 3)
 plt.show()

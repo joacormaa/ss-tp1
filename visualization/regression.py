@@ -24,45 +24,37 @@ def E(c,n):
         error += math.pow(flow - Q(aperture, c, n), 2)
     return error
 
-# err_vals = []
-# min_error = 100000
-# min_c = 1
-# min_n = 1
-#
-# c_range = np.arange(-6,6,step=0.1)
-# n_range = np.arange(50,1000,step=10)
-#
-# for c in c_range:
-#     err_row = []
-#     for n in n_range:
-#         curr_error = E(c,n)
-#         if curr_error < min_error:
-#             min_error = curr_error
-#             min_c = c
-#             min_n = n
-#         err_row.append(curr_error)
-#     err_vals.append(err_row)
-#
-# X, Y = np.meshgrid(c_range, n_range)
-#
-# fig = plt.figure()
-# ax = fig.add_subplot(111, projection = '3d')
-# ax.plot_surface(X, Y, err_vals)
-#
-#
-# # plt.plot(np.arange(-6,3,step=0.001),errors)
-# # plt.show()
-# print(min_c)
-# print(min_n)
-# print(min_error)
+err_vals = []
+min_error = 100000
+min_c = 1
+min_n = 1
+
+c_range = np.arange(0.5,4,step=0.001)
+
+for c_v in c_range:
+    curr_error = E(c_v,n)
+    if curr_error < min_error:
+        min_error = curr_error
+        min_c = c_v
+        min_n = n
+    err_vals.append(curr_error)
+
+plt.plot(c_range,err_vals)
+plt.ylabel('ECM')
+plt.xlabel('c')
+plt.show()
+print(min_c)
+print(min_n)
+print(min_error)
 
 ds = np.arange(0.15, 0.25, 0.0001)
 
 
-plt.plot(ds, [Q(d, c, n) for d in ds], 'r-', label='Beverloo con c = {}'.format(c))
-plt.errorbar(apertures, flows, yerr=errors, fmt='bo', label='mediciones')
-plt.ylabel('Caudal en partículas por segundo')
-plt.xlabel('apertura del silo [m]')
+plt.plot(ds, [Q(d, c, n) for d in ds], 'r-', label='Beverloo [c = {}]'.format(c))
+
+plt.errorbar(apertures, flows, yerr=errors, lw=0, ms=0.5, marker='.', c='blue', elinewidth=1, capsize=5, label='muestras')
+plt.ylabel('Q [p/s]')
+plt.xlabel('Hw [m]')
 plt.legend()
 plt.show()
 
