@@ -35,6 +35,8 @@ public final class Config {
 
     private double GOAL_RADIUS;
 
+    private int MAX_TOLERANCE;
+
     private static Config instance;
 
     public static Config getInstance(){
@@ -83,6 +85,8 @@ public final class Config {
 
         String GOAL_RADIUS = document.getElementsByTagName("GOAL_RADIUS").item(0).getTextContent();
 
+        String MAX_TOLERANCE = document.getElementsByTagName("MAX_TOLERANCE").item(0).getTextContent();
+
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
 
@@ -102,6 +106,8 @@ public final class Config {
         this.OBSTACLE_SPEED = Double.parseDouble(OBSTACLE_SPEED);
 
         this.GOAL_RADIUS = Double.parseDouble(GOAL_RADIUS);
+
+        this.MAX_TOLERANCE = Integer.parseInt(MAX_TOLERANCE);
     }
 
 
@@ -156,5 +162,8 @@ public final class Config {
         return GOAL_RADIUS;
     }
 
+    public int MAX_TOLERANCE() {
+        return MAX_TOLERANCE;
+    }
 }
 

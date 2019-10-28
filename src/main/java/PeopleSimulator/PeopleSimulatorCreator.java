@@ -3,19 +3,20 @@ package PeopleSimulator;
 import Constants.Config;
 import Model.*;
 import Model.Vector;
-import org.apache.commons.collections.map.HashedMap;
 
 import java.util.*;
 
 public final class PeopleSimulatorCreator {
-    private PeopleSimulatorCreator(){}
+    private static Config c;
+    private PeopleSimulatorCreator(){
+        Config c  = Config.getInstance();
+    }
 
     public static CollisionCourse getInitialCollisionCourse(){
         Map<Integer,Obstacle> obstacles = new HashMap<>();
         Map<Integer, Person> people = new HashMap<>();
         Map<Integer, Goal> goals = new HashMap<>();
 
-        Config c  = Config.getInstance();
 
         List<Double> xPositions = getXPositions();
         int obsid=0;
@@ -39,7 +40,35 @@ public final class PeopleSimulatorCreator {
     }
 
     private static List<Double> getXPositions() {
-        return null; //todo
+        double min = c.OBSTACLE_R()+c.PERSON_MAX_R();
+        double max = c.HORIZONTAL_WALL_LENGTH() - (c.OBSTACLE_R()+ c.GOAL_RADIUS());
+
+        int tolerance = c.MAX_TOLERANCE();
+
+        List<Double> ret = new ArrayList<>();
+
+        while(tolerance>0){
+            double curr_x = Math.random()*(max-min)+min;
+
+            if(hasNoCollisions(curr_x, ret)) {
+                ret.add(curr_x);
+                tolerance = c.MAX_TOLERANCE();
+            }
+            else{
+                tolerance--;
+            }
+        }
+        return ret;
+    }
+
+
+    //todo: este metodo seria mucho mejor si x_vals estuviera sorteado, no se si vale la pena. no se me ocurrio una forma de hacerlo....
+    private static boolean hasNoCollisions(double curr_x, List<Double> x_vals) {
+        for(Double x : x_vals){
+            if(Math.abs(x-curr_x)<c.OBSTACLE_R())
+                return false;
+        }
+        return true;
     }
 
 }
