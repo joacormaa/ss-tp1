@@ -41,6 +41,6 @@ public class Person implements Interactable{
     }
 
     public String stringify() {
-        return position.x+","+position.y+","+current_r+",0\n";
+        return position.x+" "+position.y+" "+current_r+" 0\n";
     }
 }

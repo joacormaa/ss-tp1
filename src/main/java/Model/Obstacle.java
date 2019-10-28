@@ -36,6 +36,6 @@ public class Obstacle implements Interactable {
     }
 
     public String stringify() {
-        return position.x+","+position.y+","+radius+",1\n";
+        return position.x+" "+position.y+" "+radius+" 1\n";
     }
 }
