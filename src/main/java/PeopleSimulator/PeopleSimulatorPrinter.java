@@ -32,4 +32,8 @@ public class PeopleSimulatorPrinter {
 
         Helper.appendToFile(sb.toString(),c.OUTPUT_PATH()+"/"+PARTICLE_OUTPUT_PATH);
     }
+
+    public void printCollisionCourseMetrics(SystemMetrics sm) {
+
+    }
 }

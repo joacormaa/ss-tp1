@@ -19,8 +19,14 @@ public class Obstacle implements Interactable {
     }
 
     public Obstacle getNext(double delta){
+        Config c = Config.getInstance();
         Vector newPos = position.sum(velocity.multiplyBy(delta));
-        return new Obstacle(radius,newPos,velocity); //todo: agregar la logica de que vuelva para atras
+        if(newPos.getY()>c.VERTICAL_WALL_LENGTH() || newPos.getY()<0){
+            Vector newVel = velocity.multiplyBy(-1);
+            newPos = position.sum(newVel.multiplyBy(delta));
+            return new Obstacle(radius, newPos,newVel);
+        }
+        return new Obstacle(radius,newPos,velocity);
     }
 
     @Override
@@ -38,6 +44,6 @@ public class Obstacle implements Interactable {
     }
 
     public String stringify() {
-        return position.x+" "+position.y+" "+radius+" 1\n";
+        return position.x+" "+position.y+" "+radius+" 255 0 0\n";
     }
 }

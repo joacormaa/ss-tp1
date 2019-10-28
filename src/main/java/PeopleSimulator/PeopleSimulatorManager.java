@@ -1,11 +1,11 @@
 package PeopleSimulator;
 
 import Constants.Config;
+import Log.Logger;
 import Metrics.SystemMetrics;
 import Model.*;
 import Model.Vector;
 import NeighbourLogic.SystemNeighbourManager;
-import org.apache.commons.collections.map.HashedMap;
 
 import java.util.*;
 
@@ -18,16 +18,25 @@ public class PeopleSimulatorManager {
     private CollisionCourse currStep;
 
     public PeopleSimulatorManager(){
+        Logger.print("Initializing People Simulation.");
         this.currStep = PeopleSimulatorCreator.getInitialCollisionCourse();
+        Logger.print("Initial System done.");
         this.c = Config.getInstance();
         this.psp = new PeopleSimulatorPrinter();
         this.snm = new SystemNeighbourManager();
     }
 
-    public SystemMetrics stepForward(double delta){
+    public SystemMetrics stepForward(double delta, boolean hasToPrint){
+        Logger.print("Calculating step t="+(delta+currStep.getTime()));
         CollisionCourse nextStep = getNextCollisionCourse(delta);
         this.currStep=nextStep;
-        return new SystemMetrics(currStep);
+        SystemMetrics sm = new SystemMetrics(currStep,goalCounter);
+        if(hasToPrint){
+            psp.printCollisionCourse(nextStep);
+            psp.printCollisionCourseMetrics(sm);
+            Logger.print("Printed system and systemMetrics to file.");
+        }
+        return sm;
     }
 
     private CollisionCourse getNextCollisionCourse(double delta) {
@@ -50,7 +59,10 @@ public class PeopleSimulatorManager {
         return ret;
     }
 
+    private int goalCounter=0;
+
     private Map<Integer, Person> getNextPersonMap(double delta) {
+        goalCounter=0;
         Map<Person, Set<Interactable>> neighbourMap = snm.getNeighbours(this.currStep);
         Map<Integer,Person> ret = new HashMap<>();
         for(Map.Entry<Integer,Person> entry : currStep.getPersonMap().entrySet()){
@@ -68,6 +80,10 @@ public class PeopleSimulatorManager {
         Goal goal = (p.achievedGoal())?p.getGoal().nextGoal():p.getGoal();
 
         double radius = getNextRadius(p,movementInfo.isInContact, delta);
+
+        if(goal==null){
+            goalCounter++;
+        }
 
         return new Person(nextPosition,movementInfo.nextVelocity,radius,goal);
 
@@ -91,7 +107,7 @@ public class PeopleSimulatorManager {
             }
         }
 
-        boolean isIncontact = false;
+        boolean isInContact = false;
         Vector velocity;
         if(velocityVectors.isEmpty()){
             double multiplier = c.PERSON_SPEED() * Math.pow((p.getRadius()-c.PERSON_MIN_R())/(c.PERSON_MAX_R()-c.PERSON_MIN_R()),1);//todo: unhardcode Beta
@@ -99,10 +115,10 @@ public class PeopleSimulatorManager {
             velocity = direction.multiplyBy(multiplier);
         }
         else{
-            velocity = Vector.AverageVector(velocityVectors).multiplyBy(3);//todo: unhardcode VE
-            isIncontact = true;
+            velocity = Vector.averageVector(velocityVectors).multiplyBy(3);//todo: unhardcode VE
+            isInContact = true;
         }
-        return new MovementInfo(velocity,isIncontact);
+        return new MovementInfo(velocity,isInContact);
     }
 
     class MovementInfo{

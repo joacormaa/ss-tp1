@@ -25,8 +25,16 @@ public class Vector {
         return Math.atan2(y,x);
     }
 
-    public static Vector AverageVector(List<Vector> velocityVectors) {
-        return null;
+    public static Vector averageVector(List<Vector> velocityVectors) {
+        double x=0;
+        double y=0;
+        for(Vector v : velocityVectors){
+            x+=v.x;
+            y+=v.y;
+        }
+        x/=velocityVectors.size();
+        y/=velocityVectors.size();
+        return new Vector(x,y);
     }
 
     public double getAngle(){

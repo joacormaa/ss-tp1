@@ -37,6 +37,9 @@ public final class Config {
 
     private int MAX_TOLERANCE;
 
+    private double VE;
+    private double TAU;
+
     private static Config instance;
 
     public static Config getInstance(){
@@ -87,6 +90,9 @@ public final class Config {
 
         String MAX_TOLERANCE = document.getElementsByTagName("MAX_TOLERANCE").item(0).getTextContent();
 
+        String TAU = document.getElementsByTagName("TAU").item(0).getTextContent();
+        String VE = document.getElementsByTagName("VE").item(0).getTextContent();
+
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
 
@@ -108,6 +114,9 @@ public final class Config {
         this.GOAL_RADIUS = Double.parseDouble(GOAL_RADIUS);
 
         this.MAX_TOLERANCE = Integer.parseInt(MAX_TOLERANCE);
+
+        this.TAU = Double.parseDouble(TAU);
+        this.VE = Double.parseDouble(VE);
     }
 
 
@@ -164,6 +173,12 @@ public final class Config {
 
     public int MAX_TOLERANCE() {
         return MAX_TOLERANCE;
+    }
+    public double TAU(){
+        return TAU;
+    }
+    public double VE(){
+        return VE;
     }
 }
 

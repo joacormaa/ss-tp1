@@ -12,7 +12,7 @@ public class Goal {
     }
 
     public String stringify() {
-        return position.x+" "+position.y+" "+radius+" 2\n";
+        return position.x+" "+position.y+" "+radius+" 0 255 0\n";
     }
 
     public Goal nextGoal() {
