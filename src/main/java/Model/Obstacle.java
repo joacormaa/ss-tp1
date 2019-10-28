@@ -34,4 +34,8 @@ public class Obstacle implements Interactable {
     public Vector getVelocity() {
         return velocity;
     }
+
+    public String stringify() {
+        return position.x+","+position.y+","+radius+",1\n";
+    }
 }

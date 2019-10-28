@@ -7,9 +7,8 @@ import Model.Vector;
 import java.util.*;
 
 public final class PeopleSimulatorCreator {
-    private static Config c;
+    private static Config c = Config.getInstance();
     private PeopleSimulatorCreator(){
-        Config c  = Config.getInstance();
     }
 
     public static CollisionCourse getInitialCollisionCourse(){

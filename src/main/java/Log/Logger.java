@@ -2,6 +2,10 @@ package Log;
 
 import Constants.Config;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public final class Logger {
     private static boolean log;
     public static void loggerInit(){
@@ -9,7 +13,8 @@ public final class Logger {
     }
     public static void print(String s){
         if(log){
-            System.out.println(s);
+            String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+            System.out.println(date +": "+s);
         }
     }
 }

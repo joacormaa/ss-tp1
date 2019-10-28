@@ -30,4 +30,17 @@ public class CollisionCourse {
     public double getTime() {
         return time;
     }
+
+    public String stringify() {
+        StringBuilder sb = new StringBuilder();
+
+        for(Person person : personMap.values())
+            sb.append(person.stringify());
+        for(Obstacle obstacle : obstacleMap.values())
+            sb.append(obstacle.stringify());
+        for(Goal goal : goalMap.values())
+            sb.append(goal.stringify());
+
+        return sb.toString();
+    }
 }

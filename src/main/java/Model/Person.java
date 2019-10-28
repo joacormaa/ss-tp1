@@ -39,4 +39,8 @@ public class Person implements Interactable{
     public double getR_max() {
         return r_max;
     }
+
+    public String stringify() {
+        return position.x+","+position.y+","+current_r+",0\n";
+    }
 }
