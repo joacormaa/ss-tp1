@@ -2,8 +2,6 @@ package NeighbourLogic;
 
 import Constants.Config;
 import Model.Interactable;
-import Model.Particle;
-import Model.Wall;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,11 +16,8 @@ public class Cell {
         yPosition = y;
     }
 
-    public void addParticle(Particle p) {
-        interactables.add(p);
-    }
-    public void addWall(Wall w) {
-        interactables.add(w);
+    public void addInteractable(Interactable i) {
+        interactables.add(i);
     }
 
     public List<Integer> getNeighbourIds() {

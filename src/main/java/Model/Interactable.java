@@ -1,6 +1,11 @@
 package Model;
 
 public interface Interactable {
+    default boolean isAdjacentTo(Interactable q){
+        Vector dist = this.getPosition().minus(q.getPosition());
+        return dist.norm<this.getRadius()+q.getRadius();
+    }
 
-    double[] getXYIncidentalForce(Particle p);
+    Vector getPosition();
+    double getRadius();
 }

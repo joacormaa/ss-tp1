@@ -2,15 +2,11 @@ package NeighbourLogic;
 
 import Constants.Config;
 import Model.*;
-import Model.System;
-
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 
 public class SystemNeighbourManager {
-    private System system;
-    private Map<Particle, Set<Interactable>> neighbours;
+    private CollisionCourse collisionCourse;
+    private Map<Person, Set<Interactable>> neighbours;
     private Map<Integer, Cell> cellMap;
     private Config c;
 
@@ -20,8 +16,8 @@ public class SystemNeighbourManager {
         this.c = Config.getInstance();
     }
 
-    public Map<Particle, Set<Interactable>> getNeighbours(System system){
-        this.system=system;
+    public Map<Person, Set<Interactable>> getNeighbours(CollisionCourse collisionCourse){
+        this.collisionCourse=collisionCourse;
         initializeCells();
         initializeNeighbourMap();
 
@@ -31,7 +27,7 @@ public class SystemNeighbourManager {
     }
 
     private void initializeNeighbourMap() {
-        for (Particle p : system.getParticles().values())  neighbours.put(p,new HashSet<>());
+        for (Person p : collisionCourse.getPersonMap().values())  neighbours.put(p,new HashSet<>());
     }
 
 
@@ -45,75 +41,44 @@ public class SystemNeighbourManager {
     }
 
     private void assignCells() {
-
-        for(Particle p : system.getParticles().values()) {
-            addParticleToCell(p);
+        for(Person p : collisionCourse.getPersonMap().values()) {
+            addInteractableToCell(p);
         }
-
-        for(Particle p : system.getStaticParticles().values()) {
-            addParticleToCell(p);
-        }
-
-        for(Wall w : system.getWalls().values()) {
-            if(w.isVertical()){
-                int cellX = (int) (w.getX()/c.CELL_LENGTH());
-                if(cellX>=c.CELL_AMOUNT()) cellX=c.CELL_AMOUNT()-1; //workaround choto
-                for(int cellY = 0; cellY<c.CELL_AMOUNT(); cellY++){
-                    int cellId = cellX+cellY*c.CELL_AMOUNT();
-                    Cell cell = cellMap.get(cellId);
-                    cell.addWall(w);
-                }
-            }
-            else{
-                int cellY = (int) (w.getY()/c.CELL_LENGTH());
-                if(cellY>=c.CELL_AMOUNT()) cellY=c.CELL_AMOUNT()-1; //workaround choto
-                for(int cellX = 0; cellX<c.CELL_AMOUNT(); cellX++){
-                    int cellId = cellX+cellY*c.CELL_AMOUNT();
-                    Cell cell = cellMap.get(cellId);
-                    cell.addWall(w);
-                }
-
-            }
+        for(Obstacle o : collisionCourse.getObstacleMap().values()){
+            addInteractableToCell(o);
         }
     }
 
-    private void addParticleToCell(Particle p) {
-        int cellX = (int) (p.getX()/c.CELL_LENGTH());
-        int cellY = (int) (p.getY() / c.CELL_LENGTH());
-        int cellId = cellX+cellY*c.CELL_AMOUNT();
+    private void addInteractableToCell(Interactable i) {
+        int cellId = getCellId(i);
         Cell cell = cellMap.get(cellId);
-        cell.addParticle(p);
+        cell.addInteractable(i);
+    }
+
+    private int getCellId(Interactable i) {
+        int cellX = (int) (i.getPosition().getX() / c.CELL_LENGTH());
+        int cellY = (int) (i.getPosition().getY() / c.CELL_LENGTH());
+        return cellX+cellY*c.CELL_AMOUNT();
     }
 
     private void assignNeighbours() {
-        for(Cell c : cellMap.values()) {
-            for(Interactable in : c.getInteractables()) {
-                if(in instanceof Wall || in instanceof StaticParticle) continue;
+        for(Person p : collisionCourse.getPersonMap().values()) {
+            List<Cell> neighbours = new ArrayList<>();
+            Cell c = cellMap.get(getCellId(p));
+            for(Integer i :c.getNeighbourIds()) neighbours.add(cellMap.get(i));
 
-                Particle p = (Particle) in;
-                List<Cell> neighbours = new ArrayList<>();
-                for(Integer i :c.getNeighbourIds()) neighbours.add(cellMap.get(i));
-
-                for(Cell neighbour : neighbours) {
-                    for(Interactable q : neighbour.getInteractables()) {
-                        if(!p.equals(q) && p.isAdjacentTo(q)) {
-                            addNeighbour(p,q);
-                        }
+            for(Cell neighbour : neighbours) {
+                for(Interactable q : neighbour.getInteractables()) {
+                    if(!p.equals(q) && p.isAdjacentTo(q)) {
+                        addNeighbour(p,q);
                     }
                 }
             }
         }
     }
 
-    private void addNeighbour(Particle p, Interactable q){
+    private void addNeighbour(Person p, Interactable q){
         Set<Interactable> pNeighbours = neighbours.get(p);
-        if(q instanceof Particle && ! (q instanceof StaticParticle)){
-            Particle qPart = (Particle) q;
-            Set<Interactable> qNeighbours = neighbours.get(qPart);
-            qNeighbours.add(p);
-            neighbours.put(qPart,qNeighbours);
-
-        }
         pNeighbours.add(q);
         neighbours.put(p,pNeighbours);
     }
