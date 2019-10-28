@@ -1,5 +1,7 @@
 package Model;
 
+import Constants.Config;
+
 public class Obstacle implements Interactable {
     private double radius;
     private Vector position;
@@ -13,12 +15,12 @@ public class Obstacle implements Interactable {
 
     public boolean hasCollided(Person person){
         double distance = position.minus(person.getPosition()).norm;
-        return distance<radius+person.getR_max();
+        return distance<radius+ Config.getInstance().PERSON_MAX_R();
     }
 
     public Obstacle getNext(double delta){
         Vector newPos = position.sum(velocity.multiplyBy(delta));
-        return new Obstacle(radius,newPos,velocity);
+        return new Obstacle(radius,newPos,velocity); //todo: agregar la logica de que vuelva para atras
     }
 
     @Override

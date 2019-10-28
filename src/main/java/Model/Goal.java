@@ -14,4 +14,16 @@ public class Goal {
     public String stringify() {
         return position.x+" "+position.y+" "+radius+" 2\n";
     }
+
+    public Goal nextGoal() {
+        return nextGoal;
+    }
+
+    public Vector getPosition() {
+        return position;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
 }

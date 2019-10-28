@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.List;
+
 public class Vector {
     protected double x;
     protected double y;
@@ -21,6 +23,10 @@ public class Vector {
 
     private static double getAngle(double x,double y) {
         return Math.atan2(y,x);
+    }
+
+    public static Vector AverageVector(List<Vector> velocityVectors) {
+        return null;
     }
 
     public double getAngle(){
@@ -66,7 +72,6 @@ public class Vector {
     }
 
     public Vector versor(){
-        double norm = norm();
         return new Vector(x/norm,y/norm);
     }
 

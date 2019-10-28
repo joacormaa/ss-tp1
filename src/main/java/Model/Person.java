@@ -4,17 +4,13 @@ public class Person implements Interactable{
 
     private Vector position;
     private Vector velocity;
-    private double r_min;
-    private double r_max;
     private double current_r;
     private Goal goal;
 
-    public Person(Vector position, Vector velocity, double r_min, double r_max, Goal goal) {
+    public Person(Vector position, Vector velocity, double radius, Goal goal) {
         this.position = position;
         this.velocity = velocity;
-        this.r_min = r_min;
-        this.r_max = r_max;
-        this.current_r = r_max;
+        this.current_r = radius;
         this.goal = goal;
     }
 
@@ -32,15 +28,22 @@ public class Person implements Interactable{
         return velocity;
     }
 
-    public double getR_min() {
-        return r_min;
-    }
-
-    public double getR_max() {
-        return r_max;
-    }
-
     public String stringify() {
         return position.x+" "+position.y+" "+current_r+" 0\n";
+    }
+
+    public Goal getGoal() {
+        return goal;
+    }
+
+    public boolean achievedGoal() {
+        if(goal==null) return false;
+        return position.minus(goal.getPosition()).norm<current_r+goal.getRadius();
+
+    }
+
+    public Vector getDesiredDirection() {
+        if(goal==null) return Vector.NULL_VECTOR;
+        return goal.getPosition().minus(position).versor();
     }
 }
