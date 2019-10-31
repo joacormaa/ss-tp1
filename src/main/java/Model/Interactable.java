@@ -7,5 +7,6 @@ public interface Interactable {
     }
 
     Vector getPosition();
+    Vector getVelocity();
     double getRadius();
 }

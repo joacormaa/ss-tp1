@@ -110,9 +110,15 @@ public class PeopleSimulatorManager {
         boolean isInContact = false;
         Vector velocity;
         if(velocityVectors.isEmpty()){
-            double multiplier = c.PERSON_SPEED() * Math.pow((p.getRadius()-c.PERSON_MIN_R())/(c.PERSON_MAX_R()-c.PERSON_MIN_R()),1);//todo: unhardcode Beta
-            Vector direction = p.getDesiredDirection();
-            velocity = direction.multiplyBy(multiplier);
+            //Miro si hay colision inminente
+            Vector amague = getNextCollisionWithNeighbors(p, neighbours);
+            if(amague != null){
+                velocity = amague;
+            }else {
+                double multiplier = c.PERSON_SPEED() * Math.pow((p.getRadius()-c.PERSON_MIN_R())/(c.PERSON_MAX_R()-c.PERSON_MIN_R()),1);//todo: unhardcode Beta
+                Vector direction = p.getDesiredDirection();
+                velocity = direction.multiplyBy(multiplier);
+            }
         }
         else{
             velocity = Vector.averageVector(velocityVectors).multiplyBy(3);//todo: unhardcode VE
@@ -120,6 +126,37 @@ public class PeopleSimulatorManager {
         }
         return new MovementInfo(velocity,isInContact);
     }
+
+    private Vector getNextCollisionWithNeighbors(Person p, Set<Interactable> neig){
+        if(neig.isEmpty())
+            return null;
+        double delta = 0.001;//ToDo: deshardcodear
+        Vector modPersonVelocity = null;
+        Vector personPos = p.getPosition();
+        Vector personVel = p.getVelocity();
+        boolean noCollision = true;
+        //ToDo: Deshardcodear el 5
+        for(int i=0; i<5 && noCollision; i++) {
+            for (Interactable n : neig) {
+                Vector personMovement = personVel.multiplyBy(delta*i);
+                Vector newPersonPos = personPos.sum(personMovement);
+                Vector neiMove = n.getVelocity().multiplyBy(delta*i);
+                Vector newNeigPos = n.getPosition().sum(neiMove);
+                Person auxPerson = new Person(newPersonPos, personMovement, p.getRadius(), p.getGoal());
+                Obstacle auxObstacle = new Obstacle(n.getRadius(), newNeigPos, neiMove);
+
+                //Si esta nueva proyeccion es un choque inminente, hago un cambio en la direccion actual de mi particula, original
+                if(auxPerson.isAdjacentTo(auxObstacle)){
+                    //resto la velocidad del obstaculo
+                    noCollision = false;
+                    modPersonVelocity = personVel.minus(auxObstacle.getVelocity().multiplyBy(5));
+                }
+            }
+        }
+        return modPersonVelocity;
+    }
+
+
 
     class MovementInfo{
         Vector nextVelocity;
