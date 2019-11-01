@@ -28,7 +28,7 @@ public final class PeopleSimulatorCreator {
             obstacles.put(obsid++, new Obstacle(c.OBSTACLE_R(),position,speed));
         }
 
-        Vector g_position = new Vector(c.HORIZONTAL_WALL_LENGTH(), Math.random()*c.VERTICAL_WALL_LENGTH());
+        Vector g_position = new Vector(c.HORIZONTAL_WALL_LENGTH(), c.VERTICAL_WALL_LENGTH()/2);
         Goal goal = new Goal(g_position,c.GOAL_RADIUS(),null);
 
         Vector p_position = new Vector(0,c.VERTICAL_WALL_LENGTH()/2);

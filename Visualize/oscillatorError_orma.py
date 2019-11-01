@@ -62,7 +62,7 @@ plt.xlabel('Derail Vals')
 plt.ylabel('Time')
 
 #con error
-plt.errorbar(derail_vals, time_vs_derail, yerr=time_vs_derail_std, lw=0.5, ms=0.5, marker='.', c='red', elinewidth=1, capsize=5, label='')
+plt.errorbar(derail_vals, time_vs_derail, yerr=time_vs_derail_std, lw=0.5, ms=4, marker='.', c='purple', elinewidth=0.5, capsize=5)
 plt.show()
 
 fig = plt.figure()
@@ -70,19 +70,19 @@ fig = plt.figure()
 plt.ylabel('Distance')
 
 #con error
-plt.errorbar(derail_vals, distance_vs_derail, yerr=distance_vs_derail_std, lw=0.5, ms=0.5, marker='.', c='red', elinewidth=1, capsize=5, label='')
+plt.errorbar(derail_vals, distance_vs_derail, yerr=distance_vs_derail_std, lw=0.5, ms=4, marker='.', c='green', elinewidth=0.5, capsize=5)
 plt.show()
 
 fig = plt.figure()
 plt.ylabel('Optimum Distance')
 
 #con error
-plt.errorbar(derail_vals, optimum_distance_vs_derail, yerr=optimum_distance_vs_derail_std, lw=0.5, ms=0.5, marker='.', c='red', elinewidth=1, capsize=5, label='')
+plt.errorbar(derail_vals, optimum_distance_vs_derail, yerr=optimum_distance_vs_derail_std, lw=0.5, ms=4, marker='.', c='blue', elinewidth=0.5, capsize=5)
 plt.show()
 
 fig = plt.figure()
 plt.ylabel('Speed')
 
-plt.errorbar(derail_vals, speed_vs_derail, yerr=speed_vs_derail_std, lw=0.5, ms=0.5, marker='.', c='red', elinewidth=1, capsize=5, label='')
+plt.errorbar(derail_vals, speed_vs_derail, yerr=speed_vs_derail_std, lw=0.5, ms=4, marker='.', c='red', elinewidth=0.5, capsize=5)
 plt.show()
 
