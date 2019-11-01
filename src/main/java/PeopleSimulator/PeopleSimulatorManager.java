@@ -93,7 +93,7 @@ public class PeopleSimulatorManager {
         if(isInContact){
             return c.PERSON_MIN_R();
         }else{
-            double nextRadius = p.getRadius() + c.PERSON_MAX_R() * (delta/10); //todo: unhardcode tau
+            double nextRadius = p.getRadius() + c.PERSON_MAX_R() * (delta/c.TAU());
             return Math.min(c.PERSON_MAX_R(),nextRadius);
         }
     }
@@ -121,7 +121,8 @@ public class PeopleSimulatorManager {
             }
         }
         else{
-            velocity = Vector.averageVector(velocityVectors).multiplyBy(3);//todo: unhardcode VE
+
+            velocity = Vector.averageVector(velocityVectors).multiplyBy(c.VE());
             isInContact = true;
         }
         return new MovementInfo(velocity,isInContact);

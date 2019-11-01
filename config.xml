@@ -18,8 +18,8 @@
 
     <GOAL_RADIUS>0.3</GOAL_RADIUS>
 
-    <TAU>1</TAU>
-    <VE>2</VE>
+    <TAU>10</TAU>
+    <VE>20</VE>
 
     <CELL_LENGTH>10</CELL_LENGTH>
 
