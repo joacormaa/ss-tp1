@@ -22,7 +22,8 @@ public final class PeopleSimulatorCreator {
         for(Double pos : xPositions){
             Double y = Math.random()*c.VERTICAL_WALL_LENGTH();
             Vector position = new Vector(pos,y);
-            double speed_mod = c.OBSTACLE_SPEED()*Math.random();
+            double min_speed = c.OBSTACLE_SPEED()/2;
+            double speed_mod = (c.OBSTACLE_SPEED()-min_speed)*Math.random()+min_speed;
             Vector speed = (Math.random()>0.5)?new Vector(0,speed_mod):new Vector(0,-speed_mod);
             obstacles.put(obsid++, new Obstacle(c.OBSTACLE_R(),position,speed));
         }

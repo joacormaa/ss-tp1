@@ -6,6 +6,7 @@ import Metrics.SystemMetrics;
 import Model.*;
 import Model.Vector;
 import NeighbourLogic.SystemNeighbourManager;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.*;
 
@@ -77,7 +78,12 @@ public class PeopleSimulatorManager {
 
         Vector movement = movementInfo.nextVelocity.multiplyBy(delta);
         Vector nextPosition = p.getPosition().sum(movement);
-        Goal goal = (p.achievedGoal())?p.getGoal().nextGoal():p.getGoal();
+        Goal goal = p.getGoal();
+        if(p.achievedGoal()){
+          goal =p.getGoal().nextGoal();
+          if(goal!=null)
+            currStep.getGoalMap().remove(2);
+        }
 
         double radius = getNextRadius(p,movementInfo.isInContact, delta);
 
@@ -109,16 +115,16 @@ public class PeopleSimulatorManager {
 
         boolean isInContact = false;
         Vector velocity;
+        double multiplier = c.PERSON_SPEED() * Math.pow((p.getRadius()-c.PERSON_MIN_R())/(c.PERSON_MAX_R()-c.PERSON_MIN_R()),c.BETA());
         if(velocityVectors.isEmpty()){
             //Miro si hay colision inminente
-            Vector amague = getNextCollisionWithNeighbors(p, neighbours);
-            if(amague != null){
-                velocity = amague;
-            }else {
-                double multiplier = c.PERSON_SPEED() * Math.pow((p.getRadius()-c.PERSON_MIN_R())/(c.PERSON_MAX_R()-c.PERSON_MIN_R()),c.BETA());
-                Vector direction = p.getDesiredDirection();
-                velocity = direction.multiplyBy(multiplier);
+            Vector newGoal = getNextCollisionWithNeighbors(p, neighbours);
+            if(newGoal != null){
+                Goal g = p.addGoal(newGoal);
+                currStep.getGoalMap().put(2, g);
             }
+            Vector direction = p.getDesiredDirection();
+            velocity = direction.multiplyBy(multiplier);
         }
         else{
             velocity = Vector.averageVector(velocityVectors).versor().multiplyBy(c.VE());
@@ -130,14 +136,17 @@ public class PeopleSimulatorManager {
     private Vector getNextCollisionWithNeighbors(Person p, Set<Interactable> neig){
         if(neig.isEmpty())
             return null;
-        double delta = 0.001;//ToDo: deshardcodear
+        double delta = c.SIMULATION_DELTA_TIME();//ToDo: deshardcodear
         Vector modPersonVelocity = null;
+        Vector goal = null;
         Vector personPos = p.getPosition();
         Vector personVel = p.getVelocity();
-        boolean noCollision = true;
+        boolean collision = false;
         //ToDo: Deshardcodear el 5
-        for(int i=0; i<5 && noCollision; i++) {
+        for(int i=0; i<100 && !collision; i++) {
             for (Interactable n : neig) {
+                if(collision)
+                    break;
                 Vector personMovement = personVel.multiplyBy(delta*i);
                 Vector newPersonPos = personPos.sum(personMovement);
                 Vector neiMove = n.getVelocity().multiplyBy(delta*i);
@@ -147,13 +156,19 @@ public class PeopleSimulatorManager {
 
                 //Si esta nueva proyeccion es un choque inminente, hago un cambio en la direccion actual de mi particula, original
                 if(auxPerson.isAdjacentTo(auxObstacle)){
-                    //resto la velocidad del obstaculo
-                    noCollision = false;
-                    modPersonVelocity = personVel.minus(auxObstacle.getVelocity().multiplyBy(5));
+                    boolean pos = n.getPosition().getY()>p.getPosition().getY();
+                    boolean vel = n.getVelocity().getY()>0;
+                    Vector offset = auxObstacle.getVelocity().versor().multiplyBy(3*(c.PERSON_MAX_R() + auxObstacle.getRadius()));
+                    if(Boolean.logicalXor(pos, vel)){
+                        goal = auxObstacle.getPosition().sum(offset);
+                    } else {
+                        goal = auxObstacle.getPosition().minus(offset);
+                    }
+                    collision = true;
                 }
             }
         }
-        return modPersonVelocity;
+        return goal;
     }
 
 

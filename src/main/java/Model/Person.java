@@ -1,5 +1,7 @@
 package Model;
 
+import Constants.Config;
+
 public class Person implements Interactable{
 
     private Vector position;
@@ -45,5 +47,12 @@ public class Person implements Interactable{
     public Vector getDesiredDirection() {
         if(goal==null) return Vector.NULL_VECTOR;
         return goal.getPosition().minus(position).versor();
+    }
+
+    public Goal addGoal(Vector newGoal) {
+        Goal nextGoal = (this.goal.nextGoal()==null)?this.goal:this.goal.nextGoal();
+        Goal g = new Goal(newGoal, Config.getInstance().GOAL_RADIUS(), nextGoal);
+        this.goal = g;
+        return g;
     }
 }

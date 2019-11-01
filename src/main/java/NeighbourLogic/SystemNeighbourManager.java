@@ -58,6 +58,16 @@ public class SystemNeighbourManager {
     private int getCellId(Interactable i) {
         int cellX = (int) (i.getPosition().getX() / c.CELL_LENGTH());
         int cellY = (int) (i.getPosition().getY() / c.CELL_LENGTH());
+
+        if(i.getPosition().getX()>c.HORIZONTAL_WALL_LENGTH())
+            cellX = c.CELL_AMOUNT()-1;
+        if(i.getPosition().getX()<0)
+            cellX = 0;
+        if(i.getPosition().getY()>c.VERTICAL_WALL_LENGTH())
+            cellY = c.CELL_AMOUNT()-1;
+        if(i.getPosition().getY()<0)
+            cellY = 0;
+
         return cellX+cellY*c.CELL_AMOUNT();
     }
 
