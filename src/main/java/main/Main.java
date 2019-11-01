@@ -26,7 +26,7 @@ public class Main {
         int j=0;
         Config c = Config.getInstance();
         while(flag){
-            boolean print= i%c.FRAMES_PER_PRINT()==0;
+            boolean print= j%c.FRAMES_PER_PRINT()==0;
             SystemMetrics sm =psm.stepForward(c.SIMULATION_DELTA_TIME(),print);
             flag = sm.getGoals() == 0;
             j++;
