@@ -197,5 +197,13 @@ public final class Config {
     public double DERAIL(){
         return DERAIL;
     }
+
+    public void setOUTPUT_PATH(String output_path){
+        this.OUTPUT_PATH=output_path;
+    }
+
+    public void setDERAIL(double derail){
+        this.DERAIL=derail;
+    }
 }
 

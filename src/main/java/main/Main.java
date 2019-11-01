@@ -1,3 +1,5 @@
+package main;
+
 import Constants.Config;
 import Log.Logger;
 import Metrics.SystemMetrics;
@@ -15,19 +17,19 @@ public class Main {
 
     public static void main(String[] args) {
         Logger.loggerInit();
-        runPeopleSimulation();
+        runPeopleSimulation(0);
     }
 
-    private static void runPeopleSimulation() {
-        PeopleSimulatorManager psm = new PeopleSimulatorManager();
+    public static void runPeopleSimulation(int i) {
+        PeopleSimulatorManager psm = new PeopleSimulatorManager(i);
         boolean flag=true;
-        int i=0;
+        int j=0;
         Config c = Config.getInstance();
         while(flag){
             boolean print= i%c.FRAMES_PER_PRINT()==0;
             SystemMetrics sm =psm.stepForward(c.SIMULATION_DELTA_TIME(),print);
             flag = sm.getGoals() == 0;
-            i++;
+            j++;
         }
         Logger.print("Ended simulation in "+i+" steps");
     }

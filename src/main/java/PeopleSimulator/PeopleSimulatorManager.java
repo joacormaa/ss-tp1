@@ -6,8 +6,6 @@ import Metrics.SystemMetrics;
 import Model.*;
 import Model.Vector;
 import NeighbourLogic.SystemNeighbourManager;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.util.*;
 
 public class PeopleSimulatorManager {
@@ -18,12 +16,12 @@ public class PeopleSimulatorManager {
 
     private CollisionCourse currStep;
 
-    public PeopleSimulatorManager(){
+    public PeopleSimulatorManager(int i){
         Logger.print("Initializing People Simulation.");
         this.currStep = PeopleSimulatorCreator.getInitialCollisionCourse();
         Logger.print("Initial System done.");
         this.c = Config.getInstance();
-        this.psp = new PeopleSimulatorPrinter();
+        this.psp = new PeopleSimulatorPrinter(i);
         this.snm = new SystemNeighbourManager();
     }
 
@@ -31,11 +29,11 @@ public class PeopleSimulatorManager {
         Logger.print("Calculating step t="+(delta+currStep.getTime()));
         CollisionCourse nextStep = getNextCollisionCourse(delta);
         this.currStep=nextStep;
-        SystemMetrics sm = new SystemMetrics(currStep,movement.norm(),speedMultiplier,goalCounter);
+        SystemMetrics sm = new SystemMetrics(currStep,movement.norm(),speedMultiplier, nextPosition.getX(),nextPosition.getY(),goalCounter);
+        psp.printCollisionCourseMetrics(sm);
         if(hasToPrint){
             psp.printCollisionCourse(nextStep);
-            psp.printCollisionCourseMetrics(sm);
-            Logger.print("Printed system and systemMetrics to file.");
+            Logger.print("Printed system to file.");
         }
         return sm;
     }
@@ -73,6 +71,7 @@ public class PeopleSimulatorManager {
     }
 
     Vector movement = null;
+    Vector nextPosition = null;
 
     private Person getNextPerson(Person p, Map<Person, Set<Interactable>> neighbourMap, double delta) {
         Set<Interactable> neighbours = neighbourMap.get(p);
@@ -80,7 +79,7 @@ public class PeopleSimulatorManager {
 
 
         movement = movementInfo.nextVelocity.multiplyBy(delta);
-        Vector nextPosition = p.getPosition().sum(movement);
+        nextPosition = p.getPosition().sum(movement);
         Goal goal = p.getGoal();
         if(p.achievedGoal()){
           goal =p.getGoal().nextGoal();

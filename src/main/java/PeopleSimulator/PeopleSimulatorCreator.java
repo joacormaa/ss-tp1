@@ -31,7 +31,7 @@ public final class PeopleSimulatorCreator {
         Vector g_position = new Vector(c.HORIZONTAL_WALL_LENGTH(), Math.random()*c.VERTICAL_WALL_LENGTH());
         Goal goal = new Goal(g_position,c.GOAL_RADIUS(),null);
 
-        Vector p_position = new Vector(0,Math.random()*c.VERTICAL_WALL_LENGTH());
+        Vector p_position = new Vector(0,c.VERTICAL_WALL_LENGTH()/2);
         Vector p_velocity = Vector.NULL_VECTOR;
 
         people.put(0, new Person(p_position,p_velocity,c.PERSON_MAX_R(),goal));
