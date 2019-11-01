@@ -69,7 +69,7 @@ public class SystemNeighbourManager {
 
             for(Cell neighbour : neighbours) {
                 for(Interactable q : neighbour.getInteractables()) {
-                    if(!p.equals(q) && p.isAdjacentTo(q)) {
+                    if(!p.equals(q)) {
                         addNeighbour(p,q);
                     }
                 }

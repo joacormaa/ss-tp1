@@ -59,9 +59,8 @@ public final class Config {
             exit(-1);
         }
 
-        CELL_AMOUNT = (int) (VERTICAL_WALL_LENGTH/ PERSON_MAX_R);
+        CELL_AMOUNT = (int) (VERTICAL_WALL_LENGTH / CELL_LENGTH);
         if(CELL_AMOUNT==0)CELL_AMOUNT=1;
-        CELL_LENGTH = VERTICAL_WALL_LENGTH/CELL_AMOUNT;
     }
 
     private void recoverValuesFromXML() throws ParserConfigurationException, IOException, SAXException {
@@ -93,6 +92,8 @@ public final class Config {
         String TAU = document.getElementsByTagName("TAU").item(0).getTextContent();
         String VE = document.getElementsByTagName("VE").item(0).getTextContent();
 
+        String CELL_LENGTH = document.getElementsByTagName("CELL_LENGTH").item(0).getTextContent();
+
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
 
@@ -117,6 +118,8 @@ public final class Config {
 
         this.TAU = Double.parseDouble(TAU);
         this.VE = Double.parseDouble(VE);
+
+        this.CELL_LENGTH = Double.parseDouble(CELL_LENGTH);
     }
 
 
