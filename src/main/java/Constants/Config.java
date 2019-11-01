@@ -41,6 +41,8 @@ public final class Config {
     private double TAU;
     private double BETA;
 
+    private double DERAIL;
+
     private static Config instance;
 
     public static Config getInstance(){
@@ -96,6 +98,8 @@ public final class Config {
 
         String CELL_LENGTH = document.getElementsByTagName("CELL_LENGTH").item(0).getTextContent();
 
+        String DERAIL = document.getElementsByTagName("DERAIL").item(0).getTextContent();
+
 
         this.OUTPUT_PATH = document.getElementsByTagName("OUTPUT_PATH").item(0).getTextContent();
 
@@ -123,6 +127,7 @@ public final class Config {
         this.BETA = Double.parseDouble(BETA);
 
         this.CELL_LENGTH = Double.parseDouble(CELL_LENGTH);
+        this.DERAIL = Double.parseDouble(DERAIL);
     }
 
 
@@ -188,6 +193,9 @@ public final class Config {
     }
     public double BETA(){
         return BETA;
+    }
+    public double DERAIL(){
+        return DERAIL;
     }
 }
 

@@ -168,7 +168,7 @@ public class PeopleSimulatorManager {
                 if(auxPerson.isAdjacentTo(auxObstacle)){
                     boolean pos = n.getPosition().getY()>p.getPosition().getY();
                     boolean vel = n.getVelocity().getY()>0;
-                    Vector offset = auxObstacle.getVelocity().versor().multiplyBy(3*(c.PERSON_MAX_R() + auxObstacle.getRadius()));
+                    Vector offset = auxObstacle.getVelocity().versor().multiplyBy(c.DERAIL()*(c.PERSON_MAX_R() + auxObstacle.getRadius()));
                     boolean spd_mod = personVel.norm()>n.getVelocity().norm();
                     boolean xor = Boolean.logicalXor(pos, vel);
 
