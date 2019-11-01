@@ -115,14 +115,13 @@ public class PeopleSimulatorManager {
             if(amague != null){
                 velocity = amague;
             }else {
-                double multiplier = c.PERSON_SPEED() * Math.pow((p.getRadius()-c.PERSON_MIN_R())/(c.PERSON_MAX_R()-c.PERSON_MIN_R()),1);//todo: unhardcode Beta
+                double multiplier = c.PERSON_SPEED() * Math.pow((p.getRadius()-c.PERSON_MIN_R())/(c.PERSON_MAX_R()-c.PERSON_MIN_R()),c.BETA());
                 Vector direction = p.getDesiredDirection();
                 velocity = direction.multiplyBy(multiplier);
             }
         }
         else{
-
-            velocity = Vector.averageVector(velocityVectors).multiplyBy(c.VE());
+            velocity = Vector.averageVector(velocityVectors).versor().multiplyBy(c.VE());
             isInContact = true;
         }
         return new MovementInfo(velocity,isInContact);

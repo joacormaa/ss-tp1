@@ -39,6 +39,7 @@ public final class Config {
 
     private double VE;
     private double TAU;
+    private double BETA;
 
     private static Config instance;
 
@@ -91,6 +92,7 @@ public final class Config {
 
         String TAU = document.getElementsByTagName("TAU").item(0).getTextContent();
         String VE = document.getElementsByTagName("VE").item(0).getTextContent();
+        String BETA = document.getElementsByTagName("BETA").item(0).getTextContent();
 
         String CELL_LENGTH = document.getElementsByTagName("CELL_LENGTH").item(0).getTextContent();
 
@@ -118,6 +120,7 @@ public final class Config {
 
         this.TAU = Double.parseDouble(TAU);
         this.VE = Double.parseDouble(VE);
+        this.BETA = Double.parseDouble(BETA);
 
         this.CELL_LENGTH = Double.parseDouble(CELL_LENGTH);
     }
@@ -182,6 +185,9 @@ public final class Config {
     }
     public double VE(){
         return VE;
+    }
+    public double BETA(){
+        return BETA;
     }
 }
 

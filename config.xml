@@ -19,7 +19,8 @@
     <GOAL_RADIUS>0.3</GOAL_RADIUS>
 
     <TAU>10</TAU>
-    <VE>20</VE>
+    <VE>200</VE>
+    <BETA>2</BETA>
 
     <CELL_LENGTH>10</CELL_LENGTH>
 
