@@ -31,7 +31,7 @@ public class PeopleSimulatorManager {
         Logger.print("Calculating step t="+(delta+currStep.getTime()));
         CollisionCourse nextStep = getNextCollisionCourse(delta);
         this.currStep=nextStep;
-        SystemMetrics sm = new SystemMetrics(currStep,goalCounter);
+        SystemMetrics sm = new SystemMetrics(currStep,movement.norm(),speedMultiplier,goalCounter);
         if(hasToPrint){
             psp.printCollisionCourse(nextStep);
             psp.printCollisionCourseMetrics(sm);
@@ -72,11 +72,13 @@ public class PeopleSimulatorManager {
         return ret;
     }
 
+    Vector movement = null;
+
     private Person getNextPerson(Person p, Map<Person, Set<Interactable>> neighbourMap, double delta) {
         Set<Interactable> neighbours = neighbourMap.get(p);
         MovementInfo movementInfo = getNextVelocity(p, neighbours);
 
-        Vector movement = movementInfo.nextVelocity.multiplyBy(delta);
+        movement = movementInfo.nextVelocity.multiplyBy(delta);
         Vector nextPosition = p.getPosition().sum(movement);
         Goal goal = p.getGoal();
         if(p.achievedGoal()){
@@ -104,6 +106,8 @@ public class PeopleSimulatorManager {
         }
     }
 
+    double speedMultiplier;
+
     private MovementInfo getNextVelocity(Person p, Set<Interactable> neighbours) {
         List<Vector> velocityVectors = new ArrayList<>();
         for(Interactable neighbour : neighbours){
@@ -115,16 +119,15 @@ public class PeopleSimulatorManager {
 
         boolean isInContact = false;
         Vector velocity;
-        double multiplier = c.PERSON_SPEED() * Math.pow((p.getRadius()-c.PERSON_MIN_R())/(c.PERSON_MAX_R()-c.PERSON_MIN_R()),c.BETA());
+        speedMultiplier = c.PERSON_SPEED() * Math.pow((p.getRadius()-c.PERSON_MIN_R())/(c.PERSON_MAX_R()-c.PERSON_MIN_R()),c.BETA());
         if(velocityVectors.isEmpty()){
-            //Miro si hay colision inminente
             Vector newGoal = getNextCollisionWithNeighbors(p, neighbours);
             if(newGoal != null){
                 Goal g = p.addGoal(newGoal);
                 currStep.getGoalMap().put(2, g);
             }
             Vector direction = p.getDesiredDirection();
-            velocity = direction.multiplyBy(multiplier);
+            velocity = direction.multiplyBy(speedMultiplier);
         }
         else{
             velocity = Vector.averageVector(velocityVectors).versor().multiplyBy(c.VE());
@@ -136,7 +139,7 @@ public class PeopleSimulatorManager {
     private Vector getNextCollisionWithNeighbors(Person p, Set<Interactable> neig){
         if(neig.isEmpty())
             return null;
-        double delta = c.SIMULATION_DELTA_TIME();//ToDo: deshardcodear
+        double delta = c.SIMULATION_DELTA_TIME();
         Vector modPersonVelocity = null;
         Vector goal = null;
         Vector personPos = p.getPosition();

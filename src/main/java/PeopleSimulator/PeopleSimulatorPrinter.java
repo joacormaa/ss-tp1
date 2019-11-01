@@ -5,9 +5,6 @@ import Metrics.SystemMetrics;
 import Model.CollisionCourse;
 import NeighbourLogic.Helper;
 
-import java.util.List;
-import java.util.Map;
-
 public class PeopleSimulatorPrinter {
 
     private static String PARTICLE_OUTPUT_PATH = "particles.ov";
@@ -15,11 +12,14 @@ public class PeopleSimulatorPrinter {
     private static String COMPARISON_OUTPUT_PATH = "comparison.csv";
     private Config c;
 
+    private static String header = "time,distance,speed\n";
+
     public PeopleSimulatorPrinter(){
         this.c = Config.getInstance();
         Helper.resetFile(c.OUTPUT_PATH()+"/"+PARTICLE_OUTPUT_PATH);
         Helper.resetFile(c.OUTPUT_PATH()+"/"+METRIC_OUTPUT_PATH);
         Helper.resetFile(c.OUTPUT_PATH()+"/"+ COMPARISON_OUTPUT_PATH);
+        Helper.appendToFile(header, c.OUTPUT_PATH()+"/"+METRIC_OUTPUT_PATH);
     }
 
     public void printCollisionCourse(CollisionCourse collisionCourse){
@@ -34,6 +34,9 @@ public class PeopleSimulatorPrinter {
     }
 
     public void printCollisionCourseMetrics(SystemMetrics sm) {
-
+        String sb = String.valueOf(sm.getTime()) + ',' +
+                sm.getDistanceCovered() + ',' +
+                sm.getInstantSpeed() + '\n';
+        Helper.appendToFile(sb,c.OUTPUT_PATH()+"/"+METRIC_OUTPUT_PATH);
     }
 }
