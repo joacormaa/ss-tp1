@@ -8,7 +8,7 @@ public class PeopleSimulatorComparator {
         double max_derail = 5d;
         double min_derail = 1d;
         double derail_step = 0.5d;
-        int simulation_runs=5;
+        int simulation_runs=25;
         double cur_derail = min_derail;
 
         Config c = Config.getInstance();
