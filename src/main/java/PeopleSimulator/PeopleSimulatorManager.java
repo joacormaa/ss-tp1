@@ -78,6 +78,7 @@ public class PeopleSimulatorManager {
         Set<Interactable> neighbours = neighbourMap.get(p);
         MovementInfo movementInfo = getNextVelocity(p, neighbours);
 
+
         movement = movementInfo.nextVelocity.multiplyBy(delta);
         Vector nextPosition = p.getPosition().sum(movement);
         Goal goal = p.getGoal();
@@ -126,6 +127,9 @@ public class PeopleSimulatorManager {
             if(!crashedLastTime){
                 Vector newGoal = getNextCollisionWithNeighbors(p, neighbours);
                 if(newGoal != null){
+                    if(newGoal.getX()<=p.getPosition().getX()){
+                        newGoal = new Vector(p.getPosition().getX()+c.PERSON_MAX_R(),newGoal.getY());
+                    }
                     Goal g = p.addGoal(newGoal);
                     currStep.getGoalMap().put(2, g);
                 }
@@ -144,7 +148,6 @@ public class PeopleSimulatorManager {
         if(neig.isEmpty())
             return null;
         double delta = c.SIMULATION_DELTA_TIME();
-        Vector modPersonVelocity = null;
         Vector goal = null;
         Vector personPos = p.getPosition();
         Vector personVel = p.getVelocity();
@@ -166,7 +169,12 @@ public class PeopleSimulatorManager {
                     boolean pos = n.getPosition().getY()>p.getPosition().getY();
                     boolean vel = n.getVelocity().getY()>0;
                     Vector offset = auxObstacle.getVelocity().versor().multiplyBy(3*(c.PERSON_MAX_R() + auxObstacle.getRadius()));
-                    if(Boolean.logicalXor(pos, vel)){
+                    boolean spd_mod = personVel.norm()>n.getVelocity().norm();
+                    boolean xor = Boolean.logicalXor(pos, vel);
+
+                    xor= spd_mod == xor;
+
+                    if(xor){
                         goal = auxObstacle.getPosition().sum(offset);
                     } else {
                         goal = auxObstacle.getPosition().minus(offset);

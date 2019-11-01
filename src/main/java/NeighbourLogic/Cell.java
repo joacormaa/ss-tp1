@@ -23,11 +23,17 @@ public class Cell {
     public List<Integer> getNeighbourIds() {
         List<Integer> neighbours = new LinkedList<>();
 
-        neighbours.add(getNeighbourId(xPosition,yPosition));
-        neighbours.add(getNeighbourId(xPosition,yPosition+1));
         neighbours.add(getNeighbourId(xPosition+1,yPosition+1));
         neighbours.add(getNeighbourId(xPosition+1,yPosition));
         neighbours.add(getNeighbourId(xPosition+1,yPosition-1));
+
+        neighbours.add(getNeighbourId(xPosition,yPosition+1));
+        neighbours.add(getNeighbourId(xPosition,yPosition));
+        neighbours.add(getNeighbourId(xPosition,yPosition-1));
+
+        neighbours.add(getNeighbourId(xPosition-1,yPosition+1));
+        neighbours.add(getNeighbourId(xPosition-1,yPosition));
+        neighbours.add(getNeighbourId(xPosition-1,yPosition-1));
 
         return neighbours;
     }
