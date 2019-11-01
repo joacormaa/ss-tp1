@@ -92,7 +92,7 @@ public class PeopleSimulatorManager {
         if(goal==null){
             goalCounter++;
         }
-
+        crashedLastTime=movementInfo.isInContact;
         return new Person(nextPosition,movementInfo.nextVelocity,radius,goal);
 
     }
@@ -108,6 +108,8 @@ public class PeopleSimulatorManager {
 
     double speedMultiplier;
 
+    boolean crashedLastTime=false;
+
     private MovementInfo getNextVelocity(Person p, Set<Interactable> neighbours) {
         List<Vector> velocityVectors = new ArrayList<>();
         for(Interactable neighbour : neighbours){
@@ -121,10 +123,12 @@ public class PeopleSimulatorManager {
         Vector velocity;
         speedMultiplier = c.PERSON_SPEED() * Math.pow((p.getRadius()-c.PERSON_MIN_R())/(c.PERSON_MAX_R()-c.PERSON_MIN_R()),c.BETA());
         if(velocityVectors.isEmpty()){
-            Vector newGoal = getNextCollisionWithNeighbors(p, neighbours);
-            if(newGoal != null){
-                Goal g = p.addGoal(newGoal);
-                currStep.getGoalMap().put(2, g);
+            if(!crashedLastTime){
+                Vector newGoal = getNextCollisionWithNeighbors(p, neighbours);
+                if(newGoal != null){
+                    Goal g = p.addGoal(newGoal);
+                    currStep.getGoalMap().put(2, g);
+                }
             }
             Vector direction = p.getDesiredDirection();
             velocity = direction.multiplyBy(speedMultiplier);
